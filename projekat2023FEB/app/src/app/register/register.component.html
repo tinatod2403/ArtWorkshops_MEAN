@@ -1,0 +1,129 @@
+<div class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Register and join us!</h1>
+        <div class="header__buttons" style="display: flex; align-items: center; justify-content: center;">
+
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <img src="../../assets/avatar.jpg" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+</div>
+
+
+
+<div class="middle">
+
+    <div class="example-form">
+
+        <mat-card class="example-card">
+            <mat-card-header class="input-data-header">
+                <mat-card-title>Register form</mat-card-title>
+            </mat-card-header>
+            &nbsp;
+            <div class="wrapper">
+
+                <div class="left">
+                    <mat-card-content>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Firstname<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="firstname" [(ngModel)]="firstname">
+                        </mat-form-field>
+
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Lastname<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="lastname" [(ngModel)]="lastname">
+                        </mat-form-field>
+
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Username<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="username" [(ngModel)]="username">
+                        </mat-form-field>
+
+                    </mat-card-content>
+                    <mat-card-content class="input-container">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="password" [(ngModel)]="password">
+                        </mat-form-field>
+                        <div class="hint">
+                            Passwod: 8-16 characters long |
+                            at least one upper letter |
+                            number and special character |
+                            must start with a lowercase letter.
+                        </div>
+                    </mat-card-content>
+                    <mat-card-content>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password confirmation<span class="RequiredField">*</span></mat-label>
+                            <!-- <input matInput class="input-class" type="password"  name="passwordConfirm">  -->
+                            <input matInput class="input-class" type="text" name="passwordConfirm"
+                                [(ngModel)]="passwordConfirm">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Phone number<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="phone" [(ngModel)]="phone">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Email<span class="RequiredField">*</span></mat-label>
+                            <input matInput class="input-class" type="text" name="email" [(ngModel)]="email">
+                        </mat-form-field>
+
+                    </mat-card-content>
+                    <mat-card-content>
+                        <img class="input-profile-picture" [src]="picture" *ngIf=" picture" style="height: 100px;" />
+
+                        <input type="file" name=" picture" accept=".jpg,.png" (change)="onFileChange($event)" />
+
+                        <mat-error class="error-output"></mat-error>
+                        <mat-error class="error-output">{{errorMessage}}</mat-error>
+                    </mat-card-content>
+                </div>
+
+                <div class="right">
+                    <mat-card-content>
+                        <!-- <mat-form-field *ngIf="isOrganization" class="example-full-width"> -->
+                        <mat-checkbox [(ngModel)]="isOrganizer">Register as the organizer</mat-checkbox>
+                        <!-- </mat-form-field> -->
+                        <mat-form-field *ngIf="isOrganizer" class="example-full-width">
+                            <mat-label>Organization name</mat-label>
+                            <input matInput class="input-class" type="text" name="organizationName"
+                                [(ngModel)]="organizationName">
+                        </mat-form-field>
+                        <mat-form-field *ngIf="isOrganizer" class="example-full-width">
+                            <mat-label>Address</mat-label>
+                            <input matInput class="input-class" type="text" name="oAddress" [(ngModel)]="oAddress">
+                        </mat-form-field>
+                        <mat-form-field *ngIf="isOrganizer" class="example-full-width">
+                            <mat-label>ID</mat-label>
+                            <input matInput class="input-class" type="text" name="IDorganization"
+                                [(ngModel)]="IDorganization">
+                        </mat-form-field>
+
+
+                    </mat-card-content>
+                </div>
+
+            </div>
+            <mat-card-actions class="login-button">
+                <button mat-raised-button color="primary" style="width: 100%; margin-top: 10px;"
+                    (click)="register()">Register</button>
+            </mat-card-actions>
+
+            <mat-card-footer>
+                Already have an account? <a routerLink="login">Log in</a>
+            </mat-card-footer>
+        </mat-card>
+
+
+
+    </div>
+
+</div>

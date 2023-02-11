@@ -1,0 +1,41 @@
+<div *ngIf="currentUser  && !currentUser.isOrganizer" class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Become an orginazer!</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="/profile" class="link">
+                <button mat-raised-button color="brownLight">Profile</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight">Workshops</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/">All Workshops</a>
+                    <a routerLink="/myWorkshops">My Workshops</a>
+                </div>
+            </div>
+            &nbsp;
+            <a routerLink="/becomeOrganizer" class="link" style="opacity: 0.8;">
+                <button mat-raised-button color="brownLight">Become an organizer</button>
+            </a>
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+
+    <div class="middle">
+
+
+
+    </div>
+</div>

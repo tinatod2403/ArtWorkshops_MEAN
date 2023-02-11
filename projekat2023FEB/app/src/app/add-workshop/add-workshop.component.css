@@ -1,0 +1,179 @@
+.example-form {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+    /* height: 80%; */
+}
+
+.example-card {
+    width: 50%;
+    z-index: 0;
+    border-radius: 10%;
+    min-height: 700px;
+    min-width: 800px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5), 0px 6px 6px rgba(0, 0, 0, 0.23);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* .wrapper {
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.left {
+    float: left;
+    width: 50%;
+
+}
+
+.right {
+    float: right;
+    width: 50%;
+} */
+
+.input-data-header {
+    background-color: #a76637;
+    color: white;
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-card-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.example-card {
+    width: 400px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.mat-card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+}
+
+.RequiredField {
+    color: rgba(255, 0, 0, 0.811);
+}
+
+mat-label {
+    height: 100%;
+    padding: 20px;
+    opacity: 0.5;
+}
+
+/* mat-card-content {
+    padding-left: 150px;
+    padding-right: 150px;
+  
+  } */
+
+.login-button {
+    padding-left: 150px;
+    padding-right: 150px;
+    padding-bottom: 20px;
+}
+
+.input-class {
+    background-color: rgba(71, 92, 139, 0.103);
+    padding: 0px;
+    padding-top: 20px;
+}
+
+input[type="datetime-local"] {
+    padding-left: 20px;
+}
+input[type="text"]{
+    padding-left: 20px;
+}
+
+.error-output {
+    color: red;
+}
+
+.input-container {
+    position: relative;
+}
+
+.hint {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px;
+    margin-left: 100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.input-container:hover .hint {
+    display: block;
+    opacity: 1;
+}
+
+label {
+    display: inline-block;
+    padding: 10px;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+input[type="file"] {
+    color: #a76637;
+}
+
+.input-profile-picture {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+
+    /* border-radius: 50%; */
+    object-fit: cover;
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    min-width: 150px;
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #000;
+    background-color: #e8dada;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}

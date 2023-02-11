@@ -1,0 +1,230 @@
+<div *ngIf="!currentUser" class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Art workshop</h1>
+        <div class="header__buttons">
+            <a routerLink="login" class="link">
+                <button mat-raised-button color="brown">Log in</button>
+            </a>
+            &nbsp;
+            <a routerLink="register" class="link">
+                <button mat-raised-button color="brown">Register</button>
+            </a>
+            &nbsp;
+
+            <!-- <button (click)="logOut()" mat-raised-button color="brown">Log out</button> -->
+
+            &nbsp;
+            &nbsp;
+            <img src="../../assets/avatar.jpg" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+
+    <div class="middle">
+        <!-- <hr>
+        <h1 class="informMessage">Log in or register to book your place</h1>
+        <hr> -->
+        <div>
+            <input type="text" placeholder="Search..." [(ngModel)]="searchValue">
+            <button type="submit" (click)="searchWorkshops()">Go</button>
+            <button type="submit" (click)="sortName()">Sort: Name</button>
+            <div class="dropdown">
+                <button type="submit">Sort: Date</button>
+                <div class="dropdown-content">
+                    <a (click)="sortDate('asc')">Earliest</a>
+                    <a (click)="sortDate('desc')">Latest</a>
+                </div>
+            </div>
+
+
+        </div>
+        <p class="searchDisplay">Search parameter: {{searchValueDisplay}}</p>
+
+
+        <div *ngFor="let w of allWorkshops">
+            <div>
+                <mat-card class="card" (click)="goToLogin()">
+                    <mat-card-header>
+                        <mat-card-title class="card-title">{{w.name}} </mat-card-title>
+                    </mat-card-header>
+                    <p class="under-title">Date: {{w.date}}</p>
+                    <p class="under-title">Place: {{w.place}}</p>
+                    <p class="under-title">Organizer: {{w.organizer}}</p>
+                    <div class="wrapping-content">
+                        <div class="card-left">
+                            <img class="card-img" [src]=w.mainPhoto alt="card image">
+                        </div>
+                        <div class="card-right">
+                            <p class="tekst">{{w.shortDesc}}</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div *ngIf="currentUser  && !currentUser.isOrganizer" class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Welcome: {{currentUser.firstname}} {{currentUser.lastname}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="profile" class="link">
+                <button mat-raised-button color="brownLight">Profile</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Workshops</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/">All Workshops</a>
+                    <a routerLink="/myWorkshops">My Workshops</a>
+                </div>
+            </div>
+
+            &nbsp;
+            <a routerLink="becomeOrganizer" class="link">
+                <button mat-raised-button color="brownLight">Become an organizer</button>
+            </a>
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+
+    <div class="middle">
+        <!-- <hr>
+        <h1 class="informMessage">Log in or register to book your place</h1>
+        <hr> -->
+        <div>
+            <input type="text" placeholder="Search..." [(ngModel)]="searchValue">
+            <button type="submit" (click)="searchWorkshops()">Go</button>
+            <button type="submit" (click)="sortName()">Sort: Name</button>
+            <div class="dropdown">
+                <button type="submit">Sort: Date</button>
+                <div class="dropdown-content">
+                    <a (click)="sortDate('asc')">Earliest</a>
+                    <a (click)="sortDate('desc')">Latest</a>
+                </div>
+            </div>
+
+
+        </div>
+        <p class="searchDisplay">Search parameter: {{searchValueDisplay}}</p>
+
+
+        <div *ngFor="let w of allWorkshops">
+            <div>
+                <mat-card class="card" (click)="goToDetails(w._id)">
+                    <mat-card-header>
+                        <mat-card-title class="card-title">{{w.name}} </mat-card-title>
+                    </mat-card-header>
+                    <p class="under-title">Date: {{w.date}}</p>
+                    <p class="under-title">Place: {{w.place}}</p>
+                    <p class="under-title">Organizer: {{w.organizer}}</p>
+                    <div class="wrapping-content">
+                        <div class="card-left">
+                            <img class="card-img" [src]=w.mainPhoto alt="card image">
+                        </div>
+                        <div class="card-right">
+                            <p class="tekst">{{w.shortDesc}}</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Organizer /////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<div *ngIf="currentUser  && currentUser.isOrganizer" class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Welcome organizer {{currentUser.firstname}} {{currentUser.lastname}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="" class="link">
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Home</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight">Profile</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/myWorkshops">My workshops</a>
+                    <a routerLink="/addWorkshop">+ Add workshop</a>
+                </div>
+            </div>
+
+
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+    <div class="middle">
+        <div>
+            <input type="text" placeholder="Search..." [(ngModel)]="searchValue">
+            <button type="submit" (click)="searchWorkshops()">Go</button>
+            <button type="submit" (click)="sortName()">Sort: Name</button>
+            <div class="dropdown">
+                <button type="submit">Sort: Date</button>
+                <div class="dropdown-content">
+                    <a (click)="sortDate('asc')">Earliest</a>
+                    <a (click)="sortDate('desc')">Latest</a>
+                </div>
+            </div>
+
+
+        </div>
+        <p class="searchDisplay">Search parameter: {{searchValueDisplay}}</p>
+
+        <div *ngFor="let w of allWorkshops">
+            <mat-card class="card" (click)="goToDetails(w._id)">
+                <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
+                    <mat-card-title class="card-title">{{w.name}} </mat-card-title>
+                    <button *ngIf="currentUser.username==w.organizer" type="editWorkshop"
+                        (click)="editWorkshop($event, w._id)">Edit</button>
+                </mat-card-header>
+                <p class="under-title">Date: {{w.date}}</p>
+                <p class="under-title">Place: {{w.place}}</p>
+                <p class="under-title">Organizer: {{w.organizer}}</p>
+                <div class="wrapping-content">
+                    <div class="card-left">
+                        <img class="card-img" [src]=w.mainPhoto alt="card image">
+                    </div>
+                    <div class="card-right">
+                        <p class="tekst">{{w.shortDesc}}</p>
+                    </div>
+                </div>
+            </mat-card>
+
+        </div>
+    </div>
+    <div class="footer"></div>
+
+
+</div>

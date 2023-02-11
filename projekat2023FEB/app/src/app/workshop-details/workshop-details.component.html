@@ -1,0 +1,172 @@
+<div class="hero" *ngIf="currentUser && !currentUser.isOrganizer && currWorkshop">
+
+
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Welcome: {{currentUser.firstname}} {{currentUser.lastname}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="/profile" class="link">
+                <button mat-raised-button color="brownLight">Profile</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Workshops</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/">All Workshops</a>
+                    <a routerLink="/myWorkshops">My Workshops</a>
+                </div>
+            </div>
+            &nbsp;
+            <a routerLink="/becomeOrganizer" class="link">
+                <button mat-raised-button color="brownLight">Become an organizer</button>
+            </a>
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+    <div class="middle">
+
+        <div class="workshop-details-card">
+            <mat-card-header>
+                <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
+
+            </mat-card-header>
+            <p class="smallDetals">Place: {{currWorkshop.place}}</p>
+            <p class="smallDetals">Date and time: {{dateAndTime}}</p>
+            <div class="wrapping-content">
+                <div>
+                    <div class="gallery">
+                        <i class="previous-arrow" (click)="previous()">&#10094;</i>
+                        <img [src]=imageDisplay alt="card image">
+                        <i class="next-arrow" (click)="next()">&#10095;</i>
+                    </div>
+
+                    <p>{{currWorkshop.longDesc}}</p>
+                    <!-- <div class="mapouter">
+                        <div class="gmap_canvas">
+                            <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=krfska 22 beograd&t=&z=10&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                                scrolling="no" marginheight="0" marginwidth="0">
+                            </iframe>
+                        </div> 
+                    </div>-->
+                    <div style="display: flex; align-items: center;">
+                        <h1 style="color:rgb(220, 170, 77)">Number of places left: </h1>&nbsp;
+                        <p style="font-size: 30px; font-weight: bold;">{{currWorkshop.numOfPlaces}}</p>
+                        <button *ngIf="currWorkshop.numOfPlaces>0" (click)="signUp()" class="signup-btn">Sign
+                            up</button>
+                        <button *ngIf="currWorkshop.numOfPlaces==0" (click)="toNotify()" class="signup-btn">Notify me
+                            when place is available.</button>
+                    </div>
+                    <span class="error-output">{{errorMessage}}</span>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+    </div>
+</div>
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div class="hero" *ngIf="currentUser && currentUser.isOrganizer && currWorkshop">
+
+
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Details: {{currWorkshop.name}} Organizer: {{currentUser.firstname}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="" class="link">
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Home</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight">Profile</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/myWorkshops">My workshops</a>
+                    <a routerLink="/addWorkshop">+ Add workshop</a>
+                </div>
+            </div>
+
+
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+    <div class="middle">
+
+        <div class="workshop-details-card">
+            <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
+                <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
+                <div>
+                    <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
+                        (click)="editWorkshop($event, currWorkshop._id)"
+                        style="background-color: rgb(102, 162, 214);">Edit</button>
+                    <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
+                        (click)="cancelWorkshop(currWorkshop._id)"
+                        style="background-color: rgb(214, 102, 102);">Cancel</button>
+                </div>
+            </mat-card-header>
+            <p class="smallDetals">Place: {{currWorkshop.place}}</p>
+            <p class="smallDetals">Date and time: {{dateAndTime}}</p>
+            <div class="wrapping-content">
+                <div>
+                    <div class="gallery">
+                        <i class="previous-arrow" (click)="previous()">&#10094;</i>
+                        <img [src]=imageDisplay alt="card image">
+                        <i class="next-arrow" (click)="next()">&#10095;</i>
+                    </div>
+
+                    <p>{{currWorkshop.longDesc}}</p>
+                    <!-- <div class="mapouter">
+                        <div class="gmap_canvas">
+                            <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=krfska 22 beograd&t=&z=10&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                                scrolling="no" marginheight="0" marginwidth="0">
+                            </iframe>
+                        </div> 
+                    </div>-->
+                    <div style="display: flex; align-items: center;">
+                    </div>
+                    <span class="error-output">{{errorMessage}}</span>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+    </div>
+</div>

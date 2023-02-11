@@ -1,0 +1,175 @@
+.link {
+    text-decoration: none;
+}
+
+body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(assets/bckg2.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+
+    background-size: cover;
+}
+
+.header {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    /* width: 80%; 
+    margin: 0 auto;  */
+}
+
+.footer {
+    height: 100px;
+}
+
+.header__title {
+    color: #7F5947;
+    font-size: 2rem;
+    font-weight: 900;
+
+}
+
+.header__title[color="initial title"] {
+    color: rgb(87, 49, 49);
+    align-items: center;
+}
+
+.header__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+button[mat-raised-button][color="brown"] {
+    background-color: #7F5947;
+    color: white;
+}
+
+button[mat-raised-button][color="green"] {
+    background-color: #427d4b;
+    color: white;
+}
+
+button[mat-raised-button][color="brownLight"] {
+    background-color: #604137;
+    color: white;
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+
+.profile-image {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.logo-image {
+
+    background-image: url(assets/logo/logo-no-background.png);
+    background-size: cover;
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    max-height: 80px;
+
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.middle {
+    z-index: 5;
+    /* background-color: #427d4b; */
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    min-width: 150px;
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #000;
+    background-color: #e8dada;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+}

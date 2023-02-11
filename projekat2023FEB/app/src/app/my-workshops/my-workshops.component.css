@@ -1,0 +1,174 @@
+.hero {
+    height: 100%;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+.card {
+    background-color: #7f5947e2;
+    /* width: 90%; */
+    display: flex;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.card-nonOrganizer {
+    background-color: #7f5947e2;
+    /* width: 90%; */
+    display: flex;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.card-left {
+    float: left;
+    min-width: 20%;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    /* text-align: center; */
+}
+
+.card-right {
+    float: right;
+    margin-left: 5px;
+    max-width: 40%;
+}
+
+.card-title {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.card-img {
+    margin-top: 10px;
+    width: 200px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.under-title {
+    padding: 0px;
+    padding-left: 20px;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.wrapping-content {
+    display: flex;
+}
+
+.card-content {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card-header {
+    padding: 0px;
+}
+
+p {
+    color: white;
+    /* padding: 5px; */
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+hr {
+    border: 2px solid #333;
+    width: 80%;
+    margin: 40px auto;
+}
+
+.informMessage {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+    margin: 40px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.status {
+    margin: 0px;
+    color: rgb(225, 160, 86)
+}
+
+
+
+.table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+
+}
+
+.table th,
+.table td {
+    color: white;
+    border-top: 0.1px solid #ffffff;
+    padding: 15px;
+    text-align: left;
+    cursor: pointer;
+
+}
+
+
+.name:hover {
+    background-color: #a3999481;
+}
+
+.table th {
+    background-color: #604137;
+}
+
+
+
+.table tr:nth-child(odd) {
+    background-color: #7F5947;
+}
+
+
+
+.image-name {
+    border-radius: 10%;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+    margin-right: 10px;
+    height: 50px;
+    width: 100px;
+}
+.inform-output{
+    /* font-size: 15px; */
+    margin: 20px;
+    color:white
+}
+
+.withdraw {
+    color: #f90000;
+    ;
+    font-size: 16px;
+    margin-left: 80px;
+    /* border-radius: 40px; */
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+}
+
+.withdraw:hover {
+    background-color: rgb(255, 255, 255);
+    font-size: 16px;
+    padding: 8px;
+    /* border-radius: 40px; */
+    cursor: pointer;
+}

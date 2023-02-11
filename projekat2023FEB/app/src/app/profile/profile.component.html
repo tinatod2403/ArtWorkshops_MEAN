@@ -1,0 +1,232 @@
+<div *ngIf="currentUser  && !currentUser.isOrganizer" class="hero">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">My Profile: {{currentUser.firstname}} {{currentUser.lastname}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+
+
+            <a routerLink="/profile" class="link" style="opacity: 0.8;">
+                <button mat-raised-button color="brownLight">Profile</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight">Workshops</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/">All Workshops</a>
+                    <a routerLink="/myWorkshops">My Workshops</a>
+                </div>
+            </div>
+            &nbsp;
+            <a routerLink="/becomeOrganizer" class="link">
+                <button mat-raised-button color="brownLight">Become an organizer</button>
+            </a>
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+
+    <div class="middle">
+        <div class="card-container">
+            <mat-card class="card">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">My Data</mat-card-title>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table">
+
+                        <tbody>
+                            <tr>
+                                <td>First name:</td>
+                                <td>{{currentUser.firstname}}</td>
+                                <button (click)="editData('firstname')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='firstname'">
+                                    <input type="text" class="fancy-input" [(ngModel)]="firstnameEdit" />
+                                </td>
+                                <button (click)="doneEditing(firstnameEdit,'firstname')" color="green"
+                                    *ngIf="edit=='firstname'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='firstname'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Last name:</td>
+                                <td>{{currentUser.lastname}}</td>
+                                <button (click)="editData('lastname')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='lastname'">
+                                    <input type="text" class="fancy-input" [(ngModel)]="lastnameEdit" />
+                                </td>
+                                <button (click)="doneEditing(lastnameEdit,'lastname')" color="green"
+                                    *ngIf="edit=='lastname'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='lastname'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Username:</td>
+                                <td>{{currentUser.username}}</td>
+                                <!-- <button (click)="editData('username')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button> -->
+                                <!-- <td *ngIf="edit=='username'">
+                                    <input type="text" class="fancy-input" [(ngModel)]="usernameEdit" />
+                                </td> -->
+                                <!-- <button (click)="doneEditing(usernameEdit,'username')" color="green"
+                                    *ngIf="edit=='username'">
+                                    <mat-icon>done</mat-icon>
+                                </button> -->
+                                <!-- <button (click)="cancelEditing()" color="green" *ngIf="edit=='username'">
+                                    <mat-icon>clear</mat-icon>
+                                </button> -->
+                            </tr>
+                            <tr>
+                                <td>Password:</td>
+                                <td style="align-items: bottom;" *ngIf="!showPassword">
+                                    <span class="password-text-container">{{ '*'.repeat(currentUser.password.length)
+                                        }}</span>
+
+                                    <mat-icon class="password-icon" (click)="togglePassword()">{{ showPassword ?
+                                        'visibility_off' : 'visibility'}}</mat-icon>
+                                </td>
+                                <td *ngIf="showPassword">
+                                    <span class="password-text-container">{{currentUser.password}}</span>
+
+                                    <mat-icon class="password-icon" (click)="togglePassword()">{{showPassword ?
+                                        'visibility_off' : 'visibility'}}</mat-icon>
+                                </td>
+                                <button (click)="editData('password')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                            </tr>
+                            <tr *ngIf="edit=='password'">
+
+                                <td *ngIf="edit=='password'">
+                                    <input [(ngModel)]="passwordEdit" type="text" class="fancy-input"
+                                        placeholder="old password" />
+                                </td>
+                                <td *ngIf="edit=='password'">
+                                    <input [(ngModel)]="passwordNew" type="text" class="fancy-input"
+                                        placeholder="new password" />
+                                </td>
+
+                                <td *ngIf="edit=='password'">
+                                    <input [(ngModel)]="passwordNewAgain" type="text" class="fancy-input"
+                                        placeholder="new password verification" />
+                                </td>
+                                <button (click)="doneEditing(passwordNew,'password')" color="green"
+                                    *ngIf="edit=='password'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='password'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Phone number:</td>
+                                <td>{{currentUser.phone}}</td>
+                                <button (click)="editData('phone')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='phone'">
+                                    <input type="text" class="fancy-input" [(ngModel)]="phoneEdit" />
+                                </td>
+                                <button (click)="doneEditing(phoneEdit,'phone')" color="green" *ngIf="edit=='phone'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='phone'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Email:</td>
+                                <td>{{currentUser.email}}</td>
+                                <button (click)="editData('email')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='email'">
+                                    <input type="text" class="fancy-input" [(ngModel)]="emailEdit" />
+                                </td>
+                                <button (click)="doneEditing(emailEdit,'email')" color="green" *ngIf="edit=='email'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='email'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <span class="error-output">{{errorMessage}}</span>
+
+                </mat-card-content>
+
+            </mat-card>
+
+        </div>
+
+        <div class="card-container">
+            <mat-card class="card">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Former workshops</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th (click)="sortName()">Workshop</th>
+                                <th (click)="sortDate()">Date of happening</th>
+                                <th (click)="sortTimeStamp()">Time of sign up</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let s of pastSignUps">
+                            <!-- <tr class="table-row" (click)="goToDetails(w.idWorkshop)"> -->
+                            <tr class="table-row">
+                                <td class="name">
+                                    <div style="display: flex; align-items: center;"><img class="image-name"
+                                            [src]="s.workshopPicture"> {{s.nameWorkshop}}</div>
+                                </td>
+
+                                <td>{{s.workshopDate}}</td>
+                                <td>{{s.signUpDate}}</td>
+                                <td style="color:rgb(255, 64, 0)">
+                                    passed
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </mat-card-content>
+                <span class="inform-output">{{informMessage}}</span>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>

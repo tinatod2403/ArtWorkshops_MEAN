@@ -1,0 +1,156 @@
+<div class="hero" *ngIf="currentUser && currentUser.isOrganizer">
+    <div class="header" style="z-index: 999;">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">{{currentUser.firstname}} {{currentUser.lastname}}s workshops!
+        </h1>
+
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="/" class="link">
+                <button mat-raised-button color="brownLight">Home</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight" style="opacity: 0.7;">Profile</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/myWorkshops">My workshops</a>
+                    <a routerLink="/addWorkshop">+ Add workshop</a>
+                </div>
+            </div>
+
+
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </div>
+    <div class="middle" style="z-index: 1;">
+        <div *ngFor="let w of myWorkshops">
+            <mat-card class="card" (click)="goToDetails(w._id)">
+                <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
+                    <mat-card-title class="card-title">{{w.name}} </mat-card-title>
+                    <p *ngIf="w.status=='pending'" style="color: rgb(230, 188, 50); margin: 0px;">STATUS: {{w.status}}</p>
+                    <p *ngIf="w.status=='accepted'" style="color: rgb(7, 230, 44);">STATUS: {{w.status}}</p>
+                </mat-card-header>
+                <p class="under-title">Date: {{w.date}}</p>
+                <p class="under-title">Place: {{w.place}}</p>
+                <div class="wrapping-content">
+                    <div class="card-left">
+                        <img class="card-img" [src]=w.mainPhoto alt="card image">
+                    </div>
+                    <div class="card-right">
+                        <p class="tekst">{{w.shortDesc}}</p>
+                    </div>
+                </div>
+            </mat-card>
+
+        </div>
+        <div *ngIf="!myWorkshops">
+            <hr>
+            <h1 class="informMessage">{{informMessage}}</h1>
+            <hr>
+        </div>
+
+    </div>
+    <div class="footer">
+
+    </div>
+</div>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="hero" *ngIf="currentUser && !currentUser.isOrganizer">
+    <div class="header" style="z-index: 999;">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">My workshops!
+        </h1>
+
+        <div class="header__buttons">
+            &nbsp;
+
+            <a routerLink="/profile" class="link">
+                <button mat-raised-button color="brownLight">Profile</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
+
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Workshops</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/">All Workshops</a>
+                    <a routerLink="/myWorkshops">My Workshops</a>
+                </div>
+            </div>
+
+            &nbsp;
+            <a routerLink="/becomeOrganizer" class="link">
+                <button mat-raised-button color="brownLight">Become an organizer</button>
+            </a>
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </div>
+    <div class="middle" style="z-index: 1;">
+
+        <div class="card-container">
+            <mat-card class="card-nonOrganizer">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Currently
+                        registered</mat-card-title>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Workshop</th>
+                                <th>Date of happening</th>
+                                <th>Time of sign up</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let s of mySignUpsWorkshops">
+                            <tr class="table-row" (click)="goToDetails(s.idWorkshop)">
+                                <td class="name">
+                                    <div style="display: flex; align-items: center;"><img class="image-name"
+                                            [src]="s.workshopPicture"> {{s.nameWorkshop}}</div>
+                                </td>
+
+                                <td>{{s.workshopDate}}</td>
+                                <td>{{s.signUpDate}}</td>
+                                <td *ngIf="s.status=='pending'" style="color:rgb(255, 230, 0)">
+                                    {{s.status}}
+                                </td>
+                                <td *ngIf="s.status=='accepted'" style="color:rgb(48, 186, 2)">
+                                    {{s.status}}
+                                </td>
+                                <td class="withdraw" (click)="withdraw($event)"><span
+                                        style="color: rgb(255, 30, 30); font-weight: bold;padding-left: 25%;">CANCEL</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </mat-card-content>
+                <span class="inform-output">{{informMessage}}</span>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+    <div class="footer">
+
+    </div>
+</div>
