@@ -105,8 +105,34 @@ export class OrganizerController {
                 }
             }
         );
+    }
 
+    getSignUpRequests = (req: express.Request, res: express.Response) => {//dobro za dodavanje i bivsih ucesnika
 
+        let organizer = req.body.organizer;
+        let today = new Date();
+
+        signUp.find({ workshopDate: { $gt: today }, organizer: organizer }, (error, signUps) => {
+
+            if (signUps)
+                res.json(signUps)
+            else
+                console.log(error)
+        })
+    }
+
+    acceptRequestForWorkshop = (req: express.Request, res: express.Response) => {
+
+        signUp.updateOne(
+            {
+                username: req.body.username,
+                idWorkshop: req.body.idWorkshop
+            }, { $set: { status: 'accepted' } }, (error, success) => {
+                if
+                    (error) console.log(error)
+                else
+                    res.json({ "resp": "OK" })
+            })
     }
 
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ChatService } from 'src/services/chat.service';
 import { OrganizerService } from 'src/services/organizer.service';
 import { UserService } from 'src/services/user.service';
 import { User } from '../models/user';
 import { Workshop } from '../models/workshop';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-workshop-details',
@@ -12,7 +14,7 @@ import { Workshop } from '../models/workshop';
 })
 export class WorkshopDetailsComponent implements OnInit {
 
-  constructor(private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
+  constructor(private chatService: ChatService, private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
   ngOnInit(): void {
 
     let id = JSON.parse(localStorage.getItem("workshopID"));
@@ -35,8 +37,6 @@ export class WorkshopDetailsComponent implements OnInit {
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
       this.currentUser = user;
     });
-
-
   }
 
   currentUser: User;
@@ -104,6 +104,30 @@ export class WorkshopDetailsComponent implements OnInit {
     localStorage.removeItem("currentUser");
     this.currentUser = null;
     this.router.navigate([""]);
+  }
+
+  chatOpened: boolean = false;
+
+  startChat() {
+    this.chatOpened = true;
+    this.ngAfterViewChecked()
+  }
+
+  @ViewChild('scrollContainer') private myScrollContainer: ElementRef;
+
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
+
+  sendMessage(){
+    alert("message")
   }
 
 }

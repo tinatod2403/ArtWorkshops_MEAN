@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="middle" style="z-index: 1;">
-        <div *ngFor="let w of myWorkshops">
+        <!-- <div *ngFor="let w of myWorkshops">
             <mat-card class="card" (click)="goToDetails(w._id)">
                 <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
                     <mat-card-title class="card-title">{{w.name}} </mat-card-title>
@@ -50,6 +50,86 @@
                 </div>
             </mat-card>
 
+        </div> -->
+
+        <div class="card-container">
+            <mat-card class="card-nonOrganizer">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Currently
+                        registered</mat-card-title>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Workshop name</th>
+                                <th>Date</th>
+                                <th>Place</th>
+                                <th>Status</th>
+                                <th>Number of places left</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let s of myWorkshops">
+                            <tr class="table-row" (click)="goToDetails(s._id)">
+                                <td class="name">
+                                    <div style="display: flex; align-items: center;"><img class="image-name"
+                                            [src]="s.mainPhoto"> {{s.name}}</div>
+                                </td>
+
+                                <td>{{s.date}}</td>
+                                <td>{{s.place}}</td>
+                                <td *ngIf="s.status=='pending' && activeDate(s._id)" style="color:rgb(255, 230, 0)">
+                                    {{s.status}}
+                                </td>
+                                <td *ngIf="s.status=='accepted' && activeDate(s._id)" style="color:rgb(48, 186, 2)">
+                                    {{s.status}}
+                                </td>
+                                <td *ngIf="!activeDate(s._id)" style="color:rgb(186, 2, 2)">
+                                    passed
+                                </td>
+                                <td>{{s.numOfPlaces}}</td>
+                                <td (click)="deleteWorkshop($event)"><button class="Withdraw">DELETE</button>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <div *ngIf="activeDate(s._id)" style="display: flex; align-items: center;">
+                                    <p style=" margin: 10px;">Requests:</p>
+                                    <span *ngIf="requestsEmpty(s._id)" style=" margin: 10px; color: white;">No requests
+                                        yet</span>
+                                </div>
+                                <div *ngFor="let signUp of mySignUpsWorkshops" style="margin:10px">
+                                    <div *ngIf="s._id==signUp.idWorkshop">
+                                        <div class="Requests">
+                                            <div style="display: flex; align-items: center;">
+                                                <img class="profile-image-request" [src]="signUp.userPicture">
+                                                <span style="color: white;">{{signUp.username}}</span>
+                                            </div>
+                                            <div>
+                                                <button *ngIf="signUp.status=='pending'"
+                                                    (click)="acceptRequest(signUp.username, s._id)"
+                                                    class="button-request">Accept</button>
+                                                <!-- <button (click)="denyRequest()" class="button-request"
+                                                    style="background-color: brown;">Deny</button> -->
+                                            </div>
+                                            <!-- {{signUp.signUpDate}} -->
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </mat-card-content>
+                <span class="inform-output">{{informMessage}}</span>
+
+            </mat-card>
+
         </div>
         <div *ngIf="!myWorkshops">
             <hr>
@@ -58,7 +138,7 @@
         </div>
 
     </div>
-    
+
     <div class="footer">
 
     </div>
@@ -118,7 +198,7 @@
                                 <th>Date of happening</th>
                                 <th>Time of sign up</th>
                                 <th>Status</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody *ngFor="let s of mySignUpsWorkshops">
@@ -136,8 +216,7 @@
                                 <td *ngIf="s.status=='accepted'" style="color:rgb(48, 186, 2)">
                                     {{s.status}}
                                 </td>
-                                <td class="withdraw" (click)="withdraw($event)"><span
-                                        style="color: rgb(255, 30, 30); font-weight: bold;padding-left: 25%;">CANCEL</span>
+                                <td (click)="withdrawRequest($event)"><button class="Withdraw">WITHDRAW</button>
                                 </td>
                             </tr>
                         </tbody>

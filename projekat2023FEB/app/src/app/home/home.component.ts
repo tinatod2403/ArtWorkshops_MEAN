@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
 
   setDateFormat() {
     this.allWorkshops.forEach(w => {
-      w.date = new Date(w.date).toLocaleString('sr-RS');
+      w.date = new Date(w.date).toLocaleString('en-US');
     })
   }
 

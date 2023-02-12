@@ -5,6 +5,7 @@ import { UserService } from 'src/services/user.service';
 import { SignUps } from '../models/signUps';
 import { User } from '../models/user';
 import { Workshop } from '../models/workshop';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-my-workshops',
@@ -13,24 +14,26 @@ import { Workshop } from '../models/workshop';
 })
 export class MyWorkshopsComponent implements OnInit {
 
-  constructor(private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
   ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
       this.currentUser = user;
     });
 
-    if (this.currentUser.isOrganizer) //ZA ORGANIZATORA
+    if (this.currentUser.isOrganizer) {//ZA ORGANIZATORA
       this.organizerService.getMyWorkshops(this.currentUser.username).subscribe((workshops: Workshop[]) => {
         if (workshops.length > 0) {
           this.myWorkshops = workshops;
           this.informMessage = ""
           this.myWorkshops.forEach(w => {
-            w.date = new Date(w.date).toLocaleString('sr-RS');
+            w.date = new Date(w.date).toLocaleString('en-US');
           })
         }
         else this.informMessage = "You don't have any workshops."
       })
+      this.reloadSignUps();
+    }
     else  //ZA USERA
       this.userService.getUserRegistWorkshops(this.currentUser.username).subscribe((signUps: SignUps[]) => {
         if (signUps.length > 0) {
@@ -38,17 +41,27 @@ export class MyWorkshopsComponent implements OnInit {
           this.mySignUpsWorkshops = signUps;
           this.informMessage = ""
           this.mySignUpsWorkshops.forEach(w => {
-            w.workshopDate = new Date(w.workshopDate).toLocaleString('sr-RS');
-            w.signUpDate = new Date(w.signUpDate).toLocaleString('sr-RS');
+            w.workshopDate = new Date(w.workshopDate).toLocaleString('en-US');
+            w.signUpDate = new Date(w.signUpDate).toLocaleString('en-US');
           })
         }
         else this.informMessage = "You didn't sign up for any workshops."
       })
 
   }
-  withdraw(event) {
+  withdrawRequest(event) {
     event.stopPropagation();
-    let result = confirm("Are you sure you want to cancel application?");
+    let result = confirm("Are you sure you want to withdraw application?");
+    if (result) {
+      // Perform the action for yes and ad for 12h!!!
+    } else {
+      // Perform the action for no
+    }
+  }
+
+  deleteWorkshop(event) {
+    event.stopPropagation();
+    let result = confirm("Are you sure you want to cancle workshop?");
     if (result) {
       // Perform the action for yes and ad for 12h!!!
     } else {
@@ -59,8 +72,48 @@ export class MyWorkshopsComponent implements OnInit {
   currentUser: User;
   myWorkshops: Workshop[] = [];
   mySignUpsWorkshops: SignUps[] = [];
+  allSignUps: SignUps
   informMessage: string = "";
   errorMessage: string = "";
+
+  reloadSignUps() {
+    this.organizerService.getSignUpRequests(this.currentUser.username).subscribe((signUps: SignUps[]) => {
+      console.log("signUp ", signUps);
+      if (signUps.length > 0) {
+        this.mySignUpsWorkshops = signUps;
+      }
+    })
+  }
+
+  acceptRequest(username, idWorkshop) {
+    this.organizerService.acceptRequestForWorkshop(username, idWorkshop).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        this.reloadSignUps();
+
+      }
+      else {
+        this.errorMessage = "Error occurred accepting request."
+      }
+    })
+
+  }
+
+  // denyRequest() {
+
+  // }
+
+  requestsEmpty(id): boolean {
+    let signUp = this.mySignUpsWorkshops.filter(s => s.idWorkshop == id)
+    if (signUp.length == 0) return true;
+    return false;
+  }
+  activeDate(id): boolean {
+
+    let workshop = this.myWorkshops.filter(s => s._id == id)
+    console.log("pisao: ", workshop[0].date, "prebacio u: ", new Date(workshop[0].date))
+    if (new Date(workshop[0].date) < new Date) return false;
+    return true;
+  }
 
   goToDetails(id) {
     localStorage.setItem("workshopID", JSON.stringify(id));

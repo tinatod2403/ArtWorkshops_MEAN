@@ -127,30 +127,28 @@ hr {
 }
 
 .signup-btn {
-    height: 50%;
-    margin-left: 20px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: rgb(220, 170, 77);
+    background-color: rgb(200, 150, 57);
     color: white;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
+    padding: 14px 20px;
     border: none;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .signup-btn:hover {
-    background-color: rgb(200, 150, 57);
+    background-color: rgb(174, 132, 53);
 }
+
 .error-output {
     font-size: 20px;
     color: red;
+    padding-bottom: 20px;
 }
 
 
-button[type="actionWorkshop"]{
+button[type="actionWorkshop"] {
     margin-right: 5px;
+    margin-top: 5px;
     padding: 10px 20px;
     color: white;
     border-radius: 5px;
@@ -158,6 +156,94 @@ button[type="actionWorkshop"]{
     font-size: 16px;
     cursor: pointer;
 }
-button[type="actionWorkshop"]:hover{
+
+
+button[type="actionWorkshop"]:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#startChat {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#startChat:hover {
+    background-color: #3e8e41;
+}
+
+.chat-message {
+    display: inline-block;
+    width: 60%;
+}
+
+.sender-message {
+    float: left;
+}
+
+.recipient-message {
+    float: right;
+}
+
+.content-and-profile-sender {
+    float: left;
+}
+
+.content-sender {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: darkgray;
+    margin-bottom: 5px;
+}
+
+.content-recipient {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: lightblue;
+    margin-bottom: 5px;
+}
+
+.chat-box {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 90%;
+}
+
+
+.chat-container {
+    background-color: gray;
+    width: 480px;
+    height: 300px;
+    border: 1px solid #7f5947;
+    border-radius: 10px;
+    overflow-y: scroll;
+}
+
+@media (max-width: 600px) {
+    .chat-container {
+        width: 90%;
+    }
+}
+
+
+form {
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    width: 400px;
+    height: 30px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+input[type="submit"] {
+    width: 70px;
+    height: 35px;
 }

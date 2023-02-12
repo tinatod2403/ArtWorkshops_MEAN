@@ -16,6 +16,12 @@ organizerRouter.route("/workshopDetails").post(
 organizerRouter.route("/editWorkshopDetailes").post(
     (req, res) => new OrganizerController().editWorkshopDetailes(req, res)
 )
+organizerRouter.route("/getSignUpRequests").post(
+    (req, res) => new OrganizerController().getSignUpRequests(req, res)
+)
+organizerRouter.route("/acceptRequestForWorkshop").post(
+    (req, res) => new OrganizerController().acceptRequestForWorkshop(req, res)
+)
 
 
 

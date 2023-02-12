@@ -23,7 +23,7 @@ export class EditWorkshopComponent implements OnInit {
     this.organizerService.workshopDetails(id).subscribe((workshop: Workshop) => {
       if (workshop) {
         this.currWorkshop = workshop;
-        this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('sr-RS');
+        this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('en-US');
         this.nameEdit = this.currWorkshop.name;
         this.placeEdit = this.currWorkshop.place;
         this.shortDescEdit = this.currWorkshop.shortDesc;
@@ -105,11 +105,11 @@ export class EditWorkshopComponent implements OnInit {
         console.log("Error editing data.")
       }
     })
-    
+
     this.organizerService.workshopDetails(this.currWorkshop._id).subscribe((workshop: Workshop) => {
       if (workshop) {
         this.currWorkshop = workshop;
-        this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('sr-RS');
+        this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('en-US');
         this.nameEdit = this.currWorkshop.name;
         this.placeEdit = this.currWorkshop.place;
         this.shortDescEdit = this.currWorkshop.shortDesc;

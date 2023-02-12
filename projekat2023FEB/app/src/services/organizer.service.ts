@@ -60,7 +60,20 @@ export class OrganizerService {
     return this.http.post(`${this.url}/organizer/editWorkshopDetailes`, data)
   }
 
+  getSignUpRequests(organizer) {
+    const data = {
+      organizer: organizer
+    }
+    return this.http.post(`${this.url}/organizer/getSignUpRequests`, data)
+  }
 
+  acceptRequestForWorkshop(username, idWorkshop) {
+    const data = {
+      username: username,
+      idWorkshop: idWorkshop
+    }
+    return this.http.post(`${this.url}/organizer/acceptRequestForWorkshop`, data)
+  }
 
 
 }

@@ -79,6 +79,27 @@ class OrganizerController {
                 }
             });
         };
+        this.getSignUpRequests = (req, res) => {
+            let organizer = req.body.organizer;
+            let today = new Date();
+            signUp_1.default.find({ workshopDate: { $gt: today }, organizer: organizer }, (error, signUps) => {
+                if (signUps)
+                    res.json(signUps);
+                else
+                    console.log(error);
+            });
+        };
+        this.acceptRequestForWorkshop = (req, res) => {
+            signUp_1.default.updateOne({
+                username: req.body.username,
+                idWorkshop: req.body.idWorkshop
+            }, { $set: { status: 'accepted' } }, (error, success) => {
+                if (error)
+                    console.log(error);
+                else
+                    res.json({ "resp": "OK" });
+            });
+        };
     }
 }
 exports.OrganizerController = OrganizerController;
