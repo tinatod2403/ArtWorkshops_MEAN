@@ -31,6 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MyWorkshopsComponent } from './my-workshops/my-workshops.component';
 import { WorkshopDetailsComponent } from './workshop-details/workshop-details.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
     AddWorkshopComponent,
     MyWorkshopsComponent,
     WorkshopDetailsComponent,
-    EditWorkshopComponent
+    EditWorkshopComponent,
+    AdminLoginComponent
 
   ],
   imports: [

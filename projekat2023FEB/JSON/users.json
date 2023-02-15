@@ -1,4 +1,7 @@
 [{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbee"
+  },
   "firstname": "Mitar",
   "lastname": "Mitrovic",
   "username": "milos1",
@@ -12,6 +15,9 @@
   "IDorganization": "",
   "status": "pending"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbef"
+  },
   "firstname": "Milica",
   "lastname": "Kurcubic",
   "username": "mica",
@@ -25,6 +31,9 @@
   "IDorganization": "",
   "status": "approved"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbf0"
+  },
   "firstname": "Kristina",
   "lastname": "Todorovic",
   "username": "tinatod",
@@ -38,6 +47,9 @@
   "IDorganization": "2431999787821",
   "status": "approved"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbf1"
+  },
   "firstname": "Ana",
   "lastname": "Andric",
   "username": "andricana",
@@ -51,6 +63,9 @@
   "IDorganization": "",
   "status": "approved"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbf2"
+  },
   "firstname": "Stefan",
   "lastname": "Jovanovic",
   "username": "sefke",
@@ -62,8 +77,11 @@
   "organizationName": "De Balie",
   "address": "Kleine-Gartmanplantsoen 10 amsterdam, Netherlands 1019",
   "IDorganization": "3504786372831",
-  "status": "pending"
+  "status": "approved"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbf3"
+  },
   "firstname": "John",
   "lastname": "Doe",
   "username": "johndoe",
@@ -77,6 +95,9 @@
   "IDorganization": "",
   "status": "pending"
 },{
+  "_id": {
+    "$oid": "63e272ad2abf3e82e760bbf4"
+  },
   "firstname": "Filip",
   "lastname": "Todorovic",
   "username": "filiptodor",

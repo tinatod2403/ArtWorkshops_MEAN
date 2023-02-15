@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose';
 import userRouter from './routers/user.routers';
 import organizerRouter from './routers/organizer.routers';
+import adminRouter from './routers/admin.routers';
 
 
 const app = express();
@@ -21,6 +22,7 @@ connection.once('open', () => {
 const router = express.Router();
 router.use('/user', userRouter);
 router.use('/organizer', organizerRouter);
+router.use('/admin', adminRouter);
 
 app.use('/', router);
 

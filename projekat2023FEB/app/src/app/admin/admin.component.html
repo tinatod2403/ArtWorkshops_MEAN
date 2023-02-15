@@ -1,5 +1,82 @@
-<mat-form-field appearance="outline">
-    <input matInput [matDatepicker]="picker" (click)="picker.open()">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+<div class="hero">
+  <header class="header">
+    <a routerLink=""><img class="logo-image"></a>
+    <h1 class="header__title">Welcome {{currAdmin.firstname}} {{currAdmin.lastname}}!</h1>
+    <div class="header__buttons" style="display: flex; align-items: center; justify-content: center;">
+
+
+
+
+
+      <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+
+      &nbsp;
+      <img src="../../assets/admin.jpg" alt="Profile picture" class="profile-image">
+    </div>
+  </header>
+
+  <div class="middle">
+
+
+    <!-- //////////////////////////////////////////////////// REGISTRATION CONTAINER -->
+    <div class="admin-containers">
+      <h1 class="registration-requests__title">Registration Requests ({{registrationRequests.length}})</h1>
+      <div class="registration-requests">
+
+        <table class="registration-requests__table">
+          <tbody class="registration-requests__table-body">
+            <tr class="registration-requests__table-row" *ngFor="let request of registrationRequests">
+              <td><img class="request-image" [src]="request.picture"></td>
+              <td>{{request.firstname}}</td>
+              <td>{{request.lastname}}</td>
+              <td>{{request.username}}</td>
+              <td>{{request.phone}}</td>
+              <td>{{request.email}}</td>
+              <td>{{request.isOrganizer}}</td>
+              <td><button class="registration-requests__approve-btn">Approve</button></td>
+              <td><button class="registration-requests__deny-btn">Deny</button></td>
+            </tr>
+          </tbody>
+
+        </table>
+        <h3 style="margin-left: 5px; color: brown;" *ngIf="registrationMessage">{{registrationMessage}}</h3>
+      </div>
+
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
+
+
+
+    <!-- //////////////////////////////////////////////////// WORKSHOP PROPOSITION CONTAINER -->
+
+    <div class="admin-containers">
+      <h1 class="registration-requests__title">Workshop propositions ({{workshopPropositions.length}})</h1>
+      <div class="registration-requests">
+
+        <table class="registration-requests__table">
+          <tbody class="registration-requests__table-body">
+            <tr class="registration-requests__table-row" *ngFor="let prop of workshopPropositions">
+              <td><img class="image-name" [src]="prop.mainPhoto"></td>
+              <td>{{prop.name}}</td>
+              <td>{{prop.date}}</td>
+              <td>{{prop.place}}</td>
+              <td>{{prop.shortDesc}}</td>
+              <td>{{prop.numOfPlaces}}</td>
+              <td style="font-weight: bold;">{{prop.organizer}}</td>
+              <td><button class="registration-requests__approve-btn">Approve</button></td>
+            </tr>
+          </tbody>
+
+        </table>
+        <h3 style="margin-left: 5px; color: brown;" *ngIf="workshopPropMessage">{{workshopPropMessage}}</h3>
+      </div>
+
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
+
+
+  </div>
+
+  <div class="footer"></div>
+</div>

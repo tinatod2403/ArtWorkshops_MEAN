@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AddWorkshopComponent } from './add-workshop/add-workshop.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminComponent } from './admin/admin.component';
 import { BecomeOrganizerComponent } from './become-organizer/become-organizer.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
@@ -32,9 +33,10 @@ const routes: Routes = [
   { path: "workshopDetails", component: WorkshopDetailsComponent },
   { path: "**/workshopDetails", component: WorkshopDetailsComponent },
   { path: "editWorkshop", component: EditWorkshopComponent },
+  { path: "adminLogin", component: AdminLoginComponent },
+  { path: "admin", component: AdminComponent },
+  { path: "**/admin", component: AdminComponent },
   // { path: "**/editWorkshop", component: EditWorkshopComponent },
-
-  { path: "admin", component: AdminComponent }
 
 ];
 
