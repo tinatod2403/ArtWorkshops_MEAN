@@ -2,6 +2,7 @@ import * as express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { ObjectId } from 'mongodb';
 import { ParsedQs } from 'qs';
+import Message from '../models/Message';
 import signUp from '../models/signUp';
 import Workshop from '../models/workshop';
 
@@ -133,6 +134,69 @@ export class OrganizerController {
                 else
                     res.json({ "resp": "OK" })
             })
+    }
+
+    getMessageRequests = (req: express.Request, res: express.Response) => {
+
+        Message.aggregate([
+            {
+                $match: {
+                    'workshop._id': req.body.workshopId,
+                    'recipient.username': req.body.recipientUsername
+                }
+            },
+            {
+                $group: {
+                    _id: '$sender.username',
+                    senderUsername: { $first: '$sender.username' },
+                    senderPicture: { $first: '$sender.picture' }
+                }
+            }
+        ], (err, messageRequests) => {
+            if (err) console.log(err)
+            else res.json(messageRequests)
+        });
+
+    }
+
+
+
+    getMessages = (req: express.Request, res: express.Response) => {
+        // console.log("ID ", req.body.workshopId)
+        Message.find({
+            'workshop._id': req.body.workshopId,
+            $or: [
+                { 'sender.username': req.body.senderUsername, 'recipient.username': req.body.recipientUsername },
+                { 'sender.username': req.body.recipientUsername, 'recipient.username': req.body.senderUsername }
+            ]
+        }
+        ).sort({ timestamp: 1 }).then(messages => {
+            if (messages) {
+                res.json(messages)
+            }
+        })
+
+    }
+
+
+    sendMessage = (req: express.Request, res: express.Response) => {
+
+        // console.log("sendMessage")
+
+        let message = new Message({
+            workshop: req.body.workshop,
+            sender: req.body.sender,
+            recipient: req.body.recipient,
+            content: req.body.content,
+            timestamp: req.body.timestamp
+        })
+
+        message.save().then(message => {
+            if (message) {
+                res.json({ "resp": "OK" })
+            }
+        })
+
     }
 
 }

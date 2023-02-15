@@ -1,1 +1,2 @@
 npm install @angular/material @angular/animations
+npm install @angular/material-moment-adapter

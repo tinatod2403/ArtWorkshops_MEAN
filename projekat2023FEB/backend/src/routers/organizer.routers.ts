@@ -22,6 +22,16 @@ organizerRouter.route("/getSignUpRequests").post(
 organizerRouter.route("/acceptRequestForWorkshop").post(
     (req, res) => new OrganizerController().acceptRequestForWorkshop(req, res)
 )
+organizerRouter.route("/getMessageRequests").post(
+    (req, res) => new OrganizerController().getMessageRequests(req, res)
+)
+organizerRouter.route("/getMessages").post(
+    (req, res) => new OrganizerController().getMessages(req, res)
+)
+organizerRouter.route("/sendMessage").post(
+    (req, res) => new OrganizerController().sendMessage(req, res)
+)
+
 
 
 

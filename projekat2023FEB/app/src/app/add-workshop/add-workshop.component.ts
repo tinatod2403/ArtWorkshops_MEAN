@@ -15,7 +15,7 @@ export class AddWorkshopComponent implements OnInit {
   ngOnInit(): void {
     this.currOrganizer = JSON.parse(localStorage.getItem("currentUser"));
     this.userService.getUserData(this.currOrganizer.username).subscribe((user: User) => {
-      this.currOrganizer = user;
+      this.currOrganizer = user;//da l dodati ovo sad u localStorage
     });
 
   }

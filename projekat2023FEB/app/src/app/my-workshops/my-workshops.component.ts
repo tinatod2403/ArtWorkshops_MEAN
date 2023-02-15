@@ -110,7 +110,7 @@ export class MyWorkshopsComponent implements OnInit {
   activeDate(id): boolean {
 
     let workshop = this.myWorkshops.filter(s => s._id == id)
-    console.log("pisao: ", workshop[0].date, "prebacio u: ", new Date(workshop[0].date))
+    // console.log("pisao: ", workshop[0].date, "prebacio u: ", new Date(workshop[0].date))
     if (new Date(workshop[0].date) < new Date) return false;
     return true;
   }

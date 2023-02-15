@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrganizerController = void 0;
 const mongodb_1 = require("mongodb");
+const Message_1 = __importDefault(require("../models/Message"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const workshop_1 = __importDefault(require("../models/workshop"));
 class OrganizerController {
@@ -98,6 +99,57 @@ class OrganizerController {
                     console.log(error);
                 else
                     res.json({ "resp": "OK" });
+            });
+        };
+        this.getMessageRequests = (req, res) => {
+            Message_1.default.aggregate([
+                {
+                    $match: {
+                        'workshop._id': req.body.workshopId,
+                        'recipient.username': req.body.recipientUsername
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$sender.username',
+                        senderUsername: { $first: '$sender.username' },
+                        senderPicture: { $first: '$sender.picture' }
+                    }
+                }
+            ], (err, messageRequests) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(messageRequests);
+            });
+        };
+        this.getMessages = (req, res) => {
+            // console.log("ID ", req.body.workshopId)
+            Message_1.default.find({
+                'workshop._id': req.body.workshopId,
+                $or: [
+                    { 'sender.username': req.body.senderUsername, 'recipient.username': req.body.recipientUsername },
+                    { 'sender.username': req.body.recipientUsername, 'recipient.username': req.body.senderUsername }
+                ]
+            }).sort({ timestamp: 1 }).then(messages => {
+                if (messages) {
+                    res.json(messages);
+                }
+            });
+        };
+        this.sendMessage = (req, res) => {
+            // console.log("sendMessage")
+            let message = new Message_1.default({
+                workshop: req.body.workshop,
+                sender: req.body.sender,
+                recipient: req.body.recipient,
+                content: req.body.content,
+                timestamp: req.body.timestamp
+            });
+            message.save().then(message => {
+                if (message) {
+                    res.json({ "resp": "OK" });
+                }
             });
         };
     }

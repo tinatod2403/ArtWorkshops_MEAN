@@ -73,6 +73,28 @@ export class UserService {
     return this.http.post(`${this.url}/user/getPassedWorkshops`, data);
   }
 
+  sendMessage(sender, recipient, content, timestamp, workshop) {
+    const data = {
+      workshop: workshop,
+      sender: sender,
+      recipient: recipient,
+      content: content,
+      timestamp: timestamp
+    }
+    return this.http.post(`${this.url}/user/sendMessage`, data);
+  }
+
+
+  getMessages(senderUsername, recipientUsername, workshopId) {
+    const data = {
+      senderUsername: senderUsername,
+      recipientUsername: recipientUsername,
+      workshopId:workshopId
+    }
+
+    return this.http.post(`${this.url}/user/getMessages`, data);
+  }
+
 
 
 }

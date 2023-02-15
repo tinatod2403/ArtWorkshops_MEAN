@@ -75,5 +75,35 @@ export class OrganizerService {
     return this.http.post(`${this.url}/organizer/acceptRequestForWorkshop`, data)
   }
 
+  getMessageRequests(recipientUsername, workshopId) {
+    const data = {
+      recipientUsername: recipientUsername,
+      workshopId: workshopId
+    }
+
+    return this.http.post(`${this.url}/organizer/getMessageRequests`, data);
+  }
+
+  getMessages(senderUsername, recipientUsername, workshopId) {
+    const data = {
+      senderUsername: senderUsername,
+      recipientUsername: recipientUsername,
+      workshopId: workshopId
+    }
+
+    return this.http.post(`${this.url}/organizer/getMessages`, data);
+  }
+
+  sendMessage(sender, recipient, content, timestamp, workshop) {
+    const data = {
+      workshop: workshop,
+      sender: sender,
+      recipient: recipient,
+      content: content,
+      timestamp: timestamp
+    }
+    return this.http.post(`${this.url}/organizer/sendMessage`, data);
+  }
+
 
 }

@@ -211,18 +211,30 @@ button[type="actionWorkshop"]:hover {
     display: inline-block;
     padding: 10px 15px;
     border-radius: 10px;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     width: 90%;
+}
+
+.input-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    width: 490px;
 }
 
 
 .chat-container {
-    background-color: gray;
-    width: 480px;
+    background-color: rgb(216, 215, 215);
+    width: 490px;
     height: 300px;
     border: 1px solid #7f5947;
     border-radius: 10px;
     overflow-y: scroll;
+    padding-bottom: 35px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 600px) {
@@ -246,4 +258,48 @@ input[type="text"] {
 input[type="submit"] {
     width: 70px;
     height: 35px;
+}
+
+
+
+
+
+/* ////////////////////////////////////////////// za requestove */
+
+.picture-username {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    cursor: pointer;
+    background-color: #bdb6b6;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+.picture-username:hover{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.messages-container {
+    display: flex;
+}
+
+.message-requests-table {
+    border-collapse: collapse;
+}
+
+.message-requests-table th,
+.message-requests-table td {
+    padding: 8px;
+    text-align: left;
+}
+
+.message-requests-table th {
+    background-color: #eee;
+    font-weight: bold;
+}
+
+
+.message-requests-table img {
+    max-width: 64px;
+    max-height: 64px;
 }

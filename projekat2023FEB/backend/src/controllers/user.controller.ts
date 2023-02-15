@@ -4,7 +4,7 @@ import { ParsedQs } from 'qs';
 import Workshop from '../models/workshop';
 import User from '../models/user';
 import SignUp from '../models/signUp';
-import workshop from '../models/workshop';
+import Message from '../models/Message';
 
 export class UserController {
     register = (req: express.Request, res: express.Response) => {
@@ -184,6 +184,44 @@ export class UserController {
             else
                 console.log(error)
         })
+    }
+
+    sendMessage = (req: express.Request, res: express.Response) => {
+
+        // console.log("sendMessage")
+
+        let message = new Message({
+            workshop: req.body.workshop,
+            sender: req.body.sender,
+            recipient: req.body.recipient,
+            content: req.body.content,
+            timestamp: req.body.timestamp
+        })
+
+        message.save().then(message => {
+            if (message) {
+                res.json({ "resp": "OK" })
+            }
+        })
+
+    }
+
+
+    getMessages = (req: express.Request, res: express.Response) => {
+        // console.log("ID ",req.body.workshopId)
+        Message.find({
+            'workshop._id': req.body.workshopId,
+            $or: [
+                { 'sender.username': req.body.senderUsername, 'recipient.username': req.body.recipientUsername },
+                { 'sender.username': req.body.recipientUsername, 'recipient.username': req.body.senderUsername }
+            ]
+        }
+        ).sort({ timestamp: 1 }).then(messages => {
+            if (messages) {
+                res.json(messages)
+            }
+        })
+
     }
 
 

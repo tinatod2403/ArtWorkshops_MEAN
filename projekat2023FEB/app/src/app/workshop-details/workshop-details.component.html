@@ -73,64 +73,63 @@
                     <br>
                     <br>
 
-                    <div *ngIf="chatOpened">
+                    <div *ngIf="chatOpened" style="position: relative;">
+
                         <div class="chat-container" #scrollContainer>
 
-                            <div class="chat-box">
-                                <div class="chat-message sender-message">
-                                    <div class="content-and-profile-sender">
-                                        <div style="display: inline-block;">
-                                            <div style="display: flex; align-items: center;">
-                                                <img src="../../assets/avatar.jpg"
-                                                    style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
-                                                <span>Tina</span>
+                            <div *ngFor="let message of myMessages">
+                                <div class="chat-box" *ngIf="message.sender.username==currWorkshop.organizer">
+                                    <div class="chat-message sender-message">
+                                        <div class="content-and-profile-sender">
+                                            <div style="display: inline-block;">
+                                                <div style="display: flex; align-items: center;">
+                                                    <img [src]="message.sender.picture"
+                                                        style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                    <span style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                        {{message.timestamp}}</span>
+                                                </div>
+                                                <div>
+                                                    <span style="float:left"
+                                                        class="content-sender">{{message.content}}</span>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <span style="float:left" class="content-sender">Hi there! H there! H
-                                                    there!
-                                                    H
-                                                    there</span>
-                                            </div>
-                                            <div>
-                                                <span style="float:left" class="content-sender">Hi there! H there! H
-                                                    there!
-                                                    H
-                                                    there</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="chat-box" *ngIf="message.sender.username==currentUser.username">
+                                    <div class="chat-message recipient-message">
+                                        <div class="content-and-profile-recipient">
+                                            <div style="float:right">
+                                                <div style="display: flex; align-items: center; float:right">
+                                                    <span style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                        {{message.timestamp}}</span>
+                                                    <img [src]="message.sender.picture"
+                                                        style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                </div>
+                                                <div>
+                                                    <span style="float:right"
+                                                        class="content-recipient">{{message.content}}</span>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="chat-box">
-                                <div class="chat-message recipient-message">
-                                    <div class="content-and-profile-recipient">
-                                        <div style="float:right">
-                                            <div style="display: flex; align-items: center; float:right">
-                                                <span>Gpt</span>
-                                                <img src="../../assets/avatar.jpg"
-                                                    style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
-                                            </div>
-                                            <div>
-                                                <span style="float:right" class="content-recipient">HiiHiHiHi HiHi
-                                                    HiHiHiHiHi HiHiHiHiHi </span>
-                                            </div>
-                                            <div>
-                                                <span style="float:right" class="content-recipient">HiiHiHiHi HiHi
-                                                    HiHiHiHiHi HiHiHiHiHi </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <form>
-                            <input type="text" placeholder="Type your message here...">
-                            <input (click)="sendMessage()" style="height: 100%;" class="signup-btn" type="submit"
-                                value="Send">
-                        </form>
+                        <div class="input-btn" style="display: flex;">
+                            <input style="margin:0px" type="text" placeholder="Type your message here..."
+                                [(ngModel)]="messageContent">
+                            <input (click)="sendMessage()" style="height: 100%; width: 20%;" class="signup-btn"
+                                type="submit" value="Send">
+                        </div>
+
+
                     </div>
-                    <button type="button" id="startChat" (click)="startChat()">Start Chat</button>
+                    <button *ngIf="!chatOpened" type="button" id="startChat" (click)="startChat()">Start Chat</button>
+                    <button *ngIf="chatOpened" type="button" id="startChat" (click)="endChat()">Close Chat</button>
 
 
 
@@ -220,6 +219,92 @@
                     <div style="display: flex; align-items: center;">
                     </div>
                     <span class="error-output">{{errorMessage}}</span>
+
+                    <div class="messages-container" *ngIf="currWorkshop.organizer==currentUser.username">
+                        <table class="message-requests-table">
+                            <thead>
+                                <tr>
+                                    <th>Message requests</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let request of messageReqests">
+                                    <div class="picture-username" (click)="openChat(request.senderUsername)">
+                                        <td><img style="height: 40px; width: 40px;" class="profile-image"
+                                                [src]="request.senderPicture" alt="Sender Picture"></td>
+
+                                        <td>{{request.senderUsername}}</td>
+                                    </div>
+                                    <td>
+                                        <div *ngIf="request.opened" style="position: relative;">
+
+                                            <div class="chat-container" #scrollContainer>
+
+                                                <div *ngFor="let message of request.messages">
+                                                    <div class="chat-box"
+                                                        *ngIf="message.sender.username==request.senderUsername">
+                                                        <div class="chat-message sender-message">
+                                                            <div class="content-and-profile-sender">
+                                                                <div style="display: inline-block;">
+                                                                    <div style="display: flex; align-items: center;">
+                                                                        <img [src]="message.sender.picture"
+                                                                            style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                                        <span
+                                                                            style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                                            {{message.timestamp}}</span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span style="float:left"
+                                                                            class="content-sender">{{message.content}}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="chat-box"
+                                                        *ngIf="message.sender.username!=request.senderUsername">
+                                                        <div class="chat-message recipient-message">
+                                                            <div class="content-and-profile-recipient">
+                                                                <div style="float:right">
+                                                                    <div
+                                                                        style="display: flex; align-items: center; float:right">
+                                                                        <span
+                                                                            style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                                            {{message.timestamp}}</span>
+                                                                        <img [src]="message.sender.picture"
+                                                                            style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                                    </div>
+                                                                    <div>
+                                                                        <span style="float:right"
+                                                                            class="content-recipient">{{message.content}}</span>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="input-btn" style="display: flex;">
+                                                <input style="margin:0px" type="text"
+                                                    placeholder="Type your message here..."
+                                                    [(ngModel)]="messageContent">
+                                                <input (click)="sendMessageToUser(request)"
+                                                    style="height: 100%; width: 20%;" class="signup-btn" type="submit"
+                                                    value="Send">
+                                            </div>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
 
                 </div>
 

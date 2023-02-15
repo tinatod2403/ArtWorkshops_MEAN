@@ -31,5 +31,11 @@ userRouter.route("/getUserRegistWorkshops").post(
 userRouter.route("/getPassedWorkshops").post(
     (req, res) => new UserController().getPassedWorkshops(req, res)
 )
+userRouter.route("/sendMessage").post(
+    (req, res) => new UserController().sendMessage(req, res)
+)
+userRouter.route("/getMessages").post(
+    (req, res) => new UserController().getMessages(req, res)
+)
 
 export default userRouter;

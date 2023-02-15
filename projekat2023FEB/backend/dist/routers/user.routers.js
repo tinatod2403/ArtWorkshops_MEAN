@@ -15,5 +15,7 @@ userRouter.route("/searchWorkshops").post((req, res) => new user_controller_1.Us
 userRouter.route("/signUpForWorkshop").post((req, res) => new user_controller_1.UserController().signUpForWorkshop(req, res));
 userRouter.route("/getUserRegistWorkshops").post((req, res) => new user_controller_1.UserController().getUserRegistWorkshops(req, res));
 userRouter.route("/getPassedWorkshops").post((req, res) => new user_controller_1.UserController().getPassedWorkshops(req, res));
+userRouter.route("/sendMessage").post((req, res) => new user_controller_1.UserController().sendMessage(req, res));
+userRouter.route("/getMessages").post((req, res) => new user_controller_1.UserController().getMessages(req, res));
 exports.default = userRouter;
 //# sourceMappingURL=user.routers.js.map

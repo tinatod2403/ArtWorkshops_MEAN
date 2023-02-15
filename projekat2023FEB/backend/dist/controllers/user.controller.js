@@ -7,6 +7,7 @@ exports.UserController = void 0;
 const workshop_1 = __importDefault(require("../models/workshop"));
 const user_1 = __importDefault(require("../models/user"));
 const signUp_1 = __importDefault(require("../models/signUp"));
+const Message_1 = __importDefault(require("../models/Message"));
 class UserController {
     constructor() {
         this.register = (req, res) => {
@@ -145,6 +146,35 @@ class UserController {
                     res.json(signUps);
                 else
                     console.log(error);
+            });
+        };
+        this.sendMessage = (req, res) => {
+            // console.log("sendMessage")
+            let message = new Message_1.default({
+                workshop: req.body.workshop,
+                sender: req.body.sender,
+                recipient: req.body.recipient,
+                content: req.body.content,
+                timestamp: req.body.timestamp
+            });
+            message.save().then(message => {
+                if (message) {
+                    res.json({ "resp": "OK" });
+                }
+            });
+        };
+        this.getMessages = (req, res) => {
+            // console.log("ID ",req.body.workshopId)
+            Message_1.default.find({
+                'workshop._id': req.body.workshopId,
+                $or: [
+                    { 'sender.username': req.body.senderUsername, 'recipient.username': req.body.recipientUsername },
+                    { 'sender.username': req.body.recipientUsername, 'recipient.username': req.body.senderUsername }
+                ]
+            }).sort({ timestamp: 1 }).then(messages => {
+                if (messages) {
+                    res.json(messages);
+                }
             });
         };
     }
