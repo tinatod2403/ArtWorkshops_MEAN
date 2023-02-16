@@ -106,4 +106,19 @@ export class OrganizerService {
   }
 
 
+  cancelWorkshop(workshopId) {
+    const data = {
+      workshopId: workshopId
+    }
+
+    return this.http.post(`${this.url}/organizer/cancelWorkshop`, data);
+  }
+
+  // sendMail() {
+
+  //   console.log("server")
+  //   return this.http.get(`${this.url}/admin/sendMail`);
+  // }
+
+
 }

@@ -15,5 +15,6 @@ organizerRouter.route("/acceptRequestForWorkshop").post((req, res) => new organi
 organizerRouter.route("/getMessageRequests").post((req, res) => new organizer_controller_1.OrganizerController().getMessageRequests(req, res));
 organizerRouter.route("/getMessages").post((req, res) => new organizer_controller_1.OrganizerController().getMessages(req, res));
 organizerRouter.route("/sendMessage").post((req, res) => new organizer_controller_1.OrganizerController().sendMessage(req, res));
+organizerRouter.route("/cancelWorkshop").post((req, res) => new organizer_controller_1.OrganizerController().cancelWorkshop(req, res));
 exports.default = organizerRouter;
 //# sourceMappingURL=organizer.routers.js.map

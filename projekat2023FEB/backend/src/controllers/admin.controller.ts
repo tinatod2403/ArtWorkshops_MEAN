@@ -32,11 +32,48 @@ export class AdminController {
 
 
     getWorkshopPropositions = (req: express.Request, res: express.Response) => {
+        // console.log("getWorkshopPropositions")
 
         workshop.find({ status: "pending", date: { $gt: new Date() } }, (err, propositions) => {
             if (err) console.log(err)
             else res.json(propositions)
         })
+
+    }
+
+
+    sendMail = (req: express.Request, res: express.Response) => {
+
+        const nodemailer = require('nodemailer');
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            service: 'outlook',
+            auth: {
+                user: 'artworkshop23@outlook.com',
+                pass: 'organizer123'
+            }
+        });
+
+        let mailOptions = {
+            from: '"Admin" <artworkshop23@outlook.com>', // sender address
+            to: 'kristinatodorovic2403@gmail.com', // list of receivers
+            subject: 'Hello ✔', // Subject line
+            text: 'Hello world?', // plain text body
+            html: '<h1>FILIP MAGARAC</h1>' // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log("Mail OK")
+                res.json({ "resp": "OK" })
+            }
+        }
+        );
 
     }
 }

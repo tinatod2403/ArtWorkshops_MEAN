@@ -2,6 +2,7 @@ import * as express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { ObjectId } from 'mongodb';
 import { ParsedQs } from 'qs';
+import user from '../models/user';
 import Message from '../models/Message';
 import signUp from '../models/signUp';
 import Workshop from '../models/workshop';
@@ -196,6 +197,77 @@ export class OrganizerController {
                 res.json({ "resp": "OK" })
             }
         })
+
+    }
+
+
+
+    cancelWorkshop = (req: express.Request, res: express.Response) => {
+        let wName;
+        let wOrganizer;
+        let wPhoto;
+        signUp.find({ idWorkshop: req.body.workshopId }, (err, signup) => {
+            if (err) console.log(err)
+            else {
+                let usernames = [];
+                signup.forEach(s => {
+                    usernames.push(s.username)
+                })
+                user.find({ username: { $in: usernames } }, (err, users) => {
+                    if (err) console.log(err)
+                    else {
+                        let emails = [];
+                        users.forEach(u => {
+                            emails.push(u.email)
+                        })
+
+                        if (signup) {
+                            wName = signup[0].nameWorkshop
+                            wOrganizer = signup[0].organizer
+                            wPhoto = signup[0].workshopPicture
+                        }
+                        /////////////////////////////////////////////////////////////////////////////////
+                        const nodemailer = require('nodemailer');
+
+                        // create reusable transporter object using the default SMTP transport
+                        let transporter = nodemailer.createTransport({
+                            service: 'outlook',
+                            auth: {
+                                user: 'artworkshop23@outlook.com',
+                                pass: 'organizer123'
+                            }
+                        });
+                        let mailOptions = {
+                            from: '"' + wOrganizer + '" <artworkshop23@outlook.com>', // sender address
+                            to: emails, // list of receivers
+                            subject: '❌Cancellation❌', // Subject line
+                            text: 'Cancellation', // plain text body
+                            html: '<h1 style="text-align: center; color: red;">Cancellation of the workshop <strong>' + wName + '</strong></h1><p style="color: red; font-weight: bold;">CAUTION:</p><p">This workshop has been canceled by the organizer.</p>' // html body
+                        };
+
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                console.log(error);
+                            }
+                            else {
+                                console.log("Mail OK")
+                                res.json({ "resp": "OK" })
+                            }
+                        }
+                        );
+
+                        ////////////////////////////////////////////////////////////////////////////////
+
+
+                    }
+                })
+            }
+        })
+
+
+
+
 
     }
 

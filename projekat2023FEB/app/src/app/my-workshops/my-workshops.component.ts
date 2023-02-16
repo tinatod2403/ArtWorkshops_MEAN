@@ -59,15 +59,7 @@ export class MyWorkshopsComponent implements OnInit {
     }
   }
 
-  deleteWorkshop(event) {
-    event.stopPropagation();
-    let result = confirm("Are you sure you want to cancle workshop?");
-    if (result) {
-      // Perform the action for yes and ad for 12h!!!
-    } else {
-      // Perform the action for no
-    }
-  }
+
 
   currentUser: User;
   myWorkshops: Workshop[] = [];
@@ -118,6 +110,21 @@ export class MyWorkshopsComponent implements OnInit {
   goToDetails(id) {
     localStorage.setItem("workshopID", JSON.stringify(id));
     this.router.navigate(["/workshopDetails"]);
+  }
+
+
+
+  deleteWorkshop(event, workshop) {
+    event.stopPropagation();
+    let result = confirm("Are you sure you want to cancle workshop?");
+    if (result) {
+      this.organizerService.cancelWorkshop(workshop._id).subscribe((resp) => {
+        if (resp["resp"] == "OK") {
+          alert("poslat mail")
+        }
+      })
+
+    }
   }
 
   logOut() {

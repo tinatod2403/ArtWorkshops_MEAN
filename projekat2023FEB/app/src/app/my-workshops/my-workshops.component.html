@@ -90,7 +90,7 @@
                                     passed
                                 </td>
                                 <td>{{s.numOfPlaces}}</td>
-                                <td (click)="deleteWorkshop($event)"><button class="Withdraw">DELETE</button>
+                                <td (click)="deleteWorkshop($event, s)"><button class="Withdraw">DELETE</button>
                                 </td>
 
                             </tr>
@@ -100,7 +100,7 @@
                                     <span *ngIf="requestsEmpty(s._id)" style=" margin: 10px; color: white;">No requests
                                         yet</span>
                                 </div>
-                                <div  *ngFor="let signUp of mySignUpsWorkshops" style="margin:10px">
+                                <div *ngFor="let signUp of mySignUpsWorkshops" style="margin:10px">
                                     <div *ngIf="s._id==signUp.idWorkshop && activeDate(s._id)">
                                         <!-- dodala sam deo za activeDate(s._id) da bih sakrila ove koji su passed -->
                                         <div class="Requests">

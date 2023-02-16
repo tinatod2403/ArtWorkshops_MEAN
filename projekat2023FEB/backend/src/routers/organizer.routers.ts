@@ -31,6 +31,9 @@ organizerRouter.route("/getMessages").post(
 organizerRouter.route("/sendMessage").post(
     (req, res) => new OrganizerController().sendMessage(req, res)
 )
+organizerRouter.route("/cancelWorkshop").post(
+    (req, res) => new OrganizerController().cancelWorkshop(req, res)
+)
 
 
 

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrganizerController = void 0;
 const mongodb_1 = require("mongodb");
+const user_1 = __importDefault(require("../models/user"));
 const Message_1 = __importDefault(require("../models/Message"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const workshop_1 = __importDefault(require("../models/workshop"));
@@ -149,6 +150,64 @@ class OrganizerController {
             message.save().then(message => {
                 if (message) {
                     res.json({ "resp": "OK" });
+                }
+            });
+        };
+        this.cancelWorkshop = (req, res) => {
+            let wName;
+            let wOrganizer;
+            let wPhoto;
+            signUp_1.default.find({ idWorkshop: req.body.workshopId }, (err, signup) => {
+                if (err)
+                    console.log(err);
+                else {
+                    let usernames = [];
+                    signup.forEach(s => {
+                        usernames.push(s.username);
+                    });
+                    user_1.default.find({ username: { $in: usernames } }, (err, users) => {
+                        if (err)
+                            console.log(err);
+                        else {
+                            let emails = [];
+                            users.forEach(u => {
+                                emails.push(u.email);
+                            });
+                            if (signup) {
+                                wName = signup[0].nameWorkshop;
+                                wOrganizer = signup[0].organizer;
+                                wPhoto = signup[0].workshopPicture;
+                            }
+                            /////////////////////////////////////////////////////////////////////////////////
+                            const nodemailer = require('nodemailer');
+                            // create reusable transporter object using the default SMTP transport
+                            let transporter = nodemailer.createTransport({
+                                service: 'outlook',
+                                auth: {
+                                    user: 'artworkshop23@outlook.com',
+                                    pass: 'organizer123'
+                                }
+                            });
+                            let mailOptions = {
+                                from: '"' + wOrganizer + '" <artworkshop23@outlook.com>',
+                                to: emails,
+                                subject: '❌Cancellation❌',
+                                text: 'Cancellation',
+                                html: '<h1 style="text-align: center; color: red;">Cancellation of the workshop <strong>' + wName + '</strong></h1><p style="color: red; font-weight: bold;">CAUTION:</p><p">This workshop has been canceled by the organizer.</p>' // html body
+                            };
+                            // send mail with defined transport object
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log(error);
+                                }
+                                else {
+                                    console.log("Mail OK");
+                                    res.json({ "resp": "OK" });
+                                }
+                            });
+                            ////////////////////////////////////////////////////////////////////////////////
+                        }
+                    });
                 }
             });
         };

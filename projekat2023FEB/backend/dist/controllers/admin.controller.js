@@ -28,11 +28,40 @@ class AdminController {
             });
         };
         this.getWorkshopPropositions = (req, res) => {
+            // console.log("getWorkshopPropositions")
             workshop_1.default.find({ status: "pending", date: { $gt: new Date() } }, (err, propositions) => {
                 if (err)
                     console.log(err);
                 else
                     res.json(propositions);
+            });
+        };
+        this.sendMail = (req, res) => {
+            const nodemailer = require('nodemailer');
+            // create reusable transporter object using the default SMTP transport
+            let transporter = nodemailer.createTransport({
+                service: 'outlook',
+                auth: {
+                    user: 'artworkshop23@outlook.com',
+                    pass: 'organizer123'
+                }
+            });
+            let mailOptions = {
+                from: '"Admin" <artworkshop23@outlook.com>',
+                to: 'kristinatodorovic2403@gmail.com',
+                subject: 'Hello ✔',
+                text: 'Hello world?',
+                html: '<h1>FILIP MAGARAC</h1>' // html body
+            };
+            // send mail with defined transport object
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                }
+                else {
+                    console.log("Mail OK");
+                    res.json({ "resp": "OK" });
+                }
             });
         };
     }
