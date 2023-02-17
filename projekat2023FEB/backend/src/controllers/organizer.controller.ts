@@ -6,6 +6,7 @@ import user from '../models/user';
 import Message from '../models/Message';
 import signUp from '../models/signUp';
 import Workshop from '../models/workshop';
+import path from 'path';
 
 export class OrganizerController {
 
@@ -199,6 +200,58 @@ export class OrganizerController {
         })
 
     }
+
+    saveAsTemplate = (req: express.Request, res: express.Response) => {
+        let workshop = req.body.workshop;
+
+        const fs = require('fs');
+        let templateData = JSON.stringify(workshop);
+        let directoryPath = 'templatesWorkshop/' + workshop.organizer;
+        const workshopName = workshop.name.replace(/\s+/g, "_");
+        const filePath = path.join(directoryPath, workshopName + ".json");
+
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath, { recursive: true });
+        }
+
+        fs.writeFile(filePath, templateData, (err) => {
+            if (err) throw err;
+            else {
+                res.json({ "resp": "OK" })
+            }
+        });
+
+
+
+    }
+
+    getNamesOfTemplates = (req: express.Request, res: express.Response) => {
+        const fs = require('fs');
+        let organizer = req.body.organizer;
+
+        fs.readdir('templatesWorkshop/' + organizer, (err, files) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            else {
+                res.json(files)
+            }
+
+        });
+    }
+
+    getTemplateData = (req: express.Request, res: express.Response) => {
+        const fs = require('fs');
+        fs.readFile('templatesWorkshop/' + req.body.organizer + '/' + req.body.templateName,
+            (err, data) => {
+                if (err) throw err;
+                const myObject = JSON.parse(data);
+                res.json(myObject)
+            });
+    }
+
+
 
 
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OrganizerService } from 'src/services/organizer.service';
 import { UserService } from 'src/services/user.service';
 import { User } from '../models/user';
+import { Workshop } from '../models/workshop';
 
 @Component({
   selector: 'app-add-workshop',
@@ -13,14 +14,17 @@ export class AddWorkshopComponent implements OnInit {
 
   constructor(private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
   ngOnInit(): void {
-    this.currOrganizer = JSON.parse(localStorage.getItem("currentUser"));
-    this.userService.getUserData(this.currOrganizer.username).subscribe((user: User) => {
-      this.currOrganizer = user;//da l dodati ovo sad u localStorage
+    this.currUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.userService.getUserData(this.currUser.username).subscribe((user: User) => {
+      this.currUser = user;//da l dodati ovo sad u localStorage
     });
+    this.organizerService.getNamesOfTemplates(this.currUser.username).subscribe((t: string[]) => {
+      this.workshopTemplates = t;
+    })
 
   }
 
-  currOrganizer: User;
+  currUser: User;
 
   name: string = "";
   date: Date = null;
@@ -33,7 +37,12 @@ export class AddWorkshopComponent implements OnInit {
   organizer: string = "";
   status: string = "pending";
 
+  workshopTemplates: string[] = [];
+  templateName: string = "";
+
   errorMessage: string = "";
+
+
 
   addWorkshop() {
     console.log("main: ", this.mainPhoto)
@@ -73,7 +82,7 @@ export class AddWorkshopComponent implements OnInit {
     this.errorMessage = "";
 
     this.organizerService.addWorkshop(this.name, this.date, this.place, this.shortDesc, this.longDesc
-      , this.mainPhoto, this.gallery, this.numOfPlaces, this.currOrganizer.username, this.status).subscribe((resp) => {
+      , this.mainPhoto, this.gallery, this.numOfPlaces, this.currUser.username, this.status).subscribe((resp) => {
         if (resp["resp"] == "OK") alert("The new workshop was added successfully!")
         this.router.navigate(["/myWorkshops"]);
       })
@@ -134,9 +143,48 @@ export class AddWorkshopComponent implements OnInit {
     console.log(this.gallery)
   }
 
+
+
+  clearCashWorkshop() {
+    this.name = this.place = this.shortDesc = this.mainPhoto = this.organizer = this.longDesc = "";
+    this.numOfPlaces = 0;
+    this.date = null;
+    this.gallery = [];
+  }
+
+  getTemplateData() {
+    this.organizerService.getTemplateData(this.currUser.username, this.templateName).subscribe((template: Workshop) => {
+      if (template) {
+        this.name = template.name
+        this.place = template.place
+        this.shortDesc = template.shortDesc
+        this.longDesc = template.longDesc
+        this.mainPhoto = template.mainPhoto
+        this.gallery = template.gallery
+        this.numOfPlaces = template.numOfPlaces
+      }
+      else {
+        alert("Error getting template with this name.")
+      }
+    })
+  }
+
+  getTemplate() {
+
+    if (this.templateName == "") {
+      this.clearCashWorkshop()
+    }
+    else {
+      this.getTemplateData();
+    }
+  }
+
+
+
+
   logOut() {
     localStorage.removeItem("currentUser");
-    this.currOrganizer = null;
+    this.currUser = null;
     this.router.navigate([""]);
   }
 

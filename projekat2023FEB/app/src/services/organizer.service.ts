@@ -114,11 +114,29 @@ export class OrganizerService {
     return this.http.post(`${this.url}/organizer/cancelWorkshop`, data);
   }
 
-  // sendMail() {
+  saveAsTemplate(workshop) {
+    const data = {
+      workshop: workshop
+    }
+    return this.http.post(`${this.url}/organizer/saveAsTemplate`, data);
+  }
 
-  //   console.log("server")
-  //   return this.http.get(`${this.url}/admin/sendMail`);
-  // }
 
+  getNamesOfTemplates(organizer) {
+    const data = {
+      organizer: organizer
+    }
+    return this.http.post(`${this.url}/organizer/getNamesOfTemplates`, data);
+  }
+
+
+  getTemplateData(organizer, templateName) {
+    const data = {
+      organizer: organizer,
+      templateName: templateName
+    }
+    return this.http.post(`${this.url}/organizer/getTemplateData`, data);
+
+  }
 
 }

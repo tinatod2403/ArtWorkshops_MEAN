@@ -9,6 +9,7 @@ const user_1 = __importDefault(require("../models/user"));
 const Message_1 = __importDefault(require("../models/Message"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const workshop_1 = __importDefault(require("../models/workshop"));
+const path_1 = __importDefault(require("path"));
 class OrganizerController {
     constructor() {
         this.addWorkshop = (req, res) => {
@@ -151,6 +152,46 @@ class OrganizerController {
                 if (message) {
                     res.json({ "resp": "OK" });
                 }
+            });
+        };
+        this.saveAsTemplate = (req, res) => {
+            let workshop = req.body.workshop;
+            const fs = require('fs');
+            let templateData = JSON.stringify(workshop);
+            let directoryPath = 'templatesWorkshop/' + workshop.organizer;
+            const workshopName = workshop.name.replace(/\s+/g, "_");
+            const filePath = path_1.default.join(directoryPath, workshopName + ".json");
+            if (!fs.existsSync(directoryPath)) {
+                fs.mkdirSync(directoryPath, { recursive: true });
+            }
+            fs.writeFile(filePath, templateData, (err) => {
+                if (err)
+                    throw err;
+                else {
+                    res.json({ "resp": "OK" });
+                }
+            });
+        };
+        this.getNamesOfTemplates = (req, res) => {
+            const fs = require('fs');
+            let organizer = req.body.organizer;
+            fs.readdir('templatesWorkshop/' + organizer, (err, files) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                else {
+                    res.json(files);
+                }
+            });
+        };
+        this.getTemplateData = (req, res) => {
+            const fs = require('fs');
+            fs.readFile('templatesWorkshop/' + req.body.organizer + '/' + req.body.templateName, (err, data) => {
+                if (err)
+                    throw err;
+                const myObject = JSON.parse(data);
+                res.json(myObject);
             });
         };
         this.cancelWorkshop = (req, res) => {

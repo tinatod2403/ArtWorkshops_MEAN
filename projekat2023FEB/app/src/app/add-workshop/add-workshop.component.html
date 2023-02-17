@@ -1,7 +1,7 @@
-<div class="hero" *ngIf="currOrganizer && currOrganizer.isOrganizer">
+<div class="hero" *ngIf="currUser && currUser.isOrganizer">
     <header class="header">
         <a routerLink=""><img class="logo-image"></a>
-        <h1 class="header__title">Organizer {{currOrganizer.firstname}} {{currOrganizer.lastname}} adding new workshop!
+        <h1 class="header__title">Organizer {{currUser.firstname}} {{currUser.lastname}} adding new workshop!
         </h1>
 
         <div class="header__buttons">
@@ -27,7 +27,7 @@
 
             &nbsp;
             &nbsp;
-            <img [src]="currOrganizer.picture" alt="Profile picture" class="profile-image">
+            <img [src]="currUser.picture" alt="Profile picture" class="profile-image">
         </div>
     </header>
 
@@ -44,6 +44,18 @@
 
                     <div class="left">
                         <mat-card-content>
+                            <div class="form-group">
+
+                                <select (change)="getTemplate()" class="form-control" id="templateSelect"
+                                    [(ngModel)]="templateName">
+                                    <option value="">Select a template to use</option>
+                                    <option *ngFor="let template of workshopTemplates" [value]="template">
+                                        {{template}}
+                                    </option>
+                                </select>
+                            </div>
+
+
                             <mat-form-field class="example-full-width">
                                 <mat-label>Workshop name<span class="RequiredField">*</span></mat-label>
                                 <input [(ngModel)]="name" matInput class="input-class" type="text" name="name">

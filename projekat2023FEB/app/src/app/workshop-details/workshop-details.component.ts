@@ -235,8 +235,16 @@ export class WorkshopDetailsComponent implements OnInit {
 
   }
 
+  saveAsTemplate(workshop) {
+    this.organizerService.saveAsTemplate(workshop).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        alert("You saved " + workshop.name + " template succsfully.")
+      }
+    })
+  }
+
   sendMessageToUser(recipientRequest) {
-    
+
     if (this.messageContent == "") {
       return;
     }

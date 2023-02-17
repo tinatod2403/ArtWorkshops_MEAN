@@ -194,8 +194,11 @@
                         (click)="editWorkshop($event, currWorkshop._id)"
                         style="background-color: rgb(102, 162, 214);">Edit</button>
                     <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
+                        (click)="saveAsTemplate(currWorkshop)"
+                        style="background-color: rgb(111, 214, 102);">Save as template</button>
+                    <!-- <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
                         (click)="cancelWorkshop(currWorkshop._id)"
-                        style="background-color: rgb(214, 102, 102);">Cancel</button>
+                        style="background-color: rgb(214, 102, 102);">Cancel</button> -->
                 </div>
             </mat-card-header>
             <p class="smallDetals">Place: {{currWorkshop.place}}</p>

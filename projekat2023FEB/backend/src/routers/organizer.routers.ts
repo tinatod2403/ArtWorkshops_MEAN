@@ -34,6 +34,15 @@ organizerRouter.route("/sendMessage").post(
 organizerRouter.route("/cancelWorkshop").post(
     (req, res) => new OrganizerController().cancelWorkshop(req, res)
 )
+organizerRouter.route("/saveAsTemplate").post(
+    (req, res) => new OrganizerController().saveAsTemplate(req, res)
+)
+organizerRouter.route("/getNamesOfTemplates").post(
+    (req, res) => new OrganizerController().getNamesOfTemplates(req, res)
+)
+organizerRouter.route("/getTemplateData").post(
+    (req, res) => new OrganizerController().getTemplateData(req, res)
+)
 
 
 
