@@ -35,7 +35,17 @@ export class AdminService {
   }
 
 
-  
+  getAllUsers() {
+    return this.http.get(`${this.url}/admin/getAllUsers`);
+  }
+
+  getAllOrganizers() {
+    return this.http.get(`${this.url}/admin/getAllOrganizers`);
+  }
+
+  getAllWorkshops() {
+    return this.http.get(`${this.url}/admin/getAllWorkshops`);
+  }
 
 
 

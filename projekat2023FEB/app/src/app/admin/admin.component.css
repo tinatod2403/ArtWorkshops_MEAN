@@ -28,7 +28,7 @@
 }
 
 
-.admin-containers{
+.admin-containers {
     margin-bottom: 40px;
 }
 
@@ -64,14 +64,23 @@
     background-color: #d3d3d3;
 }
 
-/* .registration-requests__table-row:hover {
+/* .participants:nth-child(even) {
+    background-color: #d8d8d8;
+}
+
+.participants:nth-child(odd) {
+    background-color: #d3d3d3;
+}
+
+.participants:hover {
     background-color: #c3c1c1;
 } */
 
 .registration-requests__table-header th,
 .registration-requests__table-body td {
-    padding: 10px;
-    text-align: left;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: center;
 }
 
 .registration-requests__table-body td:first-child {
@@ -85,7 +94,19 @@
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.1s ease-in-out;
+}
+
+.edit-btn {
+    background-color: #2887a7;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background-color: #1c6077;
 }
 
 .registration-requests__approve-btn:hover {
@@ -100,12 +121,30 @@
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.1s ease-in-out;
 }
 
 .registration-requests__deny-btn:hover {
     background-color: rgb(129, 34, 34);
 }
+
+
+.password {
+    cursor: pointer;
+    font-family: monospace;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color: rgb(255, 230, 0);
+}
+
+.red {
+    color: brown
+}
+
 
 
 

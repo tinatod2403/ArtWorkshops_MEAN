@@ -41,6 +41,44 @@ export class AdminController {
 
     }
 
+    getAllUsers = (req: express.Request, res: express.Response) => {
+
+
+        user.find({ isOrganizer: false }, (err, users) => {
+            if (err) console.log(err)
+            else {
+                console.log(users)
+                res.json(users)
+            }
+        })
+
+    }
+
+    getAllOrganizers = (req: express.Request, res: express.Response) => {
+
+
+        user.find({ isOrganizer: true }, (err, organizers) => {
+            if (err) console.log(err)
+            else {
+                res.json(organizers)
+            }
+        })
+
+    }
+
+
+    getAllWorkshops = (req: express.Request, res: express.Response) => {
+
+
+        workshop.find({}, (err, workshops) => {
+            if (err) console.log(err)
+            else {
+                res.json(workshops)
+            }
+        })
+
+    }
+
 
     sendMail = (req: express.Request, res: express.Response) => {
 

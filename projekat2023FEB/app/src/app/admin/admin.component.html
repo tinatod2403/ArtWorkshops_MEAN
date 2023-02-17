@@ -75,7 +75,107 @@
       <h2 class="registration-requests__title">&nbsp;</h2>
     </div>
 
+
+
+
+
+    <!-- //////////////////////////////////////////////////////////////////////ALL USERS -->
+    <div class="admin-containers">
+      <h1 class="registration-requests__title">All participants</h1>
+      <div class="registration-requests">
+
+        <table class="registration-requests__table">
+          <thead>
+            <th>Profile photo</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Password</th>
+            <th></th>
+          </thead>
+          <tbody class="registration-requests__table-body">
+            <tr class="registration-requests__table-row" *ngFor="let user of allUsers">
+              <td><img class="request-image" [src]="user.picture"></td>
+              <td>{{user.firstname}}</td>
+              <td>{{user.lastname}}</td>
+              <td>{{user.username}}</td>
+              <td>{{user.phone}}</td>
+              <td>{{user.email}}</td>
+              <td
+                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='deny' }">
+                {{ user.status }}</td>
+              <td>
+                <span class="password" (click)="togglePassword()">{{ showPassword ? user.password : '••••••••' }}</span>
+              </td>
+
+              <td><button class="edit-btn">Edit</button></td>
+              <td><button class="registration-requests__deny-btn">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 style="margin-left: 5px; color: brown;" *ngIf="workshopPropMessage">{{workshopPropMessage}}</h3>
+      </div>
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
+
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////// ALL ORG -->
+
+    <div class="admin-containers">
+      <h1 class="registration-requests__title">All organizers</h1>
+      <div class="registration-requests">
+
+        <table class="registration-requests__table">
+          <thead>
+            <th>Profile photo</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Organization name</th>
+            <th>Organization address</th>
+            <th></th>
+            <th></th>
+          </thead>
+          <tbody class="registration-requests__table-body">
+            <tr class="registration-requests__table-row" *ngFor="let user of allOrganizers">
+              <td><img class="request-image" [src]="user.picture"></td>
+              <td>{{user.firstname}}</td>
+              <td>{{user.lastname}}</td>
+              <td>{{user.username}}</td>
+              <td>{{user.phone}}</td>
+              <td>{{user.email}}</td>
+
+              <td>
+                <span class="password" (click)="togglePassword()">{{ showPassword ? user.password : '••••••••' }}</span>
+              </td>
+              <td>{{user.organizationName}}</td>
+              <td>{{user.address}}</td>
+              <td
+                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='deny' }">
+                {{ user.status }}</td>
+              <td><button class="edit-btn">Edit</button></td>
+              <td><button class="registration-requests__deny-btn">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 style="margin-left: 5px; color: brown;" *ngIf="workshopPropMessage">{{workshopPropMessage}}</h3>
+      </div>
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
+
+    <button class="edit-btn" style="font-size: 16px;">Add new user/organizer</button>
+
   </div>
+
+
 
   <div class="footer"></div>
 </div>

@@ -36,6 +36,34 @@ class AdminController {
                     res.json(propositions);
             });
         };
+        this.getAllUsers = (req, res) => {
+            user_1.default.find({ isOrganizer: false }, (err, users) => {
+                if (err)
+                    console.log(err);
+                else {
+                    console.log(users);
+                    res.json(users);
+                }
+            });
+        };
+        this.getAllOrganizers = (req, res) => {
+            user_1.default.find({ isOrganizer: true }, (err, organizers) => {
+                if (err)
+                    console.log(err);
+                else {
+                    res.json(organizers);
+                }
+            });
+        };
+        this.getAllWorkshops = (req, res) => {
+            workshop_1.default.find({}, (err, workshops) => {
+                if (err)
+                    console.log(err);
+                else {
+                    res.json(workshops);
+                }
+            });
+        };
         this.sendMail = (req, res) => {
             const nodemailer = require('nodemailer');
             // create reusable transporter object using the default SMTP transport

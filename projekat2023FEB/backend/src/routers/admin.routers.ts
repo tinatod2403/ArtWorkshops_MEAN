@@ -14,6 +14,15 @@ adminRouter.route("/getRegistrationRequests").get(
 adminRouter.route("/getWorkshopPropositions").get(
     (req, res) => new AdminController().getWorkshopPropositions(req, res)
 )
+adminRouter.route("/getAllUsers").get(
+    (req, res) => new AdminController().getAllUsers(req, res)
+)
+adminRouter.route("/getAllOrganizers").get(
+    (req, res) => new AdminController().getAllOrganizers(req, res)
+)
+adminRouter.route("/getAllWorkshops").get(
+    (req, res) => new AdminController().getAllWorkshops(req, res)
+)
 adminRouter.route("/sendMail").get(
     (req, res) => new AdminController().sendMail(req, res)
 )
