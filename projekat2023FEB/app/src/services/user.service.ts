@@ -118,6 +118,20 @@ export class UserService {
     return this.http.post(`${this.url}/user/getWorkshopComments`, data);
   }
 
+  likeWorkshop(user, workshop) {
+    const data = {
+      user: user,
+      workshop: workshop
+    }
+    return this.http.post(`${this.url}/user/likeWorkshop`, data);
+  }
 
+  unlikeWorkshop(user, workshop) {
+    const data = {
+      user: user,
+      workshop: workshop
+    }
+    return this.http.post(`${this.url}/user/unlikeWorkshop`, data);
+  }
 
 }

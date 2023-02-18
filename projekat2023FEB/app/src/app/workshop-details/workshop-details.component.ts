@@ -9,6 +9,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { Message } from '../models/Message';
 import { MessageReqest } from '../models/MessageRequest';
 import { Comment } from '../models/Comment'
+import { OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -18,7 +19,7 @@ import * as L from 'leaflet';
 })
 
 
-export class WorkshopDetailsComponent implements OnInit {
+export class WorkshopDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private chatService: ChatService, private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
 
@@ -337,6 +338,37 @@ export class WorkshopDetailsComponent implements OnInit {
           marker.bindPopup("<b>Here it is!</b><br>" + this.currWorkshop.place).openPopup();
         });
     }
+  }
+
+
+  liked: boolean = false;
+  numOfLikes: number;
+  // allLikes: Like[] = [];
+
+
+  like() {
+    this.liked = true;
+  }
+
+  unlike() {
+    this.liked = false;
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.liked)
+      this.userService.likeWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
+        if (resp["resp"] == "OK") {
+          alert("liked")
+        }
+      })
+
+    else
+      this.userService.unlikeWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
+        if (resp["resp"] == "OK") {
+          alert("UNliked")
+        }
+      })
   }
 
 }

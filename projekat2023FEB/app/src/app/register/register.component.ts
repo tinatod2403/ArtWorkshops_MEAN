@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-register',
@@ -12,8 +13,10 @@ export class RegisterComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
   }
+
+  currentUser: User;
 
 
   firstname: string = "";
@@ -33,9 +36,14 @@ export class RegisterComponent implements OnInit {
 
   status: string = "pending";
 
+  isAdmin: boolean = false;
+
 
   register(): void {
     let error: Boolean = this.checkInput();
+
+    if (this.isAdmin) this.status = "approved"
+
 
     if (!error) {
       this.errorMessage = "";
@@ -45,8 +53,9 @@ export class RegisterComponent implements OnInit {
         this.IDorganization, this.status).subscribe((resp) => {
 
           if (resp['resp'] == 'OK') {
-            alert('Your registration is successful! Please wait for approval.')
-            this.router.navigate(["/login"]);
+            alert('Registration is successful! Please wait for approval.')
+            if (!this.isAdmin) this.router.navigate(["/login"]);
+            if (this.isAdmin) this.router.navigate(['admin']);
           }
           else
             if (resp['resp'] == 'username') this.errorMessage = "User with this username alreay exists.";
@@ -88,31 +97,31 @@ export class RegisterComponent implements OnInit {
 
   checkInput(): Boolean {
     if (this.username.length == 0) {
-      this.errorMessage = "Error: Please enter your Username to register."
+      this.errorMessage = "Error: Please enter Username to register."
       return true;
     }
     if (this.firstname.length == 0) {
-      this.errorMessage = "Error: Please enter your Firstname to register."
+      this.errorMessage = "Error: Please enter Firstname to register."
       return true;
     }
     if (this.lastname.length == 0) {
-      this.errorMessage = "Error: Please enter your Lastname to register."
+      this.errorMessage = "Error: Please enter Lastname to register."
       return true;
     }
     if (this.password.length == 0) {
-      this.errorMessage = "Error: Please enter your Password to register."
+      this.errorMessage = "Error: Please enter Password to register."
       return true;
     }
     if (this.passwordConfirm.length == 0) {
-      this.errorMessage = "Error: Please reenter your Password to register."
+      this.errorMessage = "Error: Please reenter Password to register."
       return true;
     }
     if (this.phone.length == 0) {
-      this.errorMessage = "Error: Please enter your Phone number to register."
+      this.errorMessage = "Error: Please enter Phone number to register."
       return true;
     }
     if (this.email.length == 0) {
-      this.errorMessage = "Error: Please enter your Email to register."
+      this.errorMessage = "Error: Please enter Email to register."
       return true;
     }
     const passwordRegex = /^[a-z](?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,15}$/;
@@ -139,6 +148,15 @@ export class RegisterComponent implements OnInit {
   }
 
 
+  logOut() {
+    localStorage.removeItem("currentUser")
+    this.router.navigate(["adminLogin"])
+  }
 
+
+  adminRegister() {
+    this.isAdmin = true;
+    this.register()
+  }
 
 }

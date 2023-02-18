@@ -43,5 +43,8 @@ userRouter.route("/sendComment").post(
 userRouter.route("/getWorkshopComments").post(
     (req, res) => new UserController().getWorkshopComments(req, res)
 )
+userRouter.route("/likeWorkshop").post(
+    (req, res) => new UserController().likeWorkshop(req, res)
+)
 
 export default userRouter;

@@ -33,6 +33,9 @@ export class LoginComponent implements OnInit {
           if (user.status == "pending") {
             this.errorMessage = "User with this username is still pending aproval.";
           }
+          else if (user.status == "denied") {
+            this.errorMessage = "User with this username has been DENIED.";
+          }
           else {
             localStorage.setItem("currentUser", JSON.stringify(user));
             this.router.navigate(["/"]);

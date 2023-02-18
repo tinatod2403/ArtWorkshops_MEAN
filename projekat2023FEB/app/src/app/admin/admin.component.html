@@ -4,12 +4,7 @@
     <h1 class="header__title">Welcome {{currAdmin.firstname}} {{currAdmin.lastname}}!</h1>
     <div class="header__buttons" style="display: flex; align-items: center; justify-content: center;">
 
-
-
-
-
       <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
-
 
       &nbsp;
       <img src="../../assets/admin.jpg" alt="Profile picture" class="profile-image">
@@ -34,8 +29,9 @@
               <td>{{request.phone}}</td>
               <td>{{request.email}}</td>
               <td>{{request.isOrganizer}}</td>
-              <td><button class="registration-requests__approve-btn" (click)="approveUser(request)">Approve</button></td>
-              <td><button class="registration-requests__deny-btn">Deny</button></td>
+              <td><button class="registration-requests__approve-btn" (click)="approveUser(request)">Approve</button>
+              </td>
+              <td><button class="registration-requests__deny-btn" (click)="denyUser(request)">Deny</button></td>
             </tr>
           </tbody>
 
@@ -55,6 +51,7 @@
       <div class="registration-requests">
 
         <table class="registration-requests__table">
+
           <tbody class="registration-requests__table-body">
             <tr class="registration-requests__table-row" *ngFor="let prop of workshopPropositions">
               <td><img class="image-name" [src]="prop.mainPhoto"></td>
@@ -62,9 +59,10 @@
               <td>{{prop.date}}</td>
               <td>{{prop.place}}</td>
               <td>{{prop.shortDesc}}</td>
-              <td>{{prop.numOfPlaces}}</td>
+              <td>{{prop.numOfPlaces}}&nbsp;&nbsp;</td>
               <td style="font-weight: bold;">{{prop.organizer}}</td>
-              <td><button class="registration-requests__approve-btn">Approve</button></td>
+              <td><button class="registration-requests__approve-btn" (click)="approveWorkshop(prop)">Approve</button>
+              </td>
             </tr>
           </tbody>
 
@@ -105,7 +103,7 @@
               <td>{{user.phone}}</td>
               <td>{{user.email}}</td>
               <td
-                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='deny' }">
+                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='denied' }">
                 {{ user.status }}</td>
               <td>
                 <span class="password" (click)="togglePassword()">{{ showPassword ? user.password : '••••••••' }}</span>
@@ -159,7 +157,7 @@
               <td>{{user.organizationName}}</td>
               <td>{{user.address}}</td>
               <td
-                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='deny' }">
+                [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='denied' }">
                 {{ user.status }}</td>
               <td><button class="edit-btn">Edit</button></td>
               <td><button class="registration-requests__deny-btn">Delete</button></td>
@@ -171,9 +169,93 @@
       <h2 class="registration-requests__title">&nbsp;</h2>
     </div>
 
-    <button class="edit-btn" style="font-size: 16px;">Add new user/organizer</button>
+    <button class="edit-btn" style="font-size: 16px; margin-bottom: 40px;" (click)="addNewUser()">Add new
+      user/organizer</button>
+
+    <br>
+    <!-- /////////////////////////////////////////////////////////////////// ALL WORKSHOPS -->
+
+    <div class="admin-containers">
+      <h1 class="registration-requests__title">All workshops</h1>
+      <div class="registration-requests">
+
+        <table class="registration-requests__table">
+          <thead>
+            <th></th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Place</th>
+            <th>Description</th>
+            <th>Number of places</th>
+            <th>Status</th>
+            <th>Organizer</th>
+            <th></th>
+          </thead>
+          <tbody class="registration-requests__table-body">
+            <tr class="registration-requests__table-row" *ngFor="let w of allWorkshop">
+              <td><img class="image-name" [src]="w.mainPhoto"></td>
+              <td>{{w.name}}</td>
+              <td>{{w.date}}</td>
+              <td>{{w.place}}</td>
+              <td>{{w.shortDesc}}</td>
+              <td>{{w.numOfPlaces}}</td>
+              <td
+                [ngClass]="{ 'green':  w.status=='accepted','yellow':  w.status=='pending','red':  w.status=='deny' }">
+                {{ w.status }}</td>
+              <td style="font-weight: bold;">{{w.organizer}}</td>
+              <td><button class="edit-btn">Edit</button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+        <h3 style="margin-left: 5px; color: brown;" *ngIf="workshopPropMessage">{{workshopPropMessage}}</h3>
+      </div>
+
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
+
+    <button class="edit-btn" style="font-size: 16px; margin-bottom: 40px;" (click)="addWorkshop()">Add new
+      workshop</button>
+    for<select class="edit-btn" style="margin-left: 10px;" [(ngModel)]="workshopOrganizer">
+      <option value="" selected disabled>Select an organizer</option>
+      <option [value]="user.username" *ngFor="let user of allOrganizers">{{user.username}}</option>
+    </select>
+    <span style="color: red; margin-left: 5px;">{{errorMessage}}</span>
+
+
+
+    <div>
+      <h1 class="registration-requests__title">Change password</h1>
+
+      <td>
+        <h3 style="margin-right: 5px;">Password:</h3>
+      </td>
+      <td *ngIf="!showPassword">
+        <span class="password-text-container">{{ '*'.repeat(currAdmin.password.length)
+          }}</span>
+
+        <mat-icon class="password-icon" (click)="togglePassword()">{{ showPassword ?
+          'visibility_off' : 'visibility'}}</mat-icon>
+      </td>
+      <td *ngIf="showPassword">
+        <span class="password-text-container">{{currAdmin.password}}</span>
+
+        <mat-icon class="password-icon" (click)="togglePassword()">{{showPassword ?
+          'visibility_off' : 'visibility'}}</mat-icon>
+      </td>
+      <div>
+        <input class="inputType" type="password" placeholder="Old password" [(ngModel)]="oldPass">
+      <input class="inputType" type="password" placeholder="New password" [(ngModel)]="newPass">
+      <input class="inputType" type="password" placeholder="Confirm new password" [(ngModel)]="newPassAgain">
+      <button class="edit-btn" (click)="changePass()">Change</button>
+      </div>
+      <span style="color:red">{{errorMessagePass}}</span>
+      <h2 class="registration-requests__title">&nbsp;</h2>
+    </div>
 
   </div>
+
 
 
 

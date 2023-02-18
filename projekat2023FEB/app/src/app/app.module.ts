@@ -33,6 +33,7 @@ import { WorkshopDetailsComponent } from './workshop-details/workshop-details.co
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MapComponent } from './map/map.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { MapComponent } from './map/map.component';
     HttpClientModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTooltipModule
     
 
   ],

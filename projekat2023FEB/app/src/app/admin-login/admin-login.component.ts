@@ -33,7 +33,7 @@ export class AdminLoginComponent implements OnInit {
 
     this.adminService.login(this.username, this.password).subscribe((admin) => {
       if (admin) {
-        localStorage.setItem("adminUser", JSON.stringify(admin))
+        localStorage.setItem("currentUser", JSON.stringify(admin))
         this.router.navigate(["/admin"])
       }
       else {

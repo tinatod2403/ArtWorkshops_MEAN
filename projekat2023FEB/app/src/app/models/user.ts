@@ -14,4 +14,5 @@ export class User {
 
     status: string;
 
+    isAdmin: boolean;
 }

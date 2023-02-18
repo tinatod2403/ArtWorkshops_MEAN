@@ -44,7 +44,9 @@
 
         <div class="workshop-details-card">
             <mat-card-header>
-                <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
+                <div>
+                    <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
+                </div>
 
             </mat-card-header>
             <p class="smallDetals">Place: {{currWorkshop.place}}</p>
@@ -142,8 +144,29 @@
                         <button *ngIf="chatOpened" type="button" id="startChat" (click)="endChat()">Close Chat</button>
                     </div>
 
+
+                    
+
+                    <div style="position: relative; display: inline-block; margin-left: 40%;">
+                        <div
+                            style="position: absolute; top: 100%; left: 50%; margin-left: -10px; border-width: 10px; border-style: solid; border-color: pink transparent transparent transparent;">
+                        </div>
+                        <div
+                            style="background-color: pink; display: flex; align-items: center; padding: 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+                            <span style="margin-right: 5px;">5</span>
+                            <mat-icon *ngIf="!liked" (click)="like()">favorite_border</mat-icon>
+                            <mat-icon *ngIf="liked" (click)="unlike()">favorite</mat-icon>
+                            <div
+                                style="background-color: pink; display: flex; align-items: center; padding: 10px; margin-left: 10px; border-radius: 20px;">
+                                <span style="margin-right: 5px;">{{workshopComments.length}}</span>
+                                <mat-icon style="margin-left: 5px;">chat</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+
                     <h1 style="color: white; margin: 0px;">Comments</h1>
                     <div style="position: relative;">
+                        
                         <div class="comment-container" #scrollContainer>
 
                             <div style="border-bottom: 1px dotted rgb(216, 215, 215);"
@@ -242,6 +265,23 @@
         <div class="workshop-details-card">
             <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
                 <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
+
+                <div style="position: relative; display: inline-block;">
+                    <div
+                        style="position: absolute; top: 100%; left: 50%; margin-left: -10px; border-width: 10px; border-style: solid; border-color: rgb(192, 75, 94) transparent transparent transparent;">
+                    </div>
+                    <div
+                        style="background-color: pink; display: flex; align-items: center; padding: 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+                        5
+                        <mat-icon style="margin-left: 5px;">thumb_up_alt</mat-icon>
+                        <div
+                            style="background-color: pink; display: flex; align-items: center; padding: 10px; margin-left: 10px; border-radius: 20px;">
+                            5
+                            <mat-icon style="margin-left: 5px;">chat</mat-icon>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
                         (click)="editWorkshop($event, currWorkshop._id)"
@@ -362,6 +402,9 @@
                 </div>
 
             </div>
+
+
+
             <!-- <div style="display: flex; align-items: center;">
                 <button id="startChat" (click)="openMap()">Open Map</button>
             </div>

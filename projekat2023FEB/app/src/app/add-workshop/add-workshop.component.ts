@@ -15,14 +15,24 @@ export class AddWorkshopComponent implements OnInit {
   constructor(private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
   ngOnInit(): void {
     this.currUser = JSON.parse(localStorage.getItem("currentUser"));
-    this.userService.getUserData(this.currUser.username).subscribe((user: User) => {
-      this.currUser = user;//da l dodati ovo sad u localStorage
-    });
+    if (!this.currUser.isAdmin)
+      this.userService.getUserData(this.currUser.username).subscribe((user: User) => {
+        this.currUser = user;//da l dodati ovo sad u localStorage
+      });
     this.organizerService.getNamesOfTemplates(this.currUser.username).subscribe((t: string[]) => {
       this.workshopTemplates = t;
     })
 
+    console.log(this.currUser)
+
+    if (this.currUser.isAdmin) {
+      this.adminsOrganizer = localStorage.getItem("organizer")
+    }
+
   }
+
+  adminsOrganizer: String = "";
+  isAdmin: boolean = false;
 
   currUser: User;
 
@@ -81,13 +91,53 @@ export class AddWorkshopComponent implements OnInit {
     }
     this.errorMessage = "";
 
-    this.organizerService.addWorkshop(this.name, this.date, this.place, this.shortDesc, this.longDesc
-      , this.mainPhoto, this.gallery, this.numOfPlaces, this.currUser.username, this.status).subscribe((resp) => {
+    if (!this.isAdmin)
+      this.organizerService.addWorkshop(this.name, this.date, this.place, this.shortDesc, this.longDesc
+        , this.mainPhoto, this.gallery, this.numOfPlaces, this.currUser.username, this.status).subscribe((resp) => {
+          if (resp["resp"] == "OK") alert("The new workshop was added successfully!")
+          this.router.navigate(["/myWorkshops"]);
+        })
+    else this.organizerService.addWorkshop(this.name, this.date, this.place, this.shortDesc, this.longDesc
+      , this.mainPhoto, this.gallery, this.numOfPlaces, this.adminsOrganizer, 'accepted').subscribe((resp) => {
         if (resp["resp"] == "OK") alert("The new workshop was added successfully!")
-        this.router.navigate(["/myWorkshops"]);
+        this.router.navigate(["admin"]);
       })
 
   }
+
+
+
+  adminAddWorkshop() {
+    this.isAdmin = true;
+    this.addWorkshop()
+  }
+
+  logOutAdmin() {
+    localStorage.removeItem("currentUser")
+    this.router.navigate(["adminLogin"])
+  }
+
+
+  onTemplateChange(event: any): void {
+    const file: File = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onload = () => {
+      const jsonData = JSON.parse(reader.result as string);
+      console.log(jsonData);
+      this.name = jsonData.name
+        this.place = jsonData.place
+        this.shortDesc = jsonData.shortDesc
+        this.longDesc = jsonData.longDesc
+        this.mainPhoto = jsonData.mainPhoto
+        this.gallery = jsonData.gallery
+        this.numOfPlaces = jsonData.numOfPlaces
+    };
+  }
+
+
+
 
   onFileChange(event) {
 

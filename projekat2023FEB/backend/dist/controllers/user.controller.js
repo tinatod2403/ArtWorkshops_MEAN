@@ -9,6 +9,7 @@ const user_1 = __importDefault(require("../models/user"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const Message_1 = __importDefault(require("../models/Message"));
 const Comment_1 = __importDefault(require("../models/Comment"));
+const Like_1 = __importDefault(require("../models/Like"));
 class UserController {
     constructor() {
         this.register = (req, res) => {
@@ -197,6 +198,23 @@ class UserController {
                     console.log(err);
                 else {
                     res.json(comments);
+                }
+            });
+        };
+        this.likeWorkshop = (req, res) => {
+            let workshop = req.body.workshop;
+            let user = req.body.user;
+            Like_1.default.findOne({ 'user.username': user.username, 'workshop._id': workshop._id }, (err, like) => {
+                if (err)
+                    console.log(err);
+                else if (like == null) {
+                    let like = new Like_1.default({
+                        workshop: workshop,
+                        user: user
+                    });
+                    like.save().then((resp) => {
+                        res.json({ "resp": "OK" });
+                    });
                 }
             });
         };

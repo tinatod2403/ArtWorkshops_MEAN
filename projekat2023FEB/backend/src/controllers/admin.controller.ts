@@ -3,6 +3,7 @@ import { Request, Response } from 'express-serve-static-core';
 import user from '../models/user';
 import Admin from '../models/Admin';
 import workshop from '../models/workshop';
+import { ObjectId } from 'mongodb';
 
 export class AdminController {
 
@@ -76,6 +77,40 @@ export class AdminController {
                 res.json(workshops)
             }
         })
+
+    }
+
+    updateStatus = (req: express.Request, res: express.Response) => {
+
+
+        user.updateOne({ username: req.body.username }, { $set: { status: req.body.value } },
+            (err, resp) => {
+                if (err) console.log(err)
+                else res.json({ 'resp': "OK" })
+            })
+
+    }
+
+    approveWorkshop = (req: express.Request, res: express.Response) => {
+
+
+        workshop.updateOne({ _id: new ObjectId(req.body.id) }, { $set: { status: 'accepted' } },
+            (err, resp) => {
+                if (err) console.log(err)
+                else res.json({ 'resp': "OK" })
+            })
+
+    }
+
+    changePassword = (req: express.Request, res: express.Response) => {
+        // console.log(req.body.username)
+        // console.log(req.body.newPass)
+
+        Admin.updateOne({ username: req.body.username }, { $set: { password: req.body.newPass } },
+            (err, resp) => {
+                if (err) console.log(err)
+                else res.json({ 'resp': "OK" })
+            })
 
     }
 

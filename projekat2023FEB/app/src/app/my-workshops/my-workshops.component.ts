@@ -29,6 +29,10 @@ export class MyWorkshopsComponent implements OnInit {
           this.myWorkshops.forEach(w => {
             w.date = new Date(w.date).toLocaleString('en-US');
           })
+          this.myWorkshops.sort((a, b) => {
+            if (new Date(a.date) > new Date) return -1
+            return 0;
+          })
         }
         else this.informMessage = "You don't have any workshops."
       })

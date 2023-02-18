@@ -19,5 +19,6 @@ userRouter.route("/sendMessage").post((req, res) => new user_controller_1.UserCo
 userRouter.route("/getMessages").post((req, res) => new user_controller_1.UserController().getMessages(req, res));
 userRouter.route("/sendComment").post((req, res) => new user_controller_1.UserController().sendComment(req, res));
 userRouter.route("/getWorkshopComments").post((req, res) => new user_controller_1.UserController().getWorkshopComments(req, res));
+userRouter.route("/likeWorkshop").post((req, res) => new user_controller_1.UserController().likeWorkshop(req, res));
 exports.default = userRouter;
 //# sourceMappingURL=user.routers.js.map

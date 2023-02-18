@@ -26,6 +26,15 @@ adminRouter.route("/getAllWorkshops").get(
 adminRouter.route("/sendMail").get(
     (req, res) => new AdminController().sendMail(req, res)
 )
+adminRouter.route("/updateStatus").post(
+    (req, res) => new AdminController().updateStatus(req, res)
+)
+adminRouter.route("/approveWorkshop").post(
+    (req, res) => new AdminController().approveWorkshop(req, res)
+)
+adminRouter.route("/changePassword").post(
+    (req, res) => new AdminController().changePassword(req, res)
+)
 
 
 

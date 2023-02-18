@@ -7,6 +7,7 @@ exports.AdminController = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const Admin_1 = __importDefault(require("../models/Admin"));
 const workshop_1 = __importDefault(require("../models/workshop"));
+const mongodb_1 = require("mongodb");
 class AdminController {
     constructor() {
         this.login = (req, res) => {
@@ -62,6 +63,32 @@ class AdminController {
                 else {
                     res.json(workshops);
                 }
+            });
+        };
+        this.updateStatus = (req, res) => {
+            user_1.default.updateOne({ username: req.body.username }, { $set: { status: req.body.value } }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'resp': "OK" });
+            });
+        };
+        this.approveWorkshop = (req, res) => {
+            workshop_1.default.updateOne({ _id: new mongodb_1.ObjectId(req.body.id) }, { $set: { status: 'accepted' } }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'resp': "OK" });
+            });
+        };
+        this.changePassword = (req, res) => {
+            // console.log(req.body.username)
+            // console.log(req.body.newPass)
+            Admin_1.default.updateOne({ username: req.body.username }, { $set: { password: req.body.newPass } }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'resp': "OK" });
             });
         };
         this.sendMail = (req, res) => {

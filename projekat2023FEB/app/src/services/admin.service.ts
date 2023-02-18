@@ -47,12 +47,32 @@ export class AdminService {
     return this.http.get(`${this.url}/admin/getAllWorkshops`);
   }
 
-  appoveUser(username) {
+  updateStatus(username, value) {
     const data = {
-      username: username
+      username: username,
+      value: value
     }
-    return this.http.post(`${this.url}/admin/appoveUser`, data);
+    return this.http.post(`${this.url}/admin/updateStatus`, data);
 
   }
+
+  approveWorkshop(id) {
+    const data = {
+      id: id
+    }
+    return this.http.post(`${this.url}/admin/approveWorkshop`, data);
+
+  }
+
+  changePassword(username, newPass) {
+    const data = {
+      username: username,
+      newPass: newPass
+    }
+    return this.http.post(`${this.url}/admin/changePassword`, data);
+  }
+
+
+  
 
 }

@@ -14,8 +14,7 @@ export class AdminComponent implements OnInit {
   constructor(private router: Router, private adminService: AdminService) { }
 
   ngOnInit(): void {
-    localStorage.removeItem("currentUser")
-    this.currAdmin = JSON.parse(localStorage.getItem("adminUser"));
+    this.currAdmin = JSON.parse(localStorage.getItem("currentUser"));
     this.adminService.getRegistrationRequests().subscribe((req: User[]) => {
       if (req) {
         this.registrationMessage = ""
@@ -99,7 +98,7 @@ export class AdminComponent implements OnInit {
   allWorkshop: Workshop[] = [];
 
   logOut() {
-    localStorage.removeItem("adminUser")
+    localStorage.removeItem("currentUser")
     this.router.navigate(["adminLogin"])
   }
 
@@ -110,14 +109,83 @@ export class AdminComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  oldPass: string = "";
+  newPass: string = "";
+  newPassAgain: string = "";
+  errorMessagePass: string = "";
+
+  changePass() {
+
+    if (this.oldPass == "" || this.newPass == "" || this.newPassAgain == "") {
+      this.errorMessagePass = "Error: All fields must be filled."
+      return
+    }
+    if (this.oldPass != this.currAdmin.password) {
+      this.errorMessagePass = "Error: Old password is not correct."
+      return
+    }
+    if (this.newPass != this.newPassAgain) {
+      this.errorMessagePass = "Error: New and confirm passwords do not match."
+      return
+    }
+    const passwordRegex = /^[a-z](?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,15}$/;
+    if (!passwordRegex.test(this.newPass)) {
+      this.errorMessagePass = "Error: Password not in right format."
+      return;
+    }
+    this.adminService.changePassword(this.currAdmin.username, this.newPass).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        this.logOut()
+      }
+    })
+    this.errorMessagePass = ""
+
+  }
+
 
   approveUser(user) {
-    this.adminService.appoveUser(user.username).subscribe((resp) => {
+    console.log(user.username)
+    this.adminService.updateStatus(user.username, 'approved').subscribe((resp) => {
       if (resp["resp"] == "OK") {
         location.reload()
       }
     })
   }
 
+  denyUser(user) {
+
+    this.adminService.updateStatus(user.username, 'denied').subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        location.reload()
+      }
+    })
+  }
+
+  approveWorkshop(workshop) {
+    alert(workshop._id)
+    this.adminService.approveWorkshop(workshop._id).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        location.reload()
+      }
+    })
+  }
+
+
+  addNewUser() {
+    this.router.navigate(['register'])
+  }
+
+  workshopOrganizer: string = "";
+  errorMessage: string = ""
+
+  addWorkshop() {
+    if (this.workshopOrganizer == "") {
+      this.errorMessage = "You mush chose organizer to add workshop."
+      return
+    }
+    // alert(this.workshopOrganizer)
+    localStorage.setItem("organizer", this.workshopOrganizer)
+    this.router.navigate(['addWorkshop'])
+  }
 
 }

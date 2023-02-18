@@ -1,4 +1,4 @@
-<div class="hero" *ngIf="currUser && currUser.isOrganizer">
+<div class="hero" *ngIf="currUser && currUser.isOrganizer && !currUser.isAdmin">
     <header class="header">
         <a routerLink=""><img class="logo-image"></a>
         <h1 class="header__title">Organizer {{currUser.firstname}} {{currUser.lastname}} adding new workshop!
@@ -128,6 +128,125 @@
                 <span class="error-output">{{errorMessage}}</span>
                 <mat-card-actions class="login-button">
                     <button (click)="addWorkshop()" mat-raised-button color="primary"
+                        style="width: 100%; margin-top: 10px;">Add</button>
+                </mat-card-actions>
+
+
+            </mat-card>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="hero" *ngIf="currUser && currUser.isAdmin">
+
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Admin adding workshop for organizer: {{adminsOrganizer}}!</h1>
+        <div class="header__buttons" style="display: flex; align-items: center; justify-content: center;">
+
+            <button (click)="logOutAdmin()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            <img src="../../assets/admin.jpg" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+    <div class="middle">
+        <div class="example-form">
+
+
+
+            <mat-card class="example-card">
+                <mat-card-header class="input-data-header">
+                    <mat-card-title>Add workshop</mat-card-title>
+                </mat-card-header>
+                &nbsp;
+                <div class="wrapper">
+                    <mat-label>Template</mat-label>
+                    <input type="file" name=" mainJson" accept=".json"
+                                    (change)="onTemplateChange($event)" />
+
+                    <div class="left">
+                        <mat-card-content>
+
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Workshop name<span class="RequiredField">*</span></mat-label>
+                                <input [(ngModel)]="name" matInput class="input-class" type="text" name="name">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Date and time<span class="RequiredField">*</span></mat-label>
+                                <input matInput class="input-class" type="datetime-local" id="date" name="date"
+                                    [(ngModel)]="date">
+                            </mat-form-field>
+                            <!-- <mat-form-field class="example-full-width">
+                                <mat-label>Date<span class="RequiredField">*</span></mat-label>
+                                <input matInput [matDatepicker]="picker" name="date">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field> -->
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Place<span class="RequiredField">*</span></mat-label>
+                                <input [(ngModel)]="place" matInput class="input-class" type="text" name="place">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Short description<span class="RequiredField">*</span></mat-label>
+                                <input [(ngModel)]="shortDesc" matInput class="input-class" type="text"
+                                    name="shortDesc">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Long description<span class="RequiredField">*</span></mat-label>
+                                <textarea [(ngModel)]="longDesc" matInput class="input-class" type="text"
+                                    name="longDesc"></textarea>
+                            </mat-form-field>
+                            <mat-card-content style="padding-bottom: 10px;">
+                                <mat-label>Main photo<span class="RequiredField">*</span></mat-label>
+                                <img class="input-profile-picture" [src]="mainPhoto" *ngIf=" mainPhoto"
+                                    style="height: 100px;" />
+
+                                <input type="file" name=" mainPhoto" accept=".jpg,.png"
+                                    (change)="onFileChange($event)" />
+                                &nbsp;
+
+                            </mat-card-content>
+                            <mat-card-content style="padding-bottom: 10px;">
+                                <mat-label>Gallery (1-5)<span class="RequiredField">*</span></mat-label>
+                                <!-- <img class="input-profile-picture" [src]="mainPhoto" *ngIf=" mainPhoto"
+                                    style="height: 100px;" /> -->
+
+                                <input type="file" name=" mainPhoto" accept=".jpg,.png"
+                                    (change)="onFileChangeMultiple($event)" multiple />
+
+                            </mat-card-content>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Places available<span class="RequiredField">*</span></mat-label>
+                                <input [(ngModel)]="numOfPlaces" matInput class="input-class" type="text"
+                                    name="numOfPlaces">
+                            </mat-form-field>
+
+
+
+
+                        </mat-card-content>
+
+
+                    </div>
+
+                    <div class="right">
+                        <mat-card-content>
+
+                        </mat-card-content>
+                    </div>
+
+                </div>
+                <span class="error-output">{{errorMessage}}</span>
+                <mat-card-actions class="login-button">
+                    <button (click)="adminAddWorkshop()" mat-raised-button color="primary"
                         style="width: 100%; margin-top: 10px;">Add</button>
                 </mat-card-actions>
 

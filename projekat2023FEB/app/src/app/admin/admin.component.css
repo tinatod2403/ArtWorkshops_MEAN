@@ -146,6 +146,20 @@
 }
 
 
+.inputType {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+.inputType:focus {
+    outline: none;
+    border-color: #3F51B5;
+}
+
 
 
 @media screen and (max-width: 767px) {

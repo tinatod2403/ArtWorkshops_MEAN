@@ -6,6 +6,8 @@ import User from '../models/user';
 import SignUp from '../models/signUp';
 import Message from '../models/Message';
 import Comment from '../models/Comment';
+import Like from '../models/Like';
+import { ObjectId } from 'mongodb';
 
 export class UserController {
     register = (req: express.Request, res: express.Response) => {
@@ -249,6 +251,30 @@ export class UserController {
                 res.json(comments)
             }
         })
+    }
+
+
+    likeWorkshop = (req: express.Request, res: express.Response) => {
+        let workshop = req.body.workshop
+        let user = req.body.user
+
+        Like.findOne({ 'user.username': user.username, 'workshop._id': workshop._id }, (err, like) => {
+            if (err) console.log(err)
+            else if (like == null) {
+
+                let like = new Like({
+                    workshop: workshop,
+                    user: user
+                })
+
+                like.save().then((resp) => {
+                    res.json({ "resp": "OK" })
+                })
+
+            }
+        })
+
+
     }
 
 
