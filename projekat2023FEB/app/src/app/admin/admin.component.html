@@ -34,7 +34,7 @@
               <td>{{request.phone}}</td>
               <td>{{request.email}}</td>
               <td>{{request.isOrganizer}}</td>
-              <td><button class="registration-requests__approve-btn">Approve</button></td>
+              <td><button class="registration-requests__approve-btn" (click)="approveUser(request)">Approve</button></td>
               <td><button class="registration-requests__deny-btn">Deny</button></td>
             </tr>
           </tbody>

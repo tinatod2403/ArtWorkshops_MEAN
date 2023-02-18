@@ -8,6 +8,7 @@ const workshop_1 = __importDefault(require("../models/workshop"));
 const user_1 = __importDefault(require("../models/user"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const Message_1 = __importDefault(require("../models/Message"));
+const Comment_1 = __importDefault(require("../models/Comment"));
 class UserController {
     constructor() {
         this.register = (req, res) => {
@@ -174,6 +175,28 @@ class UserController {
             }).sort({ timestamp: 1 }).then(messages => {
                 if (messages) {
                     res.json(messages);
+                }
+            });
+        };
+        this.sendComment = (req, res) => {
+            let comment = new Comment_1.default({
+                workshop: req.body.workshop,
+                sender: req.body.sender,
+                content: req.body.content,
+                timestamp: req.body.timestamp
+            });
+            comment.save().then(c => {
+                if (c)
+                    res.json({ "resp": "OK" });
+            });
+        };
+        this.getWorkshopComments = (req, res) => {
+            let workshop = req.body.workshop;
+            Comment_1.default.find({ 'workshop._id': workshop._id }, (err, comments) => {
+                if (err)
+                    console.log(err);
+                else {
+                    res.json(comments);
                 }
             });
         };

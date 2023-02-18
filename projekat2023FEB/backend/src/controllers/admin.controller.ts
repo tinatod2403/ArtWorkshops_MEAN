@@ -47,7 +47,7 @@ export class AdminController {
         user.find({ isOrganizer: false }, (err, users) => {
             if (err) console.log(err)
             else {
-                console.log(users)
+                // console.log(users)
                 res.json(users)
             }
         })

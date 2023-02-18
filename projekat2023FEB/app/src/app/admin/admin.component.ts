@@ -111,4 +111,13 @@ export class AdminComponent implements OnInit {
   }
 
 
+  approveUser(user) {
+    this.adminService.appoveUser(user.username).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        location.reload()
+      }
+    })
+  }
+
+
 }

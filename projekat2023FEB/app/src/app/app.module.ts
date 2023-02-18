@@ -32,6 +32,7 @@ import { MyWorkshopsComponent } from './my-workshops/my-workshops.component';
 import { WorkshopDetailsComponent } from './workshop-details/workshop-details.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { MapComponent } from './map/map.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
     MyWorkshopsComponent,
     WorkshopDetailsComponent,
     EditWorkshopComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    MapComponent
 
   ],
   imports: [

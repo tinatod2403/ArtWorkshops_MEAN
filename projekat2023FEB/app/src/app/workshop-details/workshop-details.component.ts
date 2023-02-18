@@ -8,16 +8,23 @@ import { Workshop } from '../models/workshop';
 import { ViewChild, ElementRef } from '@angular/core';
 import { Message } from '../models/Message';
 import { MessageReqest } from '../models/MessageRequest';
+import { Comment } from '../models/Comment'
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-workshop-details',
   templateUrl: './workshop-details.component.html',
   styleUrls: ['./workshop-details.component.css']
 })
+
+
 export class WorkshopDetailsComponent implements OnInit {
 
   constructor(private chatService: ChatService, private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
+
+
   ngOnInit(): void {
+
 
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let id = JSON.parse(localStorage.getItem("workshopID"));
@@ -35,6 +42,13 @@ export class WorkshopDetailsComponent implements OnInit {
           this.getMessagesForNonOrganizer(this.currentUser.username, this.currWorkshop.organizer, this.currWorkshop._id);
         else if (this.currentUser.isOrganizer)
           this.getMessageRequests(this.currentUser.username, this.currWorkshop._id)
+
+        this.userService.getWorkshopComments(this.currWorkshop).subscribe((c: Comment[]) => {
+          if (c) {
+            this.workshopComments = c;
+            console.log(this.workshopComments)
+          }
+        })
       }
       else {
         console.log("Error with getting workshop details.")
@@ -278,6 +292,51 @@ export class WorkshopDetailsComponent implements OnInit {
 
         }
       })
+  }
+
+
+
+  commentContent: string = "";
+  workshopComments: Comment[] = [];
+
+  sendComment() {
+    if (this.commentContent == "") return;
+
+    this.userService.sendComment(this.currentUser, this.currWorkshop, this.commentContent, new Date()).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        this.userService.getWorkshopComments(this.currWorkshop).subscribe((c: Comment[]) => {
+          if (c) {
+            this.workshopComments = c;
+            this.commentContent = "";
+          }
+        })
+      }
+    })
+
+    // alert(this.commentContent)
+  }
+
+  initializeMap = false;
+  openMap() {
+    if (!this.initializeMap) {
+      const address = this.currWorkshop.place; // Example address
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const lat = data[0].lat;
+          const lon = data[0].lon;
+          const map = L.map('map').setView([lat, lon], 13);
+
+          const marker = L.marker([lat, lon]).addTo(map);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+          }).addTo(map);
+          marker.bindPopup("<b>Here it is!</b><br>" + this.currWorkshop.place).openPopup();
+        });
+    }
   }
 
 }

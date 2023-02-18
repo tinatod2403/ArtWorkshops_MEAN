@@ -7,6 +7,7 @@ import { BecomeOrganizerComponent } from './become-organizer/become-organizer.co
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { MapComponent } from './map/map.component';
 import { MyWorkshopsComponent } from './my-workshops/my-workshops.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: "adminLogin", component: AdminLoginComponent },
   { path: "admin", component: AdminComponent },
   { path: "**/admin", component: AdminComponent },
+  { path: "map", component: MapComponent },
   // { path: "**/editWorkshop", component: EditWorkshopComponent },
 
 ];

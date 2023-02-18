@@ -47,6 +47,12 @@ export class AdminService {
     return this.http.get(`${this.url}/admin/getAllWorkshops`);
   }
 
+  appoveUser(username) {
+    const data = {
+      username: username
+    }
+    return this.http.post(`${this.url}/admin/appoveUser`, data);
 
+  }
 
 }

@@ -2,14 +2,11 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-let Message = new Schema({
+let Comment = new Schema({
     workshop: {
         type: Object
     },
     sender: {
-        type: Object
-    },
-    recipient: {
         type: Object
     },
     content: {
@@ -21,4 +18,4 @@ let Message = new Schema({
 
 })
 
-export default mongoose.model('Message', Message, 'messages');
+export default mongoose.model('Comment', Comment, 'comments');

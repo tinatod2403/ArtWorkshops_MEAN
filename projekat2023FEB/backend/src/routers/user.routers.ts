@@ -37,5 +37,11 @@ userRouter.route("/sendMessage").post(
 userRouter.route("/getMessages").post(
     (req, res) => new UserController().getMessages(req, res)
 )
+userRouter.route("/sendComment").post(
+    (req, res) => new UserController().sendComment(req, res)
+)
+userRouter.route("/getWorkshopComments").post(
+    (req, res) => new UserController().getWorkshopComments(req, res)
+)
 
 export default userRouter;

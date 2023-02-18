@@ -41,7 +41,7 @@ class AdminController {
                 if (err)
                     console.log(err);
                 else {
-                    console.log(users);
+                    // console.log(users)
                     res.json(users);
                 }
             });

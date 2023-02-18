@@ -1,3 +1,9 @@
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script defer src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+</head>
+
+
 <div class="hero" *ngIf="currentUser && !currentUser.isOrganizer && currWorkshop">
 
 
@@ -73,79 +79,126 @@
                     <br>
                     <br>
 
-                    <div *ngIf="chatOpened" style="position: relative;">
+                    <div>
+                        <div *ngIf="chatOpened" style="position: relative;">
 
-                        <div class="chat-container" #scrollContainer>
+                            <div class="chat-container" #scrollContainer>
 
-                            <div *ngFor="let message of myMessages">
-                                <div class="chat-box" *ngIf="message.sender.username==currWorkshop.organizer">
-                                    <div class="chat-message sender-message">
-                                        <div class="content-and-profile-sender">
-                                            <div style="display: inline-block;">
-                                                <div style="display: flex; align-items: center;">
-                                                    <img [src]="message.sender.picture"
-                                                        style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
-                                                    <span style="font-size: 12px;"><b>{{message.sender.username}}</b>,
-                                                        {{message.timestamp}}</span>
+                                <div *ngFor="let message of myMessages">
+                                    <div class="chat-box" *ngIf="message.sender.username==currWorkshop.organizer">
+                                        <div class="chat-message sender-message">
+                                            <div class="content-and-profile-sender">
+                                                <div style="display: inline-block;">
+                                                    <div style="display: flex; align-items: center;">
+                                                        <img [src]="message.sender.picture"
+                                                            style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                        <span
+                                                            style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                            {{message.timestamp}}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span style="float:left"
+                                                            class="content-sender">{{message.content}}</span>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <span style="float:left"
-                                                        class="content-sender">{{message.content}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="chat-box" *ngIf="message.sender.username==currentUser.username">
+                                        <div class="chat-message recipient-message">
+                                            <div class="content-and-profile-recipient">
+                                                <div style="float:right">
+                                                    <div style="display: flex; align-items: center; float:right">
+                                                        <span
+                                                            style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                            {{message.timestamp}}</span>
+                                                        <img [src]="message.sender.picture"
+                                                            style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                    </div>
+                                                    <div>
+                                                        <span style="float:right"
+                                                            class="content-recipient">{{message.content}}</span>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="chat-box" *ngIf="message.sender.username==currentUser.username">
-                                    <div class="chat-message recipient-message">
-                                        <div class="content-and-profile-recipient">
-                                            <div style="float:right">
-                                                <div style="display: flex; align-items: center; float:right">
-                                                    <span style="font-size: 12px;"><b>{{message.sender.username}}</b>,
-                                                        {{message.timestamp}}</span>
-                                                    <img [src]="message.sender.picture"
+                            </div>
+                            <div class="input-btn" style="display: flex;">
+                                <input style="margin:0px" type="text" placeholder="Type your message here..."
+                                    [(ngModel)]="messageContent">
+                                <input (click)="sendMessage()" style="height: 100%; width: 20%;" class="signup-btn"
+                                    type="submit" value="Send">
+                            </div>
+
+
+                        </div>
+                        <button *ngIf="!chatOpened" type="button" id="startChat" (click)="startChat()">Start
+                            Chat</button>
+                        <button *ngIf="chatOpened" type="button" id="startChat" (click)="endChat()">Close Chat</button>
+                    </div>
+
+                    <h1 style="color: white; margin: 0px;">Comments</h1>
+                    <div style="position: relative;">
+                        <div class="comment-container" #scrollContainer>
+
+                            <div style="border-bottom: 1px dotted rgb(216, 215, 215);"
+                                *ngFor="let comment of workshopComments">
+                                <div class="comment-box">
+                                    <div>
+                                        <div class="content-and-profile-sender">
+                                            <div style="display: inline-block;">
+                                                <div style="display: flex; align-items: center;">
+                                                    <img [src]="comment.sender.picture"
                                                         style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                    <span style="font-size: 12px;"><b>{{comment.sender.username}}</b>,
+                                                        {{comment.timestamp}}</span>
                                                 </div>
                                                 <div>
-                                                    <span style="float:right"
-                                                        class="content-recipient">{{message.content}}</span>
+                                                    <span style="float:left"
+                                                        class="comment-sender">{{comment.content}}</span>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="input-btn" style="display: flex;">
-                            <input style="margin:0px" type="text" placeholder="Type your message here..."
-                                [(ngModel)]="messageContent">
-                            <input (click)="sendMessage()" style="height: 100%; width: 20%;" class="signup-btn"
+                        <div class="input-comment-btn" style="display: flex;">
+                            <input style="margin:0px;width:100%" type="text" placeholder="Type your comment..."
+                                [(ngModel)]="commentContent">
+                            <input (click)="sendComment()" style="height: 100%; width: 20%;" class="signup-btn"
                                 type="submit" value="Send">
                         </div>
 
 
                     </div>
-                    <button *ngIf="!chatOpened" type="button" id="startChat" (click)="startChat()">Start Chat</button>
-                    <button *ngIf="chatOpened" type="button" id="startChat" (click)="endChat()">Close Chat</button>
-
-
-
 
                 </div>
-
-
-
-
             </div>
 
+
+            <div style="display: flex; align-items: center;">
+                <button id="startChat" (click)="openMap()">Open Map</button>
+                <!-- <span style="margin-left: 1rem; color: whitesmoke;">{{ currWorkshop.place }}</span> -->
+            </div>
+            <div id="map" style="max-width: 50%; height: 300px;"></div>
+
+
+
         </div>
+
+
+
 
     </div>
 
     <div class="footer">
+
 
     </div>
 </div>
@@ -194,8 +247,8 @@
                         (click)="editWorkshop($event, currWorkshop._id)"
                         style="background-color: rgb(102, 162, 214);">Edit</button>
                     <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
-                        (click)="saveAsTemplate(currWorkshop)"
-                        style="background-color: rgb(111, 214, 102);">Save as template</button>
+                        (click)="saveAsTemplate(currWorkshop)" style="background-color: rgb(111, 214, 102);">Save as
+                        template</button>
                     <!-- <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
                         (click)="cancelWorkshop(currWorkshop._id)"
                         style="background-color: rgb(214, 102, 102);">Cancel</button> -->
@@ -305,19 +358,15 @@
                                 </tr>
                             </tbody>
                         </table>
-
                     </div>
-
-
                 </div>
 
-
-
-
             </div>
-
+            <!-- <div style="display: flex; align-items: center;">
+                <button id="startChat" (click)="openMap()">Open Map</button>
+            </div>
+            <div id="map" style="max-width: 50%; height: 300px;"></div> -->
         </div>
-
     </div>
 
     <div class="footer">

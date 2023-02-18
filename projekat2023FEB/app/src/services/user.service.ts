@@ -89,10 +89,33 @@ export class UserService {
     const data = {
       senderUsername: senderUsername,
       recipientUsername: recipientUsername,
-      workshopId:workshopId
+      workshopId: workshopId
     }
 
     return this.http.post(`${this.url}/user/getMessages`, data);
+  }
+
+
+  sendComment(sender, workshop, content, timestamp) {
+
+    const data = {
+      sender: sender,
+      workshop: workshop,
+      content: content,
+      timestamp: timestamp
+    }
+
+    return this.http.post(`${this.url}/user/sendComment`, data);
+
+  }
+
+
+  getWorkshopComments(workshop) {
+    const data = {
+      workshop: workshop
+    }
+
+    return this.http.post(`${this.url}/user/getWorkshopComments`, data);
   }
 
 

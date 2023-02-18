@@ -5,6 +5,7 @@ import Workshop from '../models/workshop';
 import User from '../models/user';
 import SignUp from '../models/signUp';
 import Message from '../models/Message';
+import Comment from '../models/Comment';
 
 export class UserController {
     register = (req: express.Request, res: express.Response) => {
@@ -222,6 +223,32 @@ export class UserController {
             }
         })
 
+    }
+
+    sendComment = (req: express.Request, res: express.Response) => {
+
+        let comment = new Comment({
+            workshop: req.body.workshop,
+            sender: req.body.sender,
+            content: req.body.content,
+            timestamp: req.body.timestamp
+        })
+
+        comment.save().then(c => {
+            if (c) res.json({ "resp": "OK" })
+        })
+    }
+
+
+    getWorkshopComments = (req: express.Request, res: express.Response) => {
+        let workshop = req.body.workshop
+
+        Comment.find({ 'workshop._id': workshop._id }, (err, comments) => {
+            if (err) console.log(err)
+            else {
+                res.json(comments)
+            }
+        })
     }
 
 
