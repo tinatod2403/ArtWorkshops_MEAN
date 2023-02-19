@@ -1,9 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { UserService } from 'src/services/user.service';
+import { Like } from '../models/Like';
 import { SignUps } from '../models/signUps';
 import { User } from '../models/user';
+import { Comment } from '../models/Comment';
+import { MessageReqest } from '../models/MessageRequest';
+import { Message } from '../models/Message';
+import { Workshop } from '../models/workshop';
+import { OrganizerService } from 'src/services/organizer.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +18,7 @@ import { User } from '../models/user';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private router: Router, private ls: LoginService, private userService: UserService) { }
+  constructor(private organizerService: OrganizerService, private router: Router, private ls: LoginService, private userService: UserService) { }
 
   public edit: string = "";
 
@@ -21,6 +27,27 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
       this.currentUser = user;
     });
+
+    this.userService.getAllUserLikedWorkshops(this.currentUser.username).subscribe((likes: Like[]) => {
+      if (likes.length > 0) {
+        this.allMyLikes = likes
+        console.log("Likes: ", this.allMyLikes)
+      }
+      else
+        this.emptyLikes = "No liked workshops yet."
+    })
+
+    this.userService.getAllUserComments(this.currentUser.username).subscribe((comm: Comment[]) => {
+      if (comm.length > 0) {
+        this.allMyComments = comm;
+        this.allMyComments.forEach(comm => {
+          comm.timestamp = (new Date(comm.timestamp)).toLocaleString("en-UK")
+        })
+        console.log("Comments: ", this.allMyComments)
+      }
+      else
+        this.emptyComm = "No comments on workshops yet."
+    })
 
     this.userService.getPassedWorkshops(this.currentUser.username).subscribe((signUps: SignUps[]) => {
       if (signUps.length > 0) {
@@ -37,6 +64,13 @@ export class ProfileComponent implements OnInit {
       }
     })
 
+    this.userService.getMyMessages(this.currentUser).subscribe((mess: MessageReqest[]) => {
+      if (mess) {
+        this.sentMessages = mess;
+        console.log("sentMessages", this.sentMessages)
+      }
+    })
+
   }
 
   currentUser: User;
@@ -46,6 +80,7 @@ export class ProfileComponent implements OnInit {
   passwordEdit: string = "";
   phoneEdit: string = "";
   emailEdit: string = "";
+  pictureEdit: any = "../../assets/avatar.jpg";
 
   passwordNew: string = "";
   passwordNewAgain: string = "";
@@ -99,7 +134,7 @@ export class ProfileComponent implements OnInit {
         //   return;
         // }
         if (resp['resp'] == "OK") {
-          return;
+          // alert("Succesfull editing");
         }
 
 
@@ -111,6 +146,8 @@ export class ProfileComponent implements OnInit {
         this.currentUser = user;
       }
     })
+    localStorage.setItem("currentUser", JSON.stringify(this.currentUser))
+
     this.errorMessage = "";
     this.edit = "";
   }
@@ -145,10 +182,160 @@ export class ProfileComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+
+
+  allMyLikes: Like[] = [];
+  emptyLikes: string = "";
+  allMyComments: Comment[] = [];
+  emptyComm: string = "";
+  sentMessages: MessageReqest[] = [];
+  messageContent: string;
+  chatOpened: boolean = false;
+
+  unLike(workshop) {
+    let result = confirm("Are you sure you want to remove " + workshop.name + " from liked wokrshops?")
+    if (result) {
+      this.userService.unlikeWorkshop(this.currentUser, workshop).subscribe((resp) => {
+        if (resp["resp"] == "OK") {
+          this.allMyLikes = this.allMyLikes.filter(like => like.workshop._id != workshop._id)
+          if (this.allMyLikes.length == 0) {
+            this.emptyLikes = "No liked workshops yet."
+          }
+        }
+      })
+    }
+  }
+
+  openChat(messageBox) {
+
+    messageBox.opened = !messageBox.opened
+
+    this.sentMessages.forEach(sm => {
+      if (sm != messageBox) {
+        sm.opened = false
+      }
+    })
+    if (messageBox.opened && !messageBox.beenOpened)
+      this.userService.getMessages(this.currentUser.username, messageBox.senderUsername,
+        messageBox.workshopID).subscribe((mess: Message[]) => {
+          messageBox.messages = mess
+          messageBox.beenOpened = true
+        })
+
+  }
+
+  sendMessageToUser(recipient) {
+    console.log(recipient)
+    if (this.messageContent == "") {
+      return;
+    }
+
+    this.organizerService.workshopDetails(recipient.workshopID).subscribe((w: Workshop) => {
+      if (w) {
+        let reciver = new User();
+        reciver.username = recipient.senderUsername;
+        reciver.picture = recipient.senderPicture;
+        this.organizerService.sendMessage(this.currentUser, reciver,
+          this.messageContent, new Date(), w).subscribe((resp) => {
+            if (resp["resp"] == "OK") {
+              this.messageContent = "";
+              this.sentMessages.forEach(m => {
+                if (m.senderUsername == recipient.senderUsername) {
+                  this.organizerService.getMessages(this.currentUser.username, recipient.senderUsername, w._id).subscribe(
+                    (mess: Message[]) => {
+                      m.messages = mess;
+                      console.log("Nadam se da jednom udje: ", m)
+
+                    }
+                  )
+                }
+              })
+
+            }
+          })
+
+      }
+    })
+
+
+  }
+
+  editComment(comm) {
+    comm.editing = true;
+  }
+
+  doneEditComment(comm) {
+    comm.editing = false;
+    console.log(comm)
+    this.userService.editComment(comm).subscribe((comm: Comment[]) => {
+      if (comm) {
+        this.allMyComments = comm
+      }
+    })
+  }
+
+  deleteComment(comm) {
+    let result = confirm('Are you sure you want to delete comment:\n"' + comm.content + '"?')
+
+    if (result) {
+      this.userService.deleteComment(comm).subscribe((comms: Comment[]) => {
+        this.allMyComments = comms;
+        if (comms.length == 0) {
+          this.emptyComm = "No comments on workshops yet."
+        }
+      })
+    }
+  }
+
   logOut() {
     localStorage.removeItem("currentUser");
     this.currentUser = null;
     this.router.navigate([""]);
+  }
+
+
+
+  @ViewChild('scrollContainer') private myScrollContainer: ElementRef;
+
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
+
+
+  onFileChange(event) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+
+        let img: any;
+        img = reader.result;
+
+        const image = new Image();
+        image.src = img;
+        image.onload = () => {
+          if (image.width < 100 || image.width > 300 || image.height < 100 || image.height > 300) {
+            this.pictureEdit = "../../assets/avatar.jpg";
+            this.errorMessage = "Image must be between 100x100 and 300x300 pixels"
+          }
+          else {
+            this.pictureEdit = reader.result;
+            this.errorMessage = ""
+          }
+        };
+
+      };
+
+    }
   }
 
 }

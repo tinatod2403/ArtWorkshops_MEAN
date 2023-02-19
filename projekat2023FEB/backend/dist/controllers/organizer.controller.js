@@ -10,6 +10,8 @@ const Message_1 = __importDefault(require("../models/Message"));
 const signUp_1 = __importDefault(require("../models/signUp"));
 const workshop_1 = __importDefault(require("../models/workshop"));
 const path_1 = __importDefault(require("path"));
+const Like_1 = __importDefault(require("../models/Like"));
+const Comment_1 = __importDefault(require("../models/Comment"));
 class OrganizerController {
     constructor() {
         this.addWorkshop = (req, res) => {
@@ -69,15 +71,34 @@ class OrganizerController {
                             else
                                 res.json({ "resp": "OK" });
                         });
-                    else if (dataName == "date")
+                    else if (dataName == "date") {
                         signUp_1.default.updateMany({ idWorkshop: req.body._id }, { $set: { 'workshopDate': new Date(newDataValue) } }, (error, success) => {
                             if (error)
                                 console.log(error);
-                            else
-                                res.json({ "resp": "OK" });
                         });
-                    else if (dataName == "photo") {
-                        //TODO
+                        // signUp.updateMany(
+                        //     { idWorkshop: req.body._id },
+                        //     { $set: { 'workshopDate': new Date(newDataValue) } }, (error, success) => {
+                        //         if (error)
+                        //             console.log(error);
+                        //         else
+                        //             res.json({ "resp": "OK" })
+                        //     }
+                        // );
+                    }
+                    else if (dataName == "mainPhoto") {
+                        signUp_1.default.updateMany({ idWorkshop: req.body._id }, { $set: { 'workshopPicture': newDataValue } }, (error, success) => {
+                            if (error)
+                                console.log(error);
+                        });
+                        Like_1.default.updateMany({ 'workshop._id': req.body._id }, { $set: { 'workshop.mainPhoto': newDataValue } }, (error, success) => {
+                            if (error)
+                                console.log(error);
+                        });
+                        Comment_1.default.updateMany({ 'workshop._id': req.body._id }, { $set: { 'workshop.mainPhoto': newDataValue } }, (error, success) => {
+                            if (error)
+                                console.log(error);
+                        });
                     }
                 }
             });

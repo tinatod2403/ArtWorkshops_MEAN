@@ -34,6 +34,7 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MapComponent } from './map/map.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ForgotenPasswordComponent } from './forgoten-password/forgoten-password.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     WorkshopDetailsComponent,
     EditWorkshopComponent,
     AdminLoginComponent,
-    MapComponent
+    MapComponent,
+    ForgotenPasswordComponent
 
   ],
   imports: [

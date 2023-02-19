@@ -41,6 +41,11 @@ let User = new Schema({
     },
     status: {
         type: String
+    },
+
+
+    passwordDuration: {
+        type: String
     }
 
 })

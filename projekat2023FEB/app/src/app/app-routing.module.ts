@@ -5,6 +5,7 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminComponent } from './admin/admin.component';
 import { BecomeOrganizerComponent } from './become-organizer/become-organizer.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
+import { ForgotenPasswordComponent } from './forgoten-password/forgoten-password.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { MapComponent } from './map/map.component';
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: "admin", component: AdminComponent },
   { path: "**/admin", component: AdminComponent },
   { path: "map", component: MapComponent },
+  { path: "forgotenPassword", component: ForgotenPasswordComponent },
   // { path: "**/editWorkshop", component: EditWorkshopComponent },
 
 ];

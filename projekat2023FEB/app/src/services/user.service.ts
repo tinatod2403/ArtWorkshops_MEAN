@@ -134,4 +134,52 @@ export class UserService {
     return this.http.post(`${this.url}/user/unlikeWorkshop`, data);
   }
 
+  likesOfWorkshop(user, workshop) {
+    const data = {
+      user: user,
+      workshop: workshop
+    }
+    return this.http.post(`${this.url}/user/likesOfWorkshop`, data);
+  }
+
+  getAllUserLikedWorkshops(username) {
+    const data = {
+      username: username
+    }
+    return this.http.post(`${this.url}/user/getAllUserLikedWorkshops`, data);
+  }
+
+  getAllUserComments(username) {
+    const data = {
+      username: username
+    }
+    return this.http.post(`${this.url}/user/getAllUserComments`, data);
+  }
+
+  editComment(comment) {
+    const data = {
+      comment: comment
+    }
+    return this.http.post(`${this.url}/user/editComment`, data);
+  }
+  deleteComment(comment) {
+    const data = {
+      comment: comment
+    }
+    return this.http.post(`${this.url}/user/deleteComment`, data);
+  }
+  getMyMessages(sender) {
+    const data = {
+      sender: sender
+    }
+    return this.http.post(`${this.url}/user/getMyMessages`, data);
+  }
+
+  generateNewPassword(email) {
+    const data = {
+      email: email
+    }
+    return this.http.post(`${this.url}/user/generateNewPassword`, data);
+  }
+
 }

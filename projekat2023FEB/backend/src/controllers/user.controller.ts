@@ -65,8 +65,19 @@ export class UserController {
 
             if
                 (error) console.log(error);
-            else
-                res.json(user);
+            else {
+                if (user) {
+                    if (user.passwordDuration) {
+                        if (new Date(user.passwordDuration) < new Date()) res.json({ 'resp': "expired" })
+                        else res.json({ 'user': user });
+                    }
+                    else {
+                        console.log("nema duration")
+                        res.json({ 'user': user });
+                    }
+                }
+                else { res.json({ 'user': user }); }
+            }
         })
     }
 
@@ -81,9 +92,45 @@ export class UserController {
                 if (error) {
                     console.log(error);
                 }
-                else res.json({ "resp": "OK" })
+                else if (dataName != "picture")
+                    res.json({ "resp": "OK" })
             }
         );
+
+        if (dataName == "password") {
+            User.updateOne({ username: req.body.username },
+                { $set: { passwordDuration: "" } }, (error, success) => {
+                    if (error) {
+                        console.log(error);
+                    }
+
+                })
+        }
+
+        if (dataName == "picture") {
+            SignUp.updateMany({ username: req.body.username },
+                { $set: { userPicture: newDataValue } }, (error, success) => {
+                    if (error) {
+                        console.log(error);
+                    }
+
+                })
+
+            Message.updateMany({ 'sender.username': req.body.username },
+                { $set: { 'sender.picture': newDataValue } }, (error, success) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                })
+
+            Comment.updateMany({ 'sender.username': req.body.username },
+                { $set: { 'sender.picture': newDataValue } }, (error, success) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                    else res.json({ "resp": "OK" })
+                })
+        }
 
     }
 
@@ -275,6 +322,204 @@ export class UserController {
         })
 
 
+    }
+
+    unlikeWorkshop = (req: express.Request, res: express.Response) => {
+        let workshop = req.body.workshop
+        let user = req.body.user
+
+        Like.deleteOne({ 'user.username': user.username, 'workshop._id': workshop._id }, (err, like) => {
+            if (err) console.log(err)
+            else
+                res.json({ "resp": "OK" })
+        })
+
+
+    }
+
+    likesOfWorkshop = (req: express.Request, res: express.Response) => {
+        let workshop = req.body.workshop
+        let user = req.body.user
+        // console.log(workshop)
+
+        Like.findOne({ 'user.username': user.username, 'workshop._id': workshop._id }, (err, like) => {
+            if (err) console.log(err)
+            else if (like == null) {
+                Like.find({ 'workshop._id': workshop._id }, (err, likes) => {
+                    if (err) console.log(err)
+                    else res.json({ likes: likes, resp: "noUser" });
+
+                })
+            }
+            else if (like != null) {
+                Like.find({ 'workshop._id': workshop._id }, (err, likes) => {
+                    if (err) console.log(err)
+                    else res.json({ likes: likes, resp: "yesUser" });
+                })
+            }
+        })
+    }
+
+    getAllUserLikedWorkshops = (req: express.Request, res: express.Response) => {
+
+        Like.find({ 'user.username': req.body.username }, (err, likes) => {
+            if (err) console.log(err)
+            else res.json(likes)
+        })
+    }
+
+    getAllUserComments = (req: express.Request, res: express.Response) => {
+
+        Comment.find({ 'sender.username': req.body.username }, (err, comm) => {
+            if (err) console.log(err)
+            else res.json(comm)
+        })
+    }
+
+    editComment = (req: express.Request, res: express.Response) => {
+        let comment = req.body.comment
+
+        Comment.updateOne(
+            { _id: new ObjectId(comment._id) }
+            ,
+            {
+                $set: { content: comment.content }
+            }, (err, comm) => {
+                if (err) console.log(err)
+                else {
+                    Comment.find({ 'sender.username': comment.sender.username }, (err, comms) => {
+                        if (err) console.log(err)
+                        else res.json(comms)
+                    })
+                }
+            })
+    }
+
+    deleteComment = (req: express.Request, res: express.Response) => {
+        let comment = req.body.comment
+
+        Comment.deleteOne(
+            { _id: new ObjectId(comment._id) }
+            , (err, comm) => {
+                if (err) console.log(err)
+                else {
+                    Comment.find({ 'sender.username': comment.sender.username }, (err, comms) => {
+                        if (err) console.log(err)
+                        else res.json(comms)
+                    })
+                }
+            })
+    }
+
+
+    getMyMessages = (req: express.Request, res: express.Response) => {
+        let sender = req.body.sender
+        Message.aggregate([
+            {
+                $match: {
+                    'sender.username': sender.username
+                }
+            },
+            {
+                $group: {
+                    _id: '$workshop._id',
+                    workshopName: { $first: '$workshop.name' },
+                    workshopID: { $first: '$workshop._id' },
+                    senderUsername: { $first: '$recipient.username' },
+                    senderPicture: { $first: '$recipient.picture' }//ceo ovaj deo je predebilan i nema smisla sa imenima polja zbog glupe klase na frontu
+                }
+            }
+        ], (err, messageRequests) => {
+            if (err) console.log(err)
+            else res.json(messageRequests)
+        });
+    }
+
+    generatePassword() {
+        const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        const specialCharacters = '!@#$%^&*()_+-={}[]|\\:;<>,.?';
+
+        const passwordLength = Math.floor(Math.random() * 9) + 8; // generates a random number between 8 and 16
+        const firstChar = lowercaseLetters.charAt(Math.floor(Math.random() * lowercaseLetters.length)); // generates a random lowercase letter for the first character
+        const remainingChars = passwordLength - 1;
+        const remainingCharsTypes = [
+            uppercaseLetters, // at least one uppercase letter
+            numbers, // at least one number
+            specialCharacters, // at least one special character
+            lowercaseLetters
+        ];
+
+        let password = firstChar;
+
+        for (let i = 0; i < remainingChars; i++) {
+            const randomCharType = remainingCharsTypes[Math.floor(Math.random() * remainingCharsTypes.length)];
+            const randomChar = randomCharType.charAt(Math.floor(Math.random() * randomCharType.length));
+            password += randomChar;
+        }
+
+        return password;
+    }
+
+
+
+    generateNewPassword = (req: express.Request, res: express.Response) => {
+
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (err) console.log(err)
+            else {
+
+                let duration: Date = new Date()
+                duration.setTime(duration.getTime() + (30 * 60 * 1000))
+                console.log(duration)
+
+                if (user) {
+                    let newPass = this.generatePassword()
+                    console.log(newPass)
+
+                    ///////////////////////////////////////////////////////////////////////////////
+                    const nodemailer = require('nodemailer');
+
+                    // create reusable transporter object using the default SMTP transport
+                    let transporter = nodemailer.createTransport({
+                        service: 'outlook',
+                        auth: {
+                            user: 'artworkshop23@outlook.com',
+                            pass: 'organizer123'
+                        }
+                    });
+                    let mailOptions = {
+                        from: 'Admin <artworkshop23@outlook.com>', // sender address
+                        to: req.body.email, // list of receivers
+                        subject: 'NEW PASSWORD', // Subject line
+                        text: 'NEW PASSWORD', // plain text body
+                        html: '<h1 style="text-align: center;">New password for user: <strong>' + user.username + '</strong></h1><p style="color: red; font-weight: bold;">CAUTION:</p><p>' + newPass + '</p><p>This password is valid for 30minutes.</p>' // html body
+                    };
+
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                        }
+                        else {
+                            {
+                                console.log("Mail OK")
+
+                                User.updateOne({ username: user.username },
+                                    { $set: { password: newPass, passwordDuration: duration } },
+                                    { upsert: true }, (err, resp) => {
+                                        if (err) console.log(err)
+                                        else res.json({ "resp": "OK" })
+                                    })
+                            }
+                        }
+                    }
+                    );
+                }
+                else res.json({ "resp": "noUser" })
+            }
+        })
     }
 
 

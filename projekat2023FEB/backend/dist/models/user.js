@@ -42,6 +42,9 @@ let User = new Schema({
     },
     status: {
         type: String
+    },
+    passwordDuration: {
+        type: String
     }
 });
 exports.default = mongoose_1.default.model('User', User, 'users');

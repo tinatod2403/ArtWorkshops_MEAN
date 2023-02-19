@@ -1,36 +1,36 @@
 <div class="hero" *ngIf="currentUser && currentUser.isOrganizer && currWorkshop">
-    
 
-        <header class="header">
-            <a routerLink=""><img class="logo-image"></a>
-            <h1 class="header__title">Edit workshop: {{currWorkshop.name}}</h1>
-            <div class="header__buttons">
-                &nbsp;
 
-                <a routerLink="" class="link">
-                    <button mat-raised-button color="brownLight" style="opacity: 0.8;">Home</button>
-                </a>
-                &nbsp;
-                <div class="dropdown">
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Edit workshop: {{currWorkshop.name}}</h1>
+        <div class="header__buttons">
+            &nbsp;
 
-                    <button mat-raised-button color="brownLight">Profile</button>
+            <a routerLink="" class="link">
+                <button mat-raised-button color="brownLight" style="opacity: 0.8;">Home</button>
+            </a>
+            &nbsp;
+            <div class="dropdown">
 
-                    <div class="dropdown-content">
-                        <a routerLink="/myWorkshops">My workshops</a>
-                        <a routerLink="/addWorkshop">+ Add workshop</a>
-                    </div>
+                <button mat-raised-button color="brownLight">Profile</button>
+
+                <div class="dropdown-content">
+                    <a routerLink="/myWorkshops">My workshops</a>
+                    <a routerLink="/addWorkshop">+ Add workshop</a>
                 </div>
-
-
-                &nbsp;
-                <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
-
-                &nbsp;
-                &nbsp;
-                <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
             </div>
-        </header>
-    
+
+
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img [src]="currentUser.picture" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
 
     <div class="middle">
 
@@ -143,11 +143,52 @@
                                     <input style="width: 50%;" type="number" class="fancy-input"
                                         [(ngModel)]="numOfPlacesEdit" />
                                 </td>
-                                <button (click)="toStr(numOfPlacesEdit,'numOfPlaces')"
-                                    *ngIf="edit=='numOfPlaces'">
+                                <button (click)="toStr(numOfPlacesEdit,'numOfPlaces')" *ngIf="edit=='numOfPlaces'">
                                     <mat-icon>done</mat-icon>
                                 </button>
                                 <button (click)="cancelEditing()" *ngIf="edit=='numOfPlaces'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+
+                            <tr>
+                                <td>Main Photo:</td>
+                                <td *ngIf="edit!='mainPhoto'"><img class="workshop-photo"
+                                        [src]="currWorkshop.mainPhoto"></td>
+                                <button (click)="editData('mainPhoto')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='mainPhoto'" style="display: flex; align-items: center;">
+                                    <img class="workshop-photo" [src]="mainPhotoEdit">
+                                    <input type="file" name=" mainPhoto" accept=".jpg,.png"
+                                        (change)="onFileChange($event)" />
+                                </td>
+                                <button (click)="toStr(mainPhotoEdit,'mainPhoto')" *ngIf="edit=='mainPhoto'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='mainPhoto'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Galerry:</td>
+                                <td>
+                                    <div *ngFor="let p of galleryEdit"
+                                        style="display: flex; align-items: center;">
+                                        <img class="workshop-photo" [src]="p"><button (click)="removePhoto(p)"
+                                            *ngIf="edit=='gallery'">remove</button>
+
+                                    </div>
+                                    <input *ngIf="edit=='gallery'" type="file" name=" gallery" accept=".jpg,.png"
+                                        (change)="onFileChangeMultiple($event)" multiple />
+                                </td>
+                                <button (click)="editData('gallery')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button (click)="doneEditing(galleryEdit,'gallery')" *ngIf="edit=='gallery'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='gallery'">
                                     <mat-icon>clear</mat-icon>
                                 </button>
                             </tr>

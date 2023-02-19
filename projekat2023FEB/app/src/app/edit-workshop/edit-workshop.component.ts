@@ -29,6 +29,8 @@ export class EditWorkshopComponent implements OnInit {
         this.shortDescEdit = this.currWorkshop.shortDesc;
         this.longDescEdit = this.currWorkshop.longDesc;
         this.numOfPlacesEdit = this.currWorkshop.numOfPlaces;
+        this.mainPhotoEdit = this.currWorkshop.mainPhoto;
+        this.galleryEdit = this.currWorkshop.gallery;
       }
       else {
         console.log("Error with getting workshop details.")
@@ -39,6 +41,7 @@ export class EditWorkshopComponent implements OnInit {
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
       this.currentUser = user;
     });
+
   }
 
   currentUser: User;
@@ -54,6 +57,8 @@ export class EditWorkshopComponent implements OnInit {
   shortDescEdit: string = "";
   longDescEdit: string = "";
   numOfPlacesEdit: Number = 0;
+  mainPhotoEdit: any = "";
+  galleryEdit: string[] = [];
 
 
   editData(currEditing: string) {
@@ -63,6 +68,7 @@ export class EditWorkshopComponent implements OnInit {
   cancelEditing() {
     this.errorMessage = "";
     this.edit = "";
+    this.galleryEdit = this.currWorkshop.gallery
   }
 
   toStr(newData: Number, currEditing: string) {
@@ -70,7 +76,7 @@ export class EditWorkshopComponent implements OnInit {
     this.doneEditing(newData_, currEditing)
   }
 
-  doneEditing(newData: string, currEditing: string) {
+  doneEditing(newData, currEditing: string) {
     if (this.nameEdit == "" && currEditing == "name") {
       this.errorMessage = "Error: The name field cannot be empty."
       return;
@@ -95,6 +101,10 @@ export class EditWorkshopComponent implements OnInit {
       this.errorMessage = "Error: The number of places cannot be zero."
       return;
     }
+    if (this.galleryEdit.length == 0 && currEditing == "gallery") {
+      this.errorMessage = "Error: The number of pictures in gallery can't be zero."
+      return;
+    }
 
     this.organizerService.editWorkshopDetailes(newData, currEditing, this.currWorkshop._id).subscribe((resp) => {
 
@@ -108,13 +118,14 @@ export class EditWorkshopComponent implements OnInit {
 
     this.organizerService.workshopDetails(this.currWorkshop._id).subscribe((workshop: Workshop) => {
       if (workshop) {
-        this.currWorkshop = workshop;
-        this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('en-US');
-        this.nameEdit = this.currWorkshop.name;
-        this.placeEdit = this.currWorkshop.place;
-        this.shortDescEdit = this.currWorkshop.shortDesc;
-        this.longDescEdit = this.currWorkshop.longDesc;
-        this.numOfPlacesEdit = this.currWorkshop.numOfPlaces;
+        // this.currWorkshop = workshop;
+        // this.currWorkshop.date = new Date(this.currWorkshop.date).toLocaleString('en-US');
+        // this.nameEdit = this.currWorkshop.name;
+        // this.placeEdit = this.currWorkshop.place;
+        // this.shortDescEdit = this.currWorkshop.shortDesc;
+        // this.longDescEdit = this.currWorkshop.longDesc;
+        // this.numOfPlacesEdit = this.currWorkshop.numOfPlaces;
+        location.reload()
       }
       else {
         console.log("Error with getting workshop details after adding.")
@@ -124,6 +135,73 @@ export class EditWorkshopComponent implements OnInit {
     this.errorMessage = "";
     this.edit = "";
 
+  }
+
+
+  onFileChange(event) {
+
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+
+        let img: any;
+        this.mainPhotoEdit = reader.result;
+
+      };
+
+    }
+    else {
+      this.mainPhotoEdit = "";
+    }
+  }
+
+  removePhoto(photo) {
+    this.galleryEdit = this.galleryEdit.filter(p => p != photo)
+  }
+
+  doneEditingGallery(gallery, d) {
+
+    // this.doneEditing(gallery, d)
+  }
+
+  async onFileChangeMultiple(event) {
+
+    this.errorMessage = ""
+
+    if (event.target.files && event.target.files.length) {
+      const files = event.target.files;
+      // alert(files.length + this.galleryEdit.length)
+      if ((files.length + this.galleryEdit.length) > 5) {
+        this.errorMessage = "Error: Maximum number of photos for gallery is 5."
+        return
+      }
+      if (files.length > 5) {
+        this.errorMessage = "Error: Maximum number of photos for gallery is 5."
+        return
+      }
+      this.errorMessage = "";
+
+      const reader = new FileReader();
+      for (let i = 0; i < files.length; i++) {
+
+
+        await new Promise<void>((resolve) => {
+          reader.onload = () => {
+            resolve();
+          };
+          reader.readAsDataURL(files[i]);
+        });
+        this.galleryEdit.push(reader.result as string);
+      }
+    }
+    else {
+      this.galleryEdit = [];
+    }
+
+    console.log(this.galleryEdit)
   }
 
 

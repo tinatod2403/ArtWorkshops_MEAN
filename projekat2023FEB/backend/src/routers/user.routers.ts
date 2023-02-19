@@ -46,5 +46,28 @@ userRouter.route("/getWorkshopComments").post(
 userRouter.route("/likeWorkshop").post(
     (req, res) => new UserController().likeWorkshop(req, res)
 )
-
+userRouter.route("/unlikeWorkshop").post(
+    (req, res) => new UserController().unlikeWorkshop(req, res)
+)
+userRouter.route("/likesOfWorkshop").post(
+    (req, res) => new UserController().likesOfWorkshop(req, res)
+)
+userRouter.route("/getAllUserLikedWorkshops").post(
+    (req, res) => new UserController().getAllUserLikedWorkshops(req, res)
+)
+userRouter.route("/getAllUserComments").post(
+    (req, res) => new UserController().getAllUserComments(req, res)
+)
+userRouter.route("/editComment").post(
+    (req, res) => new UserController().editComment(req, res)
+)
+userRouter.route("/deleteComment").post(
+    (req, res) => new UserController().deleteComment(req, res)
+)
+userRouter.route("/getMyMessages").post(
+    (req, res) => new UserController().getMyMessages(req, res)
+)
+userRouter.route("/generateNewPassword").post(
+    (req, res) => new UserController().generateNewPassword(req, res)
+)
 export default userRouter;

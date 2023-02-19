@@ -7,6 +7,8 @@ import Message from '../models/Message';
 import signUp from '../models/signUp';
 import Workshop from '../models/workshop';
 import path from 'path';
+import Like from '../models/Like';
+import Comment from '../models/Comment';
 
 export class OrganizerController {
 
@@ -89,19 +91,47 @@ export class OrganizerController {
 
                             }
                         );
-                    else if (dataName == "date")
+                    else if (dataName == "date") {
                         signUp.updateMany(
                             { idWorkshop: req.body._id },
                             { $set: { 'workshopDate': new Date(newDataValue) } }, (error, success) => {
                                 if (error)
                                     console.log(error);
-                                else
-                                    res.json({ "resp": "OK" })
-
                             }
                         );
-                    else if (dataName == "photo") {
-                        //TODO
+                        // signUp.updateMany(
+                        //     { idWorkshop: req.body._id },
+                        //     { $set: { 'workshopDate': new Date(newDataValue) } }, (error, success) => {
+                        //         if (error)
+                        //             console.log(error);
+                        //         else
+                        //             res.json({ "resp": "OK" })
+
+                        //     }
+                        // );
+                    }
+                    else if (dataName == "mainPhoto") {
+                        signUp.updateMany(
+                            { idWorkshop: req.body._id },
+                            { $set: { 'workshopPicture': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
+                            }
+                        );
+                        Like.updateMany(
+                            { 'workshop._id': req.body._id },
+                            { $set: { 'workshop.mainPhoto': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
+                            }
+                        );
+                        Comment.updateMany(
+                            { 'workshop._id': req.body._id },
+                            { $set: { 'workshop.mainPhoto': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
+                            }
+                        );
                     }
 
 

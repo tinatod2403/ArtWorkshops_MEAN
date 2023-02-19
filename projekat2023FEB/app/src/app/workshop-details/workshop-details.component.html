@@ -145,7 +145,7 @@
                     </div>
 
 
-                    
+
 
                     <div style="position: relative; display: inline-block; margin-left: 40%;">
                         <div
@@ -153,7 +153,7 @@
                         </div>
                         <div
                             style="background-color: pink; display: flex; align-items: center; padding: 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
-                            <span style="margin-right: 5px;">5</span>
+                            <span style="margin-right: 5px;">{{numOfLikes}}</span>
                             <mat-icon *ngIf="!liked" (click)="like()">favorite_border</mat-icon>
                             <mat-icon *ngIf="liked" (click)="unlike()">favorite</mat-icon>
                             <div
@@ -166,7 +166,7 @@
 
                     <h1 style="color: white; margin: 0px;">Comments</h1>
                     <div style="position: relative;">
-                        
+
                         <div class="comment-container" #scrollContainer>
 
                             <div style="border-bottom: 1px dotted rgb(216, 215, 215);"
@@ -266,21 +266,7 @@
             <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
                 <mat-card-title class="card-title">{{currWorkshop.name}} workshop</mat-card-title>
 
-                <div style="position: relative; display: inline-block;">
-                    <div
-                        style="position: absolute; top: 100%; left: 50%; margin-left: -10px; border-width: 10px; border-style: solid; border-color: rgb(192, 75, 94) transparent transparent transparent;">
-                    </div>
-                    <div
-                        style="background-color: pink; display: flex; align-items: center; padding: 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
-                        5
-                        <mat-icon style="margin-left: 5px;">thumb_up_alt</mat-icon>
-                        <div
-                            style="background-color: pink; display: flex; align-items: center; padding: 10px; margin-left: 10px; border-radius: 20px;">
-                            5
-                            <mat-icon style="margin-left: 5px;">chat</mat-icon>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div>
                     <button *ngIf="currentUser.username==currWorkshop.organizer" type="actionWorkshop"
@@ -384,7 +370,7 @@
 
                                             </div>
                                             <div class="input-btn" style="display: flex;">
-                                                <input style="margin:0px" type="text"
+                                                <input style="margin:0px;" type="text"
                                                     placeholder="Type your message here..."
                                                     [(ngModel)]="messageContent">
                                                 <input (click)="sendMessageToUser(request)"
@@ -399,7 +385,63 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div style="position: relative; display: inline-block; margin-left: 50%;">
+                        <div
+                            style="position: absolute; top: 100%; left: 50%; margin-left: -10px; border-width: 10px; border-style: solid; border-color: pink transparent transparent transparent;">
+                        </div>
+                        <div
+                            style="background-color: pink; display: flex; align-items: center; padding: 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+                            <span style="margin-right: 5px;">{{numOfLikes}}</span>
+                            <mat-icon>favorite_border</mat-icon>
+                            <div
+                                style="background-color: pink; display: flex; align-items: center; padding: 10px; margin-left: 10px; border-radius: 20px;">
+                                <span style="margin-right: 5px;">{{workshopComments.length}}</span>
+                                <mat-icon style="margin-left: 5px;">chat</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1 style="color: white; margin: 0px;">Comments</h1>
+                    <div style="position: relative;">
+
+                        <div class="comment-container" #scrollContainer>
+
+                            <div style="border-bottom: 1px dotted rgb(216, 215, 215);"
+                                *ngFor="let comment of workshopComments">
+                                <div class="comment-box">
+                                    <div>
+                                        <div class="content-and-profile-sender">
+                                            <div style="display: inline-block;">
+                                                <div style="display: flex; align-items: center;">
+                                                    <img [src]="comment.sender.picture"
+                                                        style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                    <span style="font-size: 12px;"><b>{{comment.sender.username}}</b>,
+                                                        {{comment.timestamp}}</span>
+                                                </div>
+                                                <div>
+                                                    <span style="float:left"
+                                                        class="comment-sender">{{comment.content}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="input-comment-btn" style="display: flex;">
+                            <input style="margin:0px;width:100%" type="text" placeholder="Type your comment..."
+                                [(ngModel)]="commentContent">
+                            <input (click)="sendComment()" style="height: 100%; width: 20%;" class="signup-btn"
+                                type="submit" value="Send">
+                        </div> -->
+
+
+                    </div>
+
                 </div>
+
+
 
             </div>
 

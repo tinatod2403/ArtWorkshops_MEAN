@@ -11,6 +11,7 @@ import { MessageReqest } from '../models/MessageRequest';
 import { Comment } from '../models/Comment'
 import { OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
+import { Like } from '../models/Like';
 
 @Component({
   selector: 'app-workshop-details',
@@ -34,6 +35,20 @@ export class WorkshopDetailsComponent implements OnInit, OnDestroy {
       if (workshop) {
         this.currWorkshop = workshop;
 
+        this.userService.likesOfWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
+          if (resp["likes"]) {
+            this.allLikes = resp["likes"]
+            this.numOfLikes = resp["likes"].length
+            console.log("Likes: ", this.allLikes)
+
+            if (resp["resp"] == "noUser") this.liked = false;
+            if (resp["resp"] == "yesUser") this.liked = true;
+
+          }
+          else
+            this.numOfLikes = 0;
+        })
+
         let date = new Date(workshop.date);
         this.dateAndTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
@@ -55,6 +70,7 @@ export class WorkshopDetailsComponent implements OnInit, OnDestroy {
         console.log("Error with getting workshop details.")
       }
     })
+
 
 
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
@@ -125,11 +141,7 @@ export class WorkshopDetailsComponent implements OnInit, OnDestroy {
     this.imageDisplay = this.currWorkshop.gallery[this.iterator]
   }
 
-  logOut() {
-    localStorage.removeItem("currentUser");
-    this.currentUser = null;
-    this.router.navigate([""]);
-  }
+
 
   chatOpened: boolean = false;
 
@@ -343,32 +355,40 @@ export class WorkshopDetailsComponent implements OnInit, OnDestroy {
 
   liked: boolean = false;
   numOfLikes: number;
-  // allLikes: Like[] = [];
+  allLikes: Like[] = [];
 
 
   like() {
     this.liked = true;
+    this.numOfLikes++;
   }
 
   unlike() {
     this.liked = false;
+    this.numOfLikes--;
   }
 
 
   ngOnDestroy(): void {
+
     if (this.liked)
       this.userService.likeWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
         if (resp["resp"] == "OK") {
-          alert("liked")
+          console.log("liked")
         }
       })
-
     else
       this.userService.unlikeWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
         if (resp["resp"] == "OK") {
-          alert("UNliked")
+          console.log("UNliked")
         }
       })
+  }
+
+  logOut() {
+    localStorage.removeItem("currentUser");
+    this.currentUser = null;
+    this.router.navigate([""]);
   }
 
 }

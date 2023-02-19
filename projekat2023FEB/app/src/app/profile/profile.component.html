@@ -172,6 +172,24 @@
                                     <mat-icon>clear</mat-icon>
                                 </button>
                             </tr>
+                            <tr>
+                                <td>Profile photo:</td>
+                                <td><img class="profile-image" [src]="currentUser.picture"></td>
+                                <button (click)="editData('picture')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='picture'">
+                                    <img class="profile-image" [src]="pictureEdit">
+                                    <input type="file" name=" picture" accept=".jpg,.png"
+                                        (change)="onFileChange($event)" />
+                                </td>
+                                <button (click)="doneEditing(pictureEdit,'picture')" color="green" *ngIf="edit=='picture'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='picture'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
 
                         </tbody>
                     </table>
@@ -225,10 +243,184 @@
 
         </div>
 
-    </div>
 
-    
-    
+        <div class="card-container" style="width: 30%;">
+            <mat-card class="card">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Liked workshops</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <table class="table">
+
+                        <tbody *ngFor="let l of allMyLikes">
+                            <!-- <tr class="table-row" (click)="goToDetails(w.idWorkshop)"> -->
+                            <tr>
+                                <td class="name">
+                                    <div style="display: flex; align-items: center;"><img class="liked-work-image"
+                                            [src]="l.workshop.mainPhoto"> {{l.workshop.name}}</div>
+                                </td>
+
+                                <td>{{l.workshop.organizer}}</td>
+                                <td style="color:rgb(255, 64, 0);">
+                                    <mat-icon (click)="unLike(l.workshop)">favorite</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </mat-card-content>
+                <span class="inform-output">{{emptyLikes}}</span>
+            </mat-card>
+
+        </div>
+
+        <div class="card-container">
+            <mat-card class="card">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">My comments</mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th (click)="sortName()">Workshop</th>
+                                <th (click)="sortDate()">Comment</th>
+                                <th (click)="sortTimeStamp()">Time</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let com of allMyComments">
+                            <!-- <tr class="table-row" (click)="goToDetails(w.idWorkshop)"> -->
+                            <tr class="table-row">
+                                <td class="name">
+                                    <div style="display: flex; align-items: center;">
+                                        <img class="liked-work-image" [src]="com.workshop.mainPhoto">
+                                        {{com.workshop.name}}
+                                    </div>
+                                </td>
+                                <td *ngIf="com.editing"><input class="fancy-input" style="width: 90%;"
+                                        [(ngModel)]="com.content"></td>
+                                <td *ngIf="!com.editing"><i>{{com.content}}</i></td>
+                                <td>{{com.timestamp}}</td>
+                                <td *ngIf="!com.editing">
+                                    <button (click)="editComment(com)" class="edit-btn">Edit</button>
+                                </td>
+                                <td *ngIf="com.editing">
+                                    <button (click)="doneEditComment(com)" class="done-btn">Done</button>
+                                </td>
+                                <td>
+                                    <button (click)="deleteComment(com)" class="delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </mat-card-content>
+                <span class="inform-output">{{emptyComm}}</span>
+
+            </mat-card>
+
+        </div>
+
+        <div class="card-container">
+            <mat-card class="card" style="width: 40%;">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Messanger</mat-card-title>
+                </mat-card-header>
+                <table class="message-requests-table">
+                    <tbody>
+                        <tr *ngFor="let request of sentMessages">
+                            <div class="picture-username" (click)="openChat(request)" style=" display: inline-block;">
+                                <div style="padding:5px; background-color: #2887a7aa; 
+                                border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                    {{request.workshopName}}</div>
+                                <div style="display: flex; align-items: center;">
+                                    <td><img style="height: 40px; width: 40px;" class="profile-image"
+                                            [src]="request.senderPicture" alt="Sender Picture"></td>
+
+                                    <td>{{request.senderUsername}}</td>
+                                </div>
+                            </div>
+                            <td>
+                                <div *ngIf="request.opened" style="position: relative;">
+
+                                    <div class="chat-container" #scrollContainer>
+
+                                        <div *ngFor="let message of request.messages">
+                                            <div class="chat-box"
+                                                *ngIf="message.sender.username==request.senderUsername">
+                                                <div class="chat-message sender-message">
+                                                    <div class="content-and-profile-sender">
+                                                        <div style="display: inline-block;">
+                                                            <div style="display: flex; align-items: center;">
+                                                                <img [src]="message.sender.picture"
+                                                                    style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                                <span
+                                                                    style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                                    {{message.timestamp}}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span style="float:left"
+                                                                    class="content-sender">{{message.content}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-box"
+                                                *ngIf="message.sender.username!=request.senderUsername">
+                                                <div class="chat-message recipient-message">
+                                                    <div class="content-and-profile-recipient">
+                                                        <div style="float:right">
+                                                            <div
+                                                                style="display: flex; align-items: center; float:right">
+                                                                <span
+                                                                    style="font-size: 12px;"><b>{{message.sender.username}}</b>,
+                                                                    {{message.timestamp}}</span>
+                                                                <img [src]="message.sender.picture"
+                                                                    style="margin: 5px; height: 30px; width: 30px; border-radius: 50%;">
+                                                            </div>
+                                                            <div>
+                                                                <span style="float:right"
+                                                                    class="content-recipient">{{message.content}}</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="input-btn" style="display: flex;">
+                                        <input style="margin:0px" type="text" placeholder="Type your message here..."
+                                            [(ngModel)]="messageContent">
+                                        <input (click)="sendMessageToUser(request)" style="height: 100%; width: 20%;"
+                                            class="signup-btn" type="submit" value="Send">
+                                    </div>
+
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card>
+        </div>
+
+
+    </div>
+    <div class="footer"></div>
+
+
+
 
 
 </div>
