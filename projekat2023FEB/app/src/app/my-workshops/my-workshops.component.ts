@@ -14,7 +14,8 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class MyWorkshopsComponent implements OnInit {
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private organizerService: OrganizerService, private userService: UserService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private organizerService: OrganizerService,
+    private userService: UserService) { }
   ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
@@ -53,11 +54,29 @@ export class MyWorkshopsComponent implements OnInit {
       })
 
   }
-  withdrawRequest(event) {
+
+
+  withdrawRequest(event, signUp) {
     event.stopPropagation();
     let result = confirm("Are you sure you want to withdraw application?");
     if (result) {
-      // Perform the action for yes and ad for 12h!!!
+      console.log(signUp)
+      if ((new Date(signUp.workshopDate).getTime() - new Date().getTime()) < (12 * 60 * 60 * 1000)) {
+        this.errorMessage = "You can't withdraw this request its less than 12h before it starts."
+        return;
+      }
+      this.userService.withdrawSigUpRequst(this.currentUser.username, signUp.idWorkshop)
+        .subscribe((s: SignUps[]) => {
+          if (s.length > 0) {
+            this.mySignUpsWorkshops = s;
+            this.mySignUpsWorkshops.forEach(w => {
+              w.workshopDate = new Date(w.workshopDate).toLocaleString('en-US');
+              w.signUpDate = new Date(w.signUpDate).toLocaleString('en-US');
+            })
+          } else this.informMessage = "You didn't sign up for any workshops."
+
+        })
+
     } else {
       // Perform the action for no
     }
@@ -81,16 +100,22 @@ export class MyWorkshopsComponent implements OnInit {
     })
   }
 
-  acceptRequest(username, idWorkshop) {
-    this.organizerService.acceptRequestForWorkshop(username, idWorkshop).subscribe((resp) => {
-      if (resp["resp"] == "OK") {
-        this.reloadSignUps();
+  acceptRequest(username, workshop) {
 
-      }
-      else {
-        this.errorMessage = "Error occurred accepting request."
-      }
-    })
+    console.log(workshop.numOfPlaces - workshop.bookedPlaces)
+    if (workshop.numOfPlaces - workshop.bookedPlaces)
+      this.organizerService.acceptRequestForWorkshop(username, workshop._id).subscribe((resp) => {
+        if (resp["resp"] == "OK") {
+          // this.reloadSignUps();
+          location.reload();
+        }
+        else {
+          this.errorMessage = "Error occurred accepting request."
+        }
+      })
+    else {
+      this.errorMessage = "No more spots available for this workshop."
+    }
 
   }
 

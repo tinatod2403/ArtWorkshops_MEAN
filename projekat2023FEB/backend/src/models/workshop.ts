@@ -28,6 +28,9 @@ let Workshop = new Schema({
     numOfPlaces: {
         type: Number
     },
+    bookedPlaces: {
+        type: Number
+    },
     organizer: {
         type: String
     },

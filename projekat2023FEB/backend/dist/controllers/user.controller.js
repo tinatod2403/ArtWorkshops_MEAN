@@ -11,6 +11,7 @@ const Message_1 = __importDefault(require("../models/Message"));
 const Comment_1 = __importDefault(require("../models/Comment"));
 const Like_1 = __importDefault(require("../models/Like"));
 const mongodb_1 = require("mongodb");
+const Waitlist_1 = __importDefault(require("../models/Waitlist"));
 class UserController {
     constructor() {
         this.register = (req, res) => {
@@ -62,7 +63,6 @@ class UserController {
                                 res.json({ 'user': user });
                         }
                         else {
-                            console.log("nema duration");
                             res.json({ 'user': user });
                         }
                     }
@@ -415,6 +415,93 @@ class UserController {
                     }
                     else
                         res.json({ "resp": "noUser" });
+                }
+            });
+        };
+        this.withdrawSigUpRequst = (req, res) => {
+            signUp_1.default.deleteOne({ username: req.body.username, idWorkshop: req.body.idWorkshop }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else {
+                    signUp_1.default.find({ username: req.body.username }, (err, s) => {
+                        if (err)
+                            console.log(err);
+                        else
+                            res.json(s);
+                    });
+                }
+            });
+            let workshop;
+            workshop_1.default.findOne({ _id: new mongodb_1.ObjectId(req.body.idWorkshop) }, (err, w) => {
+                if (err)
+                    console.log(err);
+                else {
+                    workshop = w;
+                    workshop_1.default.updateOne({ _id: new mongodb_1.ObjectId(req.body.idWorkshop) }, { $inc: { bookedPlaces: -1 } }, (err, resp) => {
+                        if (err)
+                            console.log(err);
+                        else {
+                            Waitlist_1.default.find({ 'workshop._id': req.body.idWorkshop }, (err, users) => {
+                                if (err)
+                                    console.log(err);
+                                else {
+                                    if (users) {
+                                        let emails = [];
+                                        users.forEach(u => {
+                                            emails.push(u.user.email);
+                                        });
+                                        /////////////////////////////////////////////////////////////////////////////////
+                                        const nodemailer = require('nodemailer');
+                                        // create reusable transporter object using the default SMTP transport
+                                        let transporter = nodemailer.createTransport({
+                                            service: 'outlook',
+                                            auth: {
+                                                user: 'artworkshop23@outlook.com',
+                                                pass: 'organizer123'
+                                            }
+                                        });
+                                        let mailOptions = {
+                                            from: '"' + workshop.name + '" <artworkshop23@outlook.com>',
+                                            to: emails,
+                                            subject: 'FREE SPOT',
+                                            text: 'Cancellation',
+                                            html: '<h1 style="text-align: center; color: green;">SPOT HAS BEEN FREED in workshop <strong>' + workshop.name + '</strong></h1><p>This workshop has one more place, hurry up.</p>' // html body
+                                        };
+                                        // send mail with defined transport object
+                                        transporter.sendMail(mailOptions, (error, info) => {
+                                            if (error) {
+                                                console.log(error);
+                                            }
+                                            else {
+                                                console.log("Mail OK");
+                                                res.json({ "resp": "OK" });
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        };
+        this.waitlistForWorkshop = (req, res) => {
+            let user = req.body.user;
+            let workshop = req.body.workshop;
+            Waitlist_1.default.findOne({ "user.username": user.username, "workshop._id": workshop._id }, (err, user) => {
+                if (err)
+                    console.log(err);
+                else if (user)
+                    res.json({ "resp": "already" });
+                else {
+                    let waitlist = new Waitlist_1.default({
+                        user: req.body.user,
+                        workshop: req.body.workshop
+                    });
+                    waitlist.save().then(w => {
+                        if (w)
+                            res.json({ "resp": "OK" });
+                    });
                 }
             });
         };

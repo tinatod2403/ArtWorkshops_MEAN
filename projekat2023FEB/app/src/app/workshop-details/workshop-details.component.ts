@@ -127,7 +127,14 @@ export class WorkshopDetailsComponent implements OnInit, OnDestroy {
   }
 
   toNotify() {
-    //TODO
+    this.userService.waitlistForWorkshop(this.currentUser, this.currWorkshop).subscribe((resp) => {
+      if (resp["resp"] == "OK") {
+        alert("You will be notified when place is available.")
+      }
+      else if (resp["resp"] == "already") {
+        this.errorMessage = "You are already on waitlist."
+      }
+    })
   }
 
   previous() {

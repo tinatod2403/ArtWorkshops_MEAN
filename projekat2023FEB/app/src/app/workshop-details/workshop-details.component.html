@@ -69,10 +69,10 @@
                     </div>-->
                     <div style="display: flex; align-items: center;">
                         <h1 style="color:rgb(220, 170, 77)">Number of places left: </h1>&nbsp;
-                        <p style="font-size: 30px; font-weight: bold;">{{currWorkshop.numOfPlaces}}</p>
-                        <button *ngIf="currWorkshop.numOfPlaces>0" (click)="signUp()" class="signup-btn">Sign
+                        <p style="font-size: 30px; font-weight: bold;">{{currWorkshop.numOfPlaces-currWorkshop.bookedPlaces}}</p>
+                        <button *ngIf="currWorkshop.numOfPlaces-currWorkshop.bookedPlaces" (click)="signUp()" class="signup-btn">Sign
                             up</button>
-                        <button *ngIf="currWorkshop.numOfPlaces==0" (click)="toNotify()" class="signup-btn">Notify me
+                        <button *ngIf="!(currWorkshop.numOfPlaces-currWorkshop.bookedPlaces)" (click)="toNotify()" class="signup-btn">Notify me
                             when place is available.</button>
 
 

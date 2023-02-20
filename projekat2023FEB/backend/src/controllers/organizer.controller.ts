@@ -22,6 +22,7 @@ export class OrganizerController {
             mainPhoto: req.body.mainPhoto,
             gallery: req.body.gallery,
             numOfPlaces: req.body.numOfPlaces,
+            bookedPlaces: 0,
             organizer: req.body.organizer,
             status: req.body.status,
             _id: new ObjectId()
@@ -163,8 +164,13 @@ export class OrganizerController {
             }, { $set: { status: 'accepted' } }, (error, success) => {
                 if
                     (error) console.log(error)
-                else
-                    res.json({ "resp": "OK" })
+                else {
+                    Workshop.updateOne({ _id: new ObjectId(req.body.idWorkshop) },
+                        { $inc: { bookedPlaces: 1 } }, (err, resp) => {
+                            if (err) console.log(err)
+                            else res.json({ 'resp': 'OK' })
+                        })
+                }
             })
     }
 

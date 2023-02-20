@@ -28,5 +28,7 @@ userRouter.route("/editComment").post((req, res) => new user_controller_1.UserCo
 userRouter.route("/deleteComment").post((req, res) => new user_controller_1.UserController().deleteComment(req, res));
 userRouter.route("/getMyMessages").post((req, res) => new user_controller_1.UserController().getMyMessages(req, res));
 userRouter.route("/generateNewPassword").post((req, res) => new user_controller_1.UserController().generateNewPassword(req, res));
+userRouter.route("/withdrawSigUpRequst").post((req, res) => new user_controller_1.UserController().withdrawSigUpRequst(req, res));
+userRouter.route("/waitlistForWorkshop").post((req, res) => new user_controller_1.UserController().waitlistForWorkshop(req, res));
 exports.default = userRouter;
 //# sourceMappingURL=user.routers.js.map

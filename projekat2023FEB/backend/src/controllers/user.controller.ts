@@ -8,6 +8,7 @@ import Message from '../models/Message';
 import Comment from '../models/Comment';
 import Like from '../models/Like';
 import { ObjectId } from 'mongodb';
+import Waitlist from '../models/Waitlist';
 
 export class UserController {
     register = (req: express.Request, res: express.Response) => {
@@ -72,7 +73,6 @@ export class UserController {
                         else res.json({ 'user': user });
                     }
                     else {
-                        console.log("nema duration")
                         res.json({ 'user': user });
                     }
                 }
@@ -522,5 +522,104 @@ export class UserController {
         })
     }
 
+    withdrawSigUpRequst = (req: express.Request, res: express.Response) => {
+
+        SignUp.deleteOne({ username: req.body.username, idWorkshop: req.body.idWorkshop }
+            , (err, resp) => {
+                if (err) console.log(err)
+                else {
+                    SignUp.find({ username: req.body.username }, (err, s) => {
+                        if (err) console.log(err)
+                        else res.json(s)
+                    })
+                }
+            })
+        let workshop;
+        Workshop.findOne({ _id: new ObjectId(req.body.idWorkshop) }, (err, w) => {
+            if (err) console.log(err)
+            else {
+                workshop = w;
+                Workshop.updateOne({ _id: new ObjectId(req.body.idWorkshop) },
+                    { $inc: { bookedPlaces: -1 } }, (err, resp) => {
+                        if (err) console.log(err)
+                        else {
+
+
+                            Waitlist.find({ 'workshop._id': req.body.idWorkshop }, (err, users) => {
+                                if (err) console.log(err)
+                                else {
+                                    if (users) {
+                                        let emails = [];
+                                        users.forEach(u => {
+                                            emails.push(u.user.email)
+                                        })
+
+
+                                        /////////////////////////////////////////////////////////////////////////////////
+                                        const nodemailer = require('nodemailer');
+
+                                        // create reusable transporter object using the default SMTP transport
+                                        let transporter = nodemailer.createTransport({
+                                            service: 'outlook',
+                                            auth: {
+                                                user: 'artworkshop23@outlook.com',
+                                                pass: 'organizer123'
+                                            }
+                                        });
+                                        let mailOptions = {
+                                            from: '"' + workshop.name + '" <artworkshop23@outlook.com>', // sender address
+                                            to: emails, // list of receivers
+                                            subject: 'FREE SPOT', // Subject line
+                                            text: 'Cancellation', // plain text body
+                                            html: '<h1 style="text-align: center; color: green;">SPOT HAS BEEN FREED in workshop <strong>' + workshop.name + '</strong></h1><p>This workshop has one more place, hurry up.</p>' // html body
+                                        };
+
+                                        // send mail with defined transport object
+                                        transporter.sendMail(mailOptions, (error, info) => {
+                                            if (error) {
+                                                console.log(error);
+                                            }
+                                            else {
+                                                console.log("Mail OK")
+                                                res.json({ "resp": "OK" })
+                                            }
+                                        }
+                                        );
+
+
+
+                                    }
+                                }
+                            })
+
+                        }
+                    })
+            }
+        })
+
+
+
+    }
+
+
+    waitlistForWorkshop = (req: express.Request, res: express.Response) => {
+        let user = req.body.user
+        let workshop = req.body.workshop
+        Waitlist.findOne({ "user.username": user.username, "workshop._id": workshop._id }, (err, user) => {
+            if (err) console.log(err)
+            else if (user) res.json({ "resp": "already" })
+            else {
+                let waitlist = new Waitlist({
+                    user: req.body.user,
+                    workshop: req.body.workshop
+                })
+
+                waitlist.save().then(w => {
+                    if (w) res.json({ "resp": "OK" })
+                })
+            }
+        })
+
+    }
 
 }

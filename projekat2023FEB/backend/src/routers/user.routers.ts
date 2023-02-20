@@ -70,4 +70,10 @@ userRouter.route("/getMyMessages").post(
 userRouter.route("/generateNewPassword").post(
     (req, res) => new UserController().generateNewPassword(req, res)
 )
+userRouter.route("/withdrawSigUpRequst").post(
+    (req, res) => new UserController().withdrawSigUpRequst(req, res)
+)
+userRouter.route("/waitlistForWorkshop").post(
+    (req, res) => new UserController().waitlistForWorkshop(req, res)
+)
 export default userRouter;

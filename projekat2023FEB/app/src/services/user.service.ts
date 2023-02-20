@@ -182,4 +182,21 @@ export class UserService {
     return this.http.post(`${this.url}/user/generateNewPassword`, data);
   }
 
+
+  withdrawSigUpRequst(username, idWorkshop) {
+    const data = {
+      username: username,
+      idWorkshop: idWorkshop
+    }
+    return this.http.post(`${this.url}/user/withdrawSigUpRequst`, data);
+  }
+
+  waitlistForWorkshop(user, workshop) {
+    const data = {
+      user: user,
+      workshop: workshop
+    }
+    return this.http.post(`${this.url}/user/waitlistForWorkshop`, data);
+  }
+
 }
