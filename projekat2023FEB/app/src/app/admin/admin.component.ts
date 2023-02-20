@@ -188,4 +188,42 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['addWorkshop'])
   }
 
+
+  deleteUser(user) {
+    let result = confirm("Are you sure you want to delte user: " + user.username)
+    if (result) {
+      this.adminService.deleteUser(user).subscribe((users: User[]) => {
+        if (users) {
+          this.allUsers = users
+        }
+      })
+    }
+  }
+
+  deleteOrganizer(organizer) {
+    let result = confirm("Are you sure you want to delte organizer: " + organizer.username)
+    if (result) {
+      this.adminService.deleteOrganizer(organizer).subscribe((organizers: User[]) => {
+        if (organizers) {
+          this.allOrganizers = organizers
+        }
+      })
+    }
+  }
+
+  editUser(user) {
+    localStorage.setItem("currentUserEditing", JSON.stringify(user))
+    this.router.navigate(['editProfile'])
+  }
+
+  editOrganizer(organizer) {
+    localStorage.setItem("currentUserEditing", JSON.stringify(organizer))
+    this.router.navigate(['editProfile'])
+  }
+
+  editWorkshop(wokrshop) {
+    localStorage.setItem("workshopIDEditing", JSON.stringify(wokrshop._id))
+    this.router.navigate(['adminEditWorkshop'])
+  }
+
 }

@@ -1,0 +1,194 @@
+<div class="hero" >
+
+
+    <header class="header">
+        <a routerLink=""><img class="logo-image"></a>
+        <h1 class="header__title">Edit workshop: {{currWorkshopEditing.name}}</h1>
+        <div class="header__buttons">
+            &nbsp;
+            <button (click)="logOut()" mat-raised-button color="brown">Log out</button>
+
+            &nbsp;
+            &nbsp;
+            <img src="../../assets/admin.jpg" alt="Profile picture" class="profile-image">
+        </div>
+    </header>
+
+
+    <div class="middle">
+
+        <div class="card-container">
+            <mat-card class="card">
+                <mat-card-header>
+                    <mat-card-title class="card-title" style="padding-bottom: 10px;">Workshop Data:
+                        {{currWorkshopEditing.name}}</mat-card-title>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table">
+
+                        <tbody>
+                            <tr>
+                                <td>Name:</td>
+                                <td *ngIf="edit!='name'">{{currWorkshopEditing.name}}</td>
+                                <button (click)="editData('name')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='name'">
+                                    <input style="width: 50%;" type="text" class="fancy-input" [(ngModel)]="nameEdit" />
+                                </td>
+                                <button (click)="doneEditing(nameEdit,'name')" *ngIf="edit=='name'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='name'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+
+                                <td>Date:</td>
+                                <td>{{currWorkshopEditing.date}}</td>
+                                <button (click)="editData('date')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='date'">
+                                    <input class="input-class" type="datetime-local" id="date" name="date"
+                                        [(ngModel)]="dateEdit">
+                                </td>
+                                <button (click)="doneEditing(dateEdit,'date')" *ngIf="edit=='date'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='date'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Place:</td>
+                                <td *ngIf="edit!='place'">{{currWorkshopEditing.place}}</td>
+                                <button (click)="editData('place')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='place'">
+                                    <input style="width: 50%;" type="text" class="fancy-input"
+                                        [(ngModel)]="placeEdit" />
+                                </td>
+                                <button (click)="doneEditing(placeEdit,'place')" *ngIf="edit=='place'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='place'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Short description:</td>
+                                <td *ngIf="edit!='shortDesc'">{{currWorkshopEditing.shortDesc}}</td>
+                                <button (click)="editData('shortDesc')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='shortDesc'">
+                                    <textarea style="width: 80%;" type="text" class="fancy-input"
+                                        [(ngModel)]="shortDescEdit"></textarea>
+                                </td>
+                                <button (click)="doneEditing(shortDescEdit,'shortDesc')" color="green"
+                                    *ngIf="edit=='shortDesc'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='shortDesc'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Long description:</td>
+                                <td *ngIf="edit!='longDesc'">{{currWorkshopEditing.longDesc}}</td>
+                                <button (click)="editData('longDesc')" color="green" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='longDesc'">
+                                    <textarea style="width: 90%; height: 100px;" name='currWorkshopEditing.longDesc'
+                                        type="text" value="asd" class="fancy-input"
+                                        [(ngModel)]="longDescEdit"></textarea>
+                                </td>
+                                <button (click)="doneEditing(longDescEdit,'longDesc')" color="green"
+                                    *ngIf="edit=='longDesc'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" color="green" *ngIf="edit=='longDesc'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Number of places:</td>
+                                <td *ngIf="edit!='numOfPlaces'">{{currWorkshopEditing.numOfPlaces}}</td>
+                                <button (click)="editData('numOfPlaces')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='numOfPlaces'">
+                                    <input style="width: 50%;" type="number" class="fancy-input"
+                                        [(ngModel)]="numOfPlacesEdit" />
+                                </td>
+                                <button (click)="toStr(numOfPlacesEdit,'numOfPlaces')" *ngIf="edit=='numOfPlaces'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='numOfPlaces'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+
+                            <tr>
+                                <td>Main Photo:</td>
+                                <td *ngIf="edit!='mainPhoto'"><img class="workshop-photo"
+                                        [src]="currWorkshopEditing.mainPhoto"></td>
+                                <button (click)="editData('mainPhoto')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <td *ngIf="edit=='mainPhoto'" style="display: flex; align-items: center;">
+                                    <img class="workshop-photo" [src]="mainPhotoEdit">
+                                    <input type="file" name=" mainPhoto" accept=".jpg,.png"
+                                        (change)="onFileChange($event)" />
+                                </td>
+                                <button (click)="toStr(mainPhotoEdit,'mainPhoto')" *ngIf="edit=='mainPhoto'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='mainPhoto'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+                            <tr>
+                                <td>Galerry:</td>
+                                <td>
+                                    <div *ngFor="let p of galleryEdit"
+                                        style="display: flex; align-items: center;">
+                                        <img class="workshop-photo" [src]="p"><button (click)="removePhoto(p)"
+                                            *ngIf="edit=='gallery'">remove</button>
+
+                                    </div>
+                                    <input *ngIf="edit=='gallery'" type="file" name=" gallery" accept=".jpg,.png"
+                                        (change)="onFileChangeMultiple($event)" multiple />
+                                </td>
+                                <button (click)="editData('gallery')" *ngIf="!edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button (click)="doneEditing(galleryEdit,'gallery')" *ngIf="edit=='gallery'">
+                                    <mat-icon>done</mat-icon>
+                                </button>
+                                <button (click)="cancelEditing()" *ngIf="edit=='gallery'">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <span class="error-output">{{errorMessage}}</span>
+
+                </mat-card-content>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+    </div>
+</div>

@@ -76,4 +76,7 @@ userRouter.route("/withdrawSigUpRequst").post(
 userRouter.route("/waitlistForWorkshop").post(
     (req, res) => new UserController().waitlistForWorkshop(req, res)
 )
+userRouter.route("/getTop5").get(
+    (req, res) => new UserController().getTop5(req, res)
+)
 export default userRouter;

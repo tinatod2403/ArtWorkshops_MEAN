@@ -81,17 +81,37 @@ export class OrganizerController {
                     console.log(error);
                 }
                 else {
-                    if (dataName == "name")
+                    if (dataName == "name") {
                         signUp.updateMany(
                             { idWorkshop: req.body._id },
                             { $set: { 'nameWorkshop': newDataValue } }, (error, success) => {
                                 if (error)
                                     console.log(error);
-                                else
-                                    res.json({ "resp": "OK" })
+                            }
 
+                        );
+                        Like.updateMany(
+                            { 'workshop._id': req.body._id },
+                            { $set: { 'workshop.name': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
                             }
                         );
+                        Comment.updateMany(
+                            { 'workshop._id': req.body._id },
+                            { $set: { 'workshop.name': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
+                            }
+                        );
+                        Message.updateMany(
+                            { 'workshop._id': req.body._id },
+                            { $set: { 'workshop.name': newDataValue } }, (error, success) => {
+                                if (error)
+                                    console.log(error);
+                            }
+                        );
+                    }
                     else if (dataName == "date") {
                         signUp.updateMany(
                             { idWorkshop: req.body._id },
@@ -298,59 +318,79 @@ export class OrganizerController {
         signUp.find({ idWorkshop: req.body.workshopId }, (err, signup) => {
             if (err) console.log(err)
             else {
-                let usernames = [];
-                signup.forEach(s => {
-                    usernames.push(s.username)
-                })
-                user.find({ username: { $in: usernames } }, (err, users) => {
-                    if (err) console.log(err)
-                    else {
-                        let emails = [];
-                        users.forEach(u => {
-                            emails.push(u.email)
-                        })
+                if (signup.length > 0) {
+                    // console.log(signup)
+                    let usernames = [];
+                    signup.forEach(s => {
+                        usernames.push(s.username)
+                    })
+                    user.find({ username: { $in: usernames } }, (err, users) => {
+                        if (err) console.log(err)
+                        else {
+                            let emails = [];
+                            users.forEach(u => {
+                                emails.push(u.email)
+                            })
 
-                        if (signup) {
-                            wName = signup[0].nameWorkshop
-                            wOrganizer = signup[0].organizer
-                            wPhoto = signup[0].workshopPicture
+                            if (signup) {
+                                wName = signup[0].nameWorkshop
+                                wOrganizer = signup[0].organizer
+                                wPhoto = signup[0].workshopPicture
+                            }
+                            /////////////////////////////////////////////////////////////////////////////////
+                            const nodemailer = require('nodemailer');
+
+                            // create reusable transporter object using the default SMTP transport
+                            let transporter = nodemailer.createTransport({
+                                service: 'outlook',
+                                auth: {
+                                    user: 'artworkshop23@outlook.com',
+                                    pass: 'organizer123'
+                                }
+                            });
+                            let mailOptions = {
+                                from: '"' + wOrganizer + '" <artworkshop23@outlook.com>', // sender address
+                                to: emails, // list of receivers
+                                subject: '❌Cancellation❌', // Subject line
+                                text: 'Cancellation', // plain text body
+                                html: '<h1 style="text-align: center; color: red;">Cancellation of the workshop <strong>' + wName + '</strong></h1><p style="color: red; font-weight: bold;">CAUTION:</p><p">This workshop has been canceled by the organizer.</p>' // html body
+                            };
+
+                            // send mail with defined transport object
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log(error);
+                                }
+                                else {
+                                    console.log("Mail OK")
+                                    signUp.deleteMany({ idWorkshop: req.body.workshopId }, (err, resp) => {
+                                        if (err) console.log(err)
+                                    })
+                                }
+                            }
+                            );
+                            ////////////////////////////////////////////////////////////////////////////////
                         }
-                        /////////////////////////////////////////////////////////////////////////////////
-                        const nodemailer = require('nodemailer');
+                    })
+                }
+            }
+        })
 
-                        // create reusable transporter object using the default SMTP transport
-                        let transporter = nodemailer.createTransport({
-                            service: 'outlook',
-                            auth: {
-                                user: 'artworkshop23@outlook.com',
-                                pass: 'organizer123'
-                            }
-                        });
-                        let mailOptions = {
-                            from: '"' + wOrganizer + '" <artworkshop23@outlook.com>', // sender address
-                            to: emails, // list of receivers
-                            subject: '❌Cancellation❌', // Subject line
-                            text: 'Cancellation', // plain text body
-                            html: '<h1 style="text-align: center; color: red;">Cancellation of the workshop <strong>' + wName + '</strong></h1><p style="color: red; font-weight: bold;">CAUTION:</p><p">This workshop has been canceled by the organizer.</p>' // html body
-                        };
+        Like.deleteMany({ 'workshop._id': req.body.workshopId }, (err, resp) => {
+            if (err) console.log(err)
+        })
+        Comment.deleteMany({ 'workshop._id': req.body.workshopId }, (err, resp) => {
+            if (err) console.log(err)
+        })
 
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error, info) => {
-                            if (error) {
-                                console.log(error);
-                            }
-                            else {
-                                console.log("Mail OK")
-                                res.json({ "resp": "OK" })
-                            }
-                        }
-                        );
+        Message.deleteMany({ 'workshop._id': req.body.workshopId }, (err, resp) => {
+            if (err) console.log(err)
+        })
 
-                        ////////////////////////////////////////////////////////////////////////////////
-
-
-                    }
-                })
+        Workshop.deleteOne({ _id: new ObjectId(req.body.workshopId) }, (err, resp) => {
+            if (err) console.log(err)
+            else {
+                res.json({ "resp": "OK" })
             }
         })
 

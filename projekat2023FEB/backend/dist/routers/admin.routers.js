@@ -16,5 +16,7 @@ adminRouter.route("/sendMail").get((req, res) => new admin_controller_1.AdminCon
 adminRouter.route("/updateStatus").post((req, res) => new admin_controller_1.AdminController().updateStatus(req, res));
 adminRouter.route("/approveWorkshop").post((req, res) => new admin_controller_1.AdminController().approveWorkshop(req, res));
 adminRouter.route("/changePassword").post((req, res) => new admin_controller_1.AdminController().changePassword(req, res));
+adminRouter.route("/deleteUser").post((req, res) => new admin_controller_1.AdminController().deleteUser(req, res));
+adminRouter.route("/deleteOrganizer").post((req, res) => new admin_controller_1.AdminController().deleteOrganizer(req, res));
 exports.default = adminRouter;
 //# sourceMappingURL=admin.routers.js.map

@@ -35,6 +35,12 @@ adminRouter.route("/approveWorkshop").post(
 adminRouter.route("/changePassword").post(
     (req, res) => new AdminController().changePassword(req, res)
 )
+adminRouter.route("/deleteUser").post(
+    (req, res) => new AdminController().deleteUser(req, res)
+)
+adminRouter.route("/deleteOrganizer").post(
+    (req, res) => new AdminController().deleteOrganizer(req, res)
+)
 
 
 

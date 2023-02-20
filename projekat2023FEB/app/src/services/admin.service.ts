@@ -72,6 +72,19 @@ export class AdminService {
     return this.http.post(`${this.url}/admin/changePassword`, data);
   }
 
+  deleteUser(user) {
+    const data = {
+      user: user
+    }
+    return this.http.post(`${this.url}/admin/deleteUser`, data);
+  }
+  deleteOrganizer(organizer) {
+    const data = {
+      organizer: organizer
+    }
+    return this.http.post(`${this.url}/admin/deleteOrganizer`, data);
+  }
+
 
   
 

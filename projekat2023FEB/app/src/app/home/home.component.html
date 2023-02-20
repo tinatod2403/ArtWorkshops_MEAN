@@ -23,6 +23,15 @@
 
 
     <div class="middle">
+
+        <h1 style="margin-left: 10px;">Top liked wokrshops</h1>
+
+        <div class="parent5" *ngFor="let w of top5Workshops">
+            <div (click)="goToLogin()" class="cardTop5">
+                <h3>{{w.name}}</h3>
+                <img class="top5photo" [src]="w.mainPhoto">
+            </div>
+        </div>
         <!-- <hr>
         <h1 class="informMessage">Log in or register to book your place</h1>
         <hr> -->

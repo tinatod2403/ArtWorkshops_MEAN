@@ -149,8 +149,9 @@ export class MyWorkshopsComponent implements OnInit {
     if (result) {
       this.organizerService.cancelWorkshop(workshop._id).subscribe((resp) => {
         if (resp["resp"] == "OK") {
-          alert("poslat mail")
+          location.reload()
         }
+        alert("Email sent")
       })
 
     }

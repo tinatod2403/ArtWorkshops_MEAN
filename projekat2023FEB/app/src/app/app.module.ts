@@ -35,6 +35,8 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MapComponent } from './map/map.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ForgotenPasswordComponent } from './forgoten-password/forgoten-password.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { AdmineEditWorkshopComponent } from './admine-edit-workshop/admine-edit-workshop.component';
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import { ForgotenPasswordComponent } from './forgoten-password/forgoten-password
     EditWorkshopComponent,
     AdminLoginComponent,
     MapComponent,
-    ForgotenPasswordComponent
+    ForgotenPasswordComponent,
+    EditUserComponent,
+    AdmineEditWorkshopComponent
 
   ],
   imports: [

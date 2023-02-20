@@ -58,6 +58,37 @@ export class UserController {
 
     }
 
+    getTop5 = (req: express.Request, res: express.Response) => {
+
+        Like.aggregate([
+            {
+                $group: {
+                    _id: "$workshop._id",
+                    count: { $sum: 1 },
+                    workshop: { $first: "$workshop" }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $limit: 5
+            }
+        ], function (err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(result)
+                // console.log(result);
+            }
+        });
+
+
+
+    }
+
     login = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
         let password = req.body.password;

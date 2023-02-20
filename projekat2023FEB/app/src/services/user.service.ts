@@ -31,6 +31,10 @@ export class UserService {
     return this.http.post(`${this.url}/user/getUserData`, data);
   }
 
+  getTop5(){
+    return this.http.get(`${this.url}/user/getTop5`);
+  }
+
   getAllActiveWorkshops() {
     return this.http.get(`${this.url}/user/getAllActiveWorkshops`);
   }

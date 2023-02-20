@@ -3,7 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddWorkshopComponent } from './add-workshop/add-workshop.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdmineEditWorkshopComponent } from './admine-edit-workshop/admine-edit-workshop.component';
 import { BecomeOrganizerComponent } from './become-organizer/become-organizer.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { ForgotenPasswordComponent } from './forgoten-password/forgoten-password.component';
 import { HomeComponent } from './home/home.component';
@@ -40,7 +42,8 @@ const routes: Routes = [
   { path: "**/admin", component: AdminComponent },
   { path: "map", component: MapComponent },
   { path: "forgotenPassword", component: ForgotenPasswordComponent },
-  // { path: "**/editWorkshop", component: EditWorkshopComponent },
+  { path: "editProfile", component: EditUserComponent },
+  { path: "adminEditWorkshop", component: AdmineEditWorkshopComponent },
 
 ];
 

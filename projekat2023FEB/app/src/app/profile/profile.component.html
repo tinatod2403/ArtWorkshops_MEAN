@@ -183,7 +183,8 @@
                                     <input type="file" name=" picture" accept=".jpg,.png"
                                         (change)="onFileChange($event)" />
                                 </td>
-                                <button (click)="doneEditing(pictureEdit,'picture')" color="green" *ngIf="edit=='picture'">
+                                <button (click)="doneEditing(pictureEdit,'picture')" color="green"
+                                    *ngIf="edit=='picture'">
                                     <mat-icon>done</mat-icon>
                                 </button>
                                 <button (click)="cancelEditing()" color="green" *ngIf="edit=='picture'">
@@ -418,9 +419,5 @@
 
     </div>
     <div class="footer"></div>
-
-
-
-
 
 </div>

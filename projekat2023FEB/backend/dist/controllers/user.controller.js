@@ -48,6 +48,33 @@ class UserController {
                     });
             });
         };
+        this.getTop5 = (req, res) => {
+            Like_1.default.aggregate([
+                {
+                    $group: {
+                        _id: "$workshop._id",
+                        count: { $sum: 1 },
+                        workshop: { $first: "$workshop" }
+                    }
+                },
+                {
+                    $sort: {
+                        count: -1
+                    }
+                },
+                {
+                    $limit: 5
+                }
+            ], function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    res.json(result);
+                    // console.log(result);
+                }
+            });
+        };
         this.login = (req, res) => {
             let username = req.body.username;
             let password = req.body.password;

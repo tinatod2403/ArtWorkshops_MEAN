@@ -109,8 +109,8 @@
                 <span class="password" (click)="togglePassword()">{{ showPassword ? user.password : '••••••••' }}</span>
               </td>
 
-              <td><button class="edit-btn">Edit</button></td>
-              <td><button class="registration-requests__deny-btn">Delete</button></td>
+              <td><button (click)="editUser(user)" class="edit-btn">Edit</button></td>
+              <td><button (click)="deleteUser(user)" class="registration-requests__deny-btn">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -159,8 +159,8 @@
               <td
                 [ngClass]="{ 'green': user.status=='approved','yellow': user.status=='pending','red': user.status=='denied' }">
                 {{ user.status }}</td>
-              <td><button class="edit-btn">Edit</button></td>
-              <td><button class="registration-requests__deny-btn">Delete</button></td>
+              <td><button (click)="editOrganizer(user)" class="edit-btn">Edit</button></td>
+              <td><button (click)="deleteOrganizer(user)" class="registration-requests__deny-btn">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -203,7 +203,7 @@
                 [ngClass]="{ 'green':  w.status=='accepted','yellow':  w.status=='pending','red':  w.status=='deny' }">
                 {{ w.status }}</td>
               <td style="font-weight: bold;">{{w.organizer}}</td>
-              <td><button class="edit-btn">Edit</button>
+              <td><button (click)="editWorkshop(w)" class="edit-btn">Edit</button>
               </td>
             </tr>
           </tbody>
@@ -246,9 +246,9 @@
       </td>
       <div>
         <input class="inputType" type="password" placeholder="Old password" [(ngModel)]="oldPass">
-      <input class="inputType" type="password" placeholder="New password" [(ngModel)]="newPass">
-      <input class="inputType" type="password" placeholder="Confirm new password" [(ngModel)]="newPassAgain">
-      <button class="edit-btn" (click)="changePass()">Change</button>
+        <input class="inputType" type="password" placeholder="New password" [(ngModel)]="newPass">
+        <input class="inputType" type="password" placeholder="Confirm new password" [(ngModel)]="newPassAgain">
+        <button class="edit-btn" (click)="changePass()">Change</button>
       </div>
       <span style="color:red">{{errorMessagePass}}</span>
       <h2 class="registration-requests__title">&nbsp;</h2>

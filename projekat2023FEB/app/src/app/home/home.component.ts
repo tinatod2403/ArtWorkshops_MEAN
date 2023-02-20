@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrganizerService } from 'src/services/organizer.service';
 import { UserService } from 'src/services/user.service';
+import { Like } from '../models/Like';
 import { User } from '../models/user';
 import { Workshop } from '../models/workshop';
 
@@ -26,8 +27,19 @@ export class HomeComponent implements OnInit {
       }
     })
 
+    this.userService.getTop5().subscribe((likes: Like[]) => {
+      // this.top5Workshops = likes
+      
+      likes.forEach(like => {
+        this.top5Workshops.push(like.workshop)
+      });
+      console.log("likeDW", this.top5Workshops)
+    })
+
     // console.log("All workshops", this.allWorkshops)
   }
+
+  top5Workshops: Workshop[] = [];
 
   currentUser: User;
   allWorkshops: Workshop[] = [];

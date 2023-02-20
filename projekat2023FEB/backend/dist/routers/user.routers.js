@@ -30,5 +30,6 @@ userRouter.route("/getMyMessages").post((req, res) => new user_controller_1.User
 userRouter.route("/generateNewPassword").post((req, res) => new user_controller_1.UserController().generateNewPassword(req, res));
 userRouter.route("/withdrawSigUpRequst").post((req, res) => new user_controller_1.UserController().withdrawSigUpRequst(req, res));
 userRouter.route("/waitlistForWorkshop").post((req, res) => new user_controller_1.UserController().waitlistForWorkshop(req, res));
+userRouter.route("/getTop5").get((req, res) => new user_controller_1.UserController().getTop5(req, res));
 exports.default = userRouter;
 //# sourceMappingURL=user.routers.js.map

@@ -4,6 +4,11 @@ import user from '../models/user';
 import Admin from '../models/Admin';
 import workshop from '../models/workshop';
 import { ObjectId } from 'mongodb';
+import Comment from '../models/Comment';
+import Like from '../models/Like';
+import Message from '../models/Message';
+import Waitlist from '../models/Waitlist';
+import signUp from '../models/signUp';
 
 export class AdminController {
 
@@ -111,6 +116,108 @@ export class AdminController {
                 if (err) console.log(err)
                 else res.json({ 'resp': "OK" })
             })
+
+    }
+
+    deleteUser = (req: express.Request, res: express.Response) => {
+        let u = req.body.user
+
+
+        Comment.deleteMany({ 'sender.username': u.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+        Like.deleteMany({ 'user.username': u.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+        Message.deleteMany(
+            {
+                $or: [
+                    { 'sender.username': u.username },
+                    { 'recipient.username': u.username }]
+            },
+            (err, resp) => {
+                if (err) console.log(err)
+            })
+
+        Waitlist.deleteOne({ 'user.username': u.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+        signUp.find({ 'username': u.username, 'status': 'accepted' }, (err, signups) => {
+            if (err) console.log(err)
+            else {
+
+                let ids: ObjectId[] = [];
+                signups.forEach(s => {
+                    ids.push(new ObjectId(s.idWorkshop))
+                })
+                console.log(ids)
+                workshop.updateMany({ '_id': { $in: ids } }, { $inc: { bookedPlaces: -1 } }, (err, resp) => {
+                    if (err) console.log(err)
+                })
+
+                signUp.deleteMany({ 'username': u.username }, (err, resp) => {
+                    if (err) console.log(err)
+                })
+            }
+        })
+
+        user.deleteOne({ username: u.username }, (err, resp) => {
+            if (err) console.log(err)
+            else {
+                user.find({ isOrganizer: false }, (err, users) => {
+                    if (err) console.log(err)
+                    else res.json(users)
+                })
+            }
+        })
+
+    }
+
+    deleteOrganizer = (req: express.Request, res: express.Response) => {
+        let organizer = req.body.organizer
+
+        Message.deleteMany({
+            $or: [
+                { 'sender.username': organizer.username },
+                { 'recipient.username': organizer.username }
+            ]
+        }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+        console.log(organizer.username)
+        Like.deleteMany({ 'workshop.organizer': organizer.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+        Comment.deleteMany({ 'workshop.organizer': organizer.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+        signUp.deleteMany({ 'organizer': organizer.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+        workshop.deleteMany({ organizer: organizer.username }, (err, resp) => {
+            if (err) console.log(err)
+        })
+
+
+        user.deleteOne({ username: organizer.username }, (err, resp) => {
+            if (err) console.log(err)
+            else {
+                user.find({ isOrganizer: true }, (err, org) => {
+                    if (err) console.log(err)
+                    else res.json(org)
+                })
+            }
+        })
+
+
+
+
+
 
     }
 

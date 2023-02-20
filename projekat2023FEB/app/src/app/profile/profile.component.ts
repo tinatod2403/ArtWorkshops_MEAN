@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    // alert(this.currentUser.isAdmin)
     this.userService.getUserData(this.currentUser.username).subscribe((user: User) => {
       this.currentUser = user;
     });
